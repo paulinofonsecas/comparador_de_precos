@@ -21,6 +21,7 @@ dependencies:
   supabase_flutter: ^2.9.0
   get_it: ^8.0.3
   flutter_gutter: ^2.2.0
+  shared_preferences: ^2.5.3
 
 dev_dependencies:
   bloc_test: ^9.1.7

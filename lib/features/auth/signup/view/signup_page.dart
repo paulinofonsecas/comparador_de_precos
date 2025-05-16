@@ -18,8 +18,13 @@ class SignupPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => SignupBloc(),
-      child: const Scaffold(
-        body: SignupView(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Cadastro de Usuário'),
+          centerTitle: true,
+          leading: const CloseButton(),
+        ),
+        body: const SignupView(),
       ),
     );
   }    

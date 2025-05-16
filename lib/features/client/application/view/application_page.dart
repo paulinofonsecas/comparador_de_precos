@@ -1,3 +1,4 @@
+import 'package:comparador_de_precos/features/client/inicio/inicio.dart';
 import 'package:flutter/material.dart';
 import 'package:comparador_de_precos/features/client/application/bloc/bloc.dart';
 import 'package:comparador_de_precos/features/client/application/widgets/application_body.dart';
@@ -5,7 +6,7 @@ import 'package:comparador_de_precos/features/client/application/widgets/applica
 /// {@template application_page}
 /// A description for ApplicationPage
 /// {@endtemplate}
-class ApplicationPage extends StatelessWidget {
+class ApplicationPage extends StatefulWidget {
   /// {@macro application_page}
   const ApplicationPage({super.key});
 
@@ -15,15 +16,27 @@ class ApplicationPage extends StatelessWidget {
   }
 
   @override
+  State<ApplicationPage> createState() => _ApplicationPageState();
+}
+
+class _ApplicationPageState extends State<ApplicationPage> {
+  var _currentIndex = 0;
+
+  final List<Widget> _pages = [
+    InicioPage(),
+    const Center(child: Text('Pesquisar')),
+    const Center(child: Text('Favoritos')),
+    const Center(child: Text('Perfil')),
+  ];
+
+  @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ApplicationBloc(),
       child: Scaffold(
-        body: ApplicationView(),
+        body: _pages[_currentIndex],
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            // Handle floating action button press
-          },
+          onPressed: () {},
           backgroundColor: Theme.of(context).colorScheme.primaryContainer,
           child: Icon(
             Icons.qr_code_scanner,
@@ -33,11 +46,14 @@ class ApplicationPage extends StatelessWidget {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.shifting,
-          currentIndex: 0,
-          selectedItemColor: Theme.of(context).colorScheme.primary,
-          unselectedItemColor: Theme.of(context).colorScheme.onSurface,
+          type: BottomNavigationBarType.fixed,
+          currentIndex: _currentIndex,
           showUnselectedLabels: true,
+          onTap: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+          },
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.home_outlined),
@@ -56,9 +72,6 @@ class ApplicationPage extends StatelessWidget {
               label: 'Perfil',
             ),
           ],
-          onTap: (index) {
-            // Handle bottom navigation tap
-          },
         ),
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:comparador_de_precos/app/app.dart';
 import 'package:comparador_de_precos/app/config/dependencies.dart';
 import 'package:comparador_de_precos/bootstrap.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -11,9 +12,15 @@ Future<void> main() async {
 
   await Supabase.initialize(
     url: 'https://yrouhkfyreqgsugljnbt.supabase.co',
-    anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlyb3Voa2Z5cmVxZ3N1Z2xqbmJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcxNzUxOTcsImV4cCI6MjA2Mjc1MTE5N30.PzqUT8blpH0Dk13oMKjZop9W08-WmQUI8GXZWnKJvRw',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJl'
+        'ZiI6Inlyb3Voa2Z5cmVxZ3N1Z2xqbmJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcxNz'
+        'UxOTcsImV4cCI6MjA2Mjc1MTE5N30.PzqUT8blpH0Dk13oMKjZop9W08-WmQUI8GX'
+        'ZWnKJvRw',
   );
 
-  await bootstrap(() => const App());
+  await bootstrap(
+    () => DevicePreview(
+      builder: (context) => const App(),
+    ),
+  );
 }

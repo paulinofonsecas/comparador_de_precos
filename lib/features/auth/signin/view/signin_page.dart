@@ -22,7 +22,7 @@ class SigninPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => SigninBloc(
         getIt<AuthenticationRepository>(),
-      ),
+      )..add(const CheckUserLocalLoginEvent()),
       child: const Scaffold(
         body: SigninView(),
       ),
@@ -46,7 +46,9 @@ class SigninView extends StatelessWidget {
         } else if (state is SigninError) {
           // Handle failure state
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.error)),
+            const SnackBar(
+              content: Text('Ocorreu um erro ao fazer login'),
+            ),
           );
         }
       },

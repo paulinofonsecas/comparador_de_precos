@@ -27,3 +27,8 @@ class SigninWithEmailAndPasswordEvent extends SigninEvent {
   @override
   List<Object> get props => [email, password];
 }
+
+// check user is local login saved
+class CheckUserLocalLoginEvent extends SigninEvent {
+  const CheckUserLocalLoginEvent();
+}
