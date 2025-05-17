@@ -1,4 +1,6 @@
-import 'package:comparador_de_precos/features/auth/signin/view/signin_page.dart';
+import 'package:comparador_de_precos/app/params/new_user_form_param.dart';
+import 'package:comparador_de_precos/features/auth/signin/bloc/bloc.dart';
+import 'package:comparador_de_precos/features/auth/signup/bloc/signup_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
 
@@ -7,9 +9,21 @@ import 'package:flutter_gutter/flutter_gutter.dart';
 ///
 /// Add what it does
 /// {@endtemplate}
-class SignupBody extends StatelessWidget {
+class SignupBody extends StatefulWidget {
   /// {@macro signup_body}
   const SignupBody({super.key});
+
+  @override
+  State<SignupBody> createState() => _SignupBodyState();
+}
+
+class _SignupBodyState extends State<SignupBody> {
+  final _form = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _biController = TextEditingController();
+  final _telefoneController = TextEditingController();
+  final _senhaController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -18,63 +32,104 @@ class SignupBody extends StatelessWidget {
         horizontal: 24,
         vertical: 16,
       ),
-      child: Column(
-        children: [
-          const Gutter(),
-          const NameTextField(),
-          const Gutter(),
-          const EmailTextField(),
-          const Gutter(),
-          const BITextField(),
-          const Gutter(),
-          const PhoneTextField(),
-          const Gutter(),
-          const PasswordTextField(),
-          const GutterLarge(),
-          ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              minimumSize: const Size(double.infinity, 0),
-              backgroundColor: Theme.of(context).primaryColor,
+      child: Form(
+        key: _form,
+        child: Column(
+          children: [
+            NameTextField(
+              controller: _nameController,
             ),
-            child: Text(
-              'Cadastrar',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.onPrimary,
+            const Gutter(),
+            Hero(
+              tag: 'auth_email',
+              child: EmailTextField(
+                controller: _emailController,
               ),
             ),
-          ),
-          const GutterMedium(),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text(
-              'Já tenho uma conta? Faça login',
-              style: TextStyle(
-                fontSize: 16,
-                color: Theme.of(context).colorScheme.primary,
+            const Gutter(),
+            BITextField(
+              controller: _biController,
+            ),
+            const Gutter(),
+            PhoneTextField(
+              controller: _telefoneController,
+            ),
+            const Gutter(),
+            Hero(
+              tag: 'auth_senha',
+              child: PasswordTextField(
+                controller: _senhaController,
               ),
             ),
-          ),
-        ],
+            const GutterLarge(),
+            ElevatedButton(
+              onPressed: () {
+                if (_form.currentState!.validate()) {
+                  final name = _nameController.text;
+                  final email = _emailController.text;
+                  final bi = _biController.text;
+                  final telefone = _telefoneController.text;
+                  final senha = _senhaController.text;
+
+                  final newUserFormParam = NewUserFormParam(
+                    name: name,
+                    email: email,
+                    bi: bi,
+                    telefone: telefone,
+                    senha: senha,
+                  );
+
+                  context.read<SignupBloc>().add(
+                        CadastrarNovoUsuarioEvent(newUserFormParam)
+                      );
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                minimumSize: const Size(double.infinity, 0),
+                backgroundColor: Theme.of(context).primaryColor,
+              ),
+              child: Text(
+                'Cadastrar',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
+              ),
+            ),
+            const GutterMedium(),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'Já tem uma conta? Faça login',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
 class EmailTextField extends StatelessWidget {
-  const EmailTextField({super.key});
+  const EmailTextField({required this.controller, super.key});
+
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       keyboardType: TextInputType.emailAddress,
       validator: (value) {
         if (value == null || value.isEmpty) {
@@ -97,11 +152,14 @@ class EmailTextField extends StatelessWidget {
 }
 
 class NameTextField extends StatelessWidget {
-  const NameTextField({super.key});
+  const NameTextField({required this.controller, super.key});
+
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Por favor, insira um nome';
@@ -123,11 +181,14 @@ class NameTextField extends StatelessWidget {
 }
 
 class BITextField extends StatelessWidget {
-  const BITextField({super.key});
+  const BITextField({required this.controller, super.key});
+
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Por favor, insira um BI';
@@ -149,11 +210,14 @@ class BITextField extends StatelessWidget {
 }
 
 class PhoneTextField extends StatelessWidget {
-  const PhoneTextField({super.key});
+  const PhoneTextField({required this.controller, super.key});
+
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Por favor, insira um telefone';
@@ -175,11 +239,14 @@ class PhoneTextField extends StatelessWidget {
 }
 
 class PasswordTextField extends StatelessWidget {
-  const PasswordTextField({super.key});
+  const PasswordTextField({required this.controller, super.key});
+
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Por favor, insira uma senha';

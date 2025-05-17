@@ -32,3 +32,20 @@ class SignupInitial extends SignupState {
   /// {@macro signup_initial}
   const SignupInitial() : super();
 }
+
+class SignupErrorState extends SignupState {
+  const SignupErrorState() : super();
+}
+
+class SignupSuccessState extends SignupState {
+  const SignupSuccessState(this.user) : super();
+
+  final MyUser user;
+
+  @override
+  List<Object> get props => [user];
+}
+
+class SignupLoadingState extends SignupState {
+  const SignupLoadingState() : super();
+}

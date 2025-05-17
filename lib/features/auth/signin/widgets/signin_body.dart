@@ -79,35 +79,17 @@ class _Body extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            TextFormField(
-              controller: _emailController,
-              focusNode: _focusNode,
-              decoration: const InputDecoration(
-                hintText: 'Digite seu e-mail',
-                prefixIcon: Icon(Icons.email),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(8)),
-                  borderSide: BorderSide(
-                    color: Colors.grey,
-                  ),
-                ),
+            Hero(
+              tag: 'auth_email',
+              child: EmailTextField(
+                emailController: _emailController,
+                focusNode: _focusNode,
               ),
-              keyboardType: TextInputType.emailAddress,
             ),
             const Gutter(),
-            TextFormField(
-              controller: _passwordController,
-              decoration: const InputDecoration(
-                hintText: 'Digite sua senha',
-                prefixIcon: Icon(Icons.lock),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(8)),
-                  borderSide: BorderSide(
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-              obscureText: true,
+            Hero(
+              tag: 'auth_senha',
+              child: SenhaTextField(passwordController: _passwordController),
             ),
             const GutterLarge(),
             _buildEntrarButton(context),
@@ -183,6 +165,64 @@ class _Body extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class EmailTextField extends StatelessWidget {
+  const EmailTextField({
+    super.key,
+    required TextEditingController emailController,
+    required FocusNode focusNode,
+  })  : _emailController = emailController,
+        _focusNode = focusNode;
+
+  final TextEditingController _emailController;
+  final FocusNode _focusNode;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: _emailController,
+      focusNode: _focusNode,
+      decoration: const InputDecoration(
+        hintText: 'Digite seu e-mail',
+        prefixIcon: Icon(Icons.email),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+          borderSide: BorderSide(
+            color: Colors.grey,
+          ),
+        ),
+      ),
+      keyboardType: TextInputType.emailAddress,
+    );
+  }
+}
+
+class SenhaTextField extends StatelessWidget {
+  const SenhaTextField({
+    super.key,
+    required TextEditingController passwordController,
+  }) : _passwordController = passwordController;
+
+  final TextEditingController _passwordController;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: _passwordController,
+      decoration: const InputDecoration(
+        hintText: 'Digite sua senha',
+        prefixIcon: Icon(Icons.lock),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+          borderSide: BorderSide(
+            color: Colors.grey,
+          ),
+        ),
+      ),
+      obscureText: true,
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:comparador_de_precos/data/repositories/authentication_repository.dart';
 import 'package:comparador_de_precos/features/auth/bloc/auth_bloc.dart';
+import 'package:comparador_de_precos/features/auth/signup/bloc/signup_bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,5 +27,9 @@ Future<void> setupDependencies() async {
 }
 
 void setupBlocs() {
-  getIt.registerSingleton<AuthBloc>(AuthBloc());
+  getIt
+    ..registerLazySingleton<AuthBloc>(AuthBloc.new)
+    ..registerLazySingleton<SignupBloc>(
+      () => SignupBloc(getIt()),
+    );
 }

@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:comparador_de_precos/app/config/dependencies.dart';
+import 'package:comparador_de_precos/features/auth/signin/view/signin_page.dart';
 import 'package:comparador_de_precos/features/auth/signup/bloc/bloc.dart';
 import 'package:comparador_de_precos/features/auth/signup/widgets/signup_body.dart';
+import 'package:flutter/material.dart';
 
 /// {@template signup_page}
 /// A description for SignupPage
@@ -16,8 +18,8 @@ class SignupPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => SignupBloc(),
+    return BlocProvider.value(
+      value: getIt<SignupBloc>(),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Cadastro de Usuário'),
@@ -27,7 +29,7 @@ class SignupPage extends StatelessWidget {
         body: const SignupView(),
       ),
     );
-  }    
+  }
 }
 
 /// {@template signup_view}
@@ -39,6 +41,24 @@ class SignupView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SignupBody();
+    return BlocListener<SignupBloc, SignupState>(
+      listener: (context, state) {
+        if (state is SignupSuccessState) {
+          Navigator.of(context).pushAndRemoveUntil(
+            SigninPage.route(),
+            (route) => true,
+          );
+        }
+
+        if (state is SignupErrorState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Ocorreu um erro ao fazer login'),
+            ),
+          );
+        }
+      },
+      child: const SignupBody(),
+    );
   }
 }

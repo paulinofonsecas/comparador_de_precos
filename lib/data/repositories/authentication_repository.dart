@@ -1,4 +1,6 @@
+import 'package:comparador_de_precos/app/params/new_user_form_param.dart';
 import 'package:comparador_de_precos/data/models/my_user.dart';
+import 'package:comparador_de_precos/data/models/user_profile.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -6,8 +8,7 @@ abstract class AuthenticationRepository {
   Future<MyUser> signInWithEmailAndPassword(String email, String password);
   Future<void> signOut();
   Future<MyUser> signUpWithEmailAndPassword(
-    MyUser user,
-    String password,
+    NewUserFormParam newUserFormParam,
   );
   Future<void> sendPasswordResetEmail(String email);
   Future<void> verifyEmail();
@@ -57,7 +58,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
         userType: authResponse.user!.userMetadata!['user_type'] as String?,
       );
     } on Exception catch (e) {
-      throw Exception('Ocorreu um erro desconhecido, tente novamente.');
+      throw Exception('Ocorreu um erro desconhecido, tente novamente., $e');
     }
   }
 
@@ -78,9 +79,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
 
   @override
   Future<MyUser> signUpWithEmailAndPassword(
-    MyUser user,
-    String password,
-  ) async {
+      NewUserFormParam newUserFormParam) async {
     try {
       // Check if the device is connected to the internet
       final connectivityResult = await connectivity.checkConnectivity();
@@ -89,18 +88,27 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       }
 
       final authResponse = await supabaseClient.auth.signUp(
-        email: user.email,
-        password: password,
+        email: newUserFormParam.email,
+        password: newUserFormParam.senha,
         data: {
-          'name': user.displayName,
-          'avatar_url': user.photoURL,
-          'user_type': user.userType,
+          'name': newUserFormParam.name,
+          'avatar_url': '',
+          'user_type': UserType.consumidor.name,
         },
       );
 
       if (authResponse.user == null) {
         throw Exception('User not found');
       }
+
+      // gravar as informacoes na tabela profiles
+      await supabaseClient.from('profiles').insert({
+        'user_id': authResponse.user!.id,
+        'nome_completo': newUserFormParam.name,
+        'bi': newUserFormParam.bi,
+        'tipo_usuario': UserType.consumidor.name,
+        'telefone': newUserFormParam.telefone,
+      });
 
       return MyUser(
         id: authResponse.user!.id,
@@ -110,7 +118,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
         userType: authResponse.user!.userMetadata!['user_type'] as String?,
       );
     } on Exception catch (e) {
-      throw Exception('Ocorreu um erro desconhecido, tente novamente.');
+      throw Exception('Ocorreu um erro desconhecido, tente novamente. $e');
     }
   }
 

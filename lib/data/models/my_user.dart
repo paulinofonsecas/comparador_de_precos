@@ -8,6 +8,7 @@ class MyUser {
   final String? displayName;
   final String? photoURL;
   final String? userType;
+  
   MyUser({
     required this.id,
     required this.email,

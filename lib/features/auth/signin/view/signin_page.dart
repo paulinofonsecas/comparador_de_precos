@@ -1,9 +1,10 @@
 import 'package:comparador_de_precos/app/config/dependencies.dart';
 import 'package:comparador_de_precos/data/repositories/authentication_repository.dart';
-import 'package:comparador_de_precos/features/client/application/view/application_page.dart';
-import 'package:flutter/material.dart';
 import 'package:comparador_de_precos/features/auth/signin/bloc/bloc.dart';
 import 'package:comparador_de_precos/features/auth/signin/widgets/signin_body.dart';
+import 'package:comparador_de_precos/features/auth/signup/bloc/signup_bloc.dart';
+import 'package:comparador_de_precos/features/client/application/view/application_page.dart';
+import 'package:flutter/material.dart';
 
 /// {@template signin_page}
 /// A description for SigninPage
@@ -19,10 +20,17 @@ class SigninPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => SigninBloc(
-        getIt<AuthenticationRepository>(),
-      )..add(const CheckUserLocalLoginEvent()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => SigninBloc(
+            getIt<AuthenticationRepository>(),
+          )..add(const CheckUserLocalLoginEvent()),
+        ),
+        BlocProvider.value(
+          value: getIt<SignupBloc>(),
+        ),
+      ],
       child: const Scaffold(
         body: SigninView(),
       ),
@@ -39,22 +47,43 @@ class SigninView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<SigninBloc, SigninState>(
-      listener: (context, state) {
-        if (state is SigninSuccess) {
-          Navigator.of(context).pushReplacement(ApplicationPage.route());
-        } else if (state is SigninError) {
-          // Handle failure state
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Ocorreu um erro ao fazer login'),
-            ),
-          );
-        }
-      },
-      builder: (context, state) {
-        return const SigninBody();
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<SigninBloc, SigninState>(
+          listener: (context, state) {
+            if (state is SigninSuccess) {
+              Navigator.of(context).pushReplacement(
+                ApplicationPage.route(),
+              );
+            } else if (state is SigninError) {
+              // Handle failure state
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Ocorreu um erro ao fazer login'),
+                ),
+              );
+            }
+          },
+        ),
+        BlocListener<SignupBloc, SignupState>(
+          listener: (context, state) {
+            if (state is SignupSuccessState) {
+              context.read<SigninBloc>().add(
+                    const CheckUserLocalLoginEvent(),
+                  );
+            }
+
+            if (state is SignupErrorState) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Ocorreu um erro ao cadastrar'),
+                ),
+              );
+            }
+          },
+        ),
+      ],
+      child: const SigninBody(),
     );
   }
 }

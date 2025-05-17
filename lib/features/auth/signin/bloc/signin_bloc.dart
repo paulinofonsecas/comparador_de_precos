@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:comparador_de_precos/app/config/dependencies.dart';
@@ -70,6 +71,7 @@ class SigninBloc extends Bloc<SigninEvent, SigninState> {
 
       emit(SigninSuccess(user));
     } catch (e) {
+      log(e.toString());
       emit(SigninError(e.toString()));
     }
   }
