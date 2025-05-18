@@ -1,4 +1,4 @@
-import 'package:comparador_de_precos/features/client/product_catalog/view/product_catalog_page.dart';
+import 'package:comparador_de_precos/features/auth/signin/view/signin_page.dart';
 import 'package:flutter/material.dart';
 
 class App extends StatelessWidget {
@@ -12,8 +12,8 @@ class App extends StatelessWidget {
         useMaterial3: true,
       ),
       // Para fins de demonstração, você pode alternar entre SigninPage e ProductCatalogPage
-      // home: const SigninPage(),
-      home: const ProductCatalogPage(),
+      home: const SigninPage(),
+      // home: const ProductCatalogPage(),
     );
   }
 }

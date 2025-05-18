@@ -2,6 +2,7 @@ import 'package:comparador_de_precos/features/auth/signin/bloc/bloc.dart';
 import 'package:comparador_de_precos/features/auth/signup/view/signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 /// {@template signin_body}
 /// Body of the SigninPage.
@@ -70,12 +71,18 @@ class _Body extends StatelessWidget {
         child: Column(
           children: [
             const Spacer(),
-            Container(
-              height: 100,
-              width: 100,
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(90),
+            const Icon(
+              HugeIcons.strokeRoundedHotPrice,
+              size: 100,
+            ),
+            const GutterLarge(),
+            const Text(
+              'COMPARADOR DE PREÇOS',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+                letterSpacing: 1,
               ),
             ),
             const Spacer(),
