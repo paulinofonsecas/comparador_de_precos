@@ -1,4 +1,5 @@
 import 'package:comparador_de_precos/features/client/inicio/widgets/market_scroll_list_item.dart';
+import 'package:comparador_de_precos/features/client/inicio/widgets/market_scroll_vertical_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
 
@@ -23,24 +24,44 @@ class InicioBody extends StatelessWidget {
             const GutterLarge(),
             const Top10MelhoreLojasWidget(),
             const GutterLarge(),
-            Row(
-              children: [
-                Text(
-                  'Recomendado para você',
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                ),
-                const Spacer(),
-                TextButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.chevron_right),
-                  iconAlignment: IconAlignment.end,
-                  label: const Text('Ver todas', style: TextStyle(fontSize: 13)),
-                ),
-              ],
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      'Para você',
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                          ),
+                    ),
+                  ),
+                  TextButton.icon(
+                    onPressed: () {},
+                    icon: const Icon(Icons.chevron_right),
+                    iconAlignment: IconAlignment.end,
+                    label: const Text('Ver todas', style: TextStyle(fontSize: 13)),
+                  ),
+                ],
+              ),
             ),
             const GutterLarge(),
+            const Column(
+              spacing: 16,
+              children: [
+                MarketScrollVerticalListItem(),
+                MarketScrollVerticalListItem(),
+                MarketScrollVerticalListItem(),
+                MarketScrollVerticalListItem(),
+                MarketScrollVerticalListItem(),
+                MarketScrollVerticalListItem(),
+                MarketScrollVerticalListItem(),
+                MarketScrollVerticalListItem(),
+                MarketScrollVerticalListItem(),
+              ],
+            ),
           ],
         ),
       ),
@@ -63,6 +84,7 @@ class Top10MelhoreLojasWidget extends StatelessWidget {
               'Top 10 melhores Lojas',
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w600,
+                    fontSize: 16,
                   ),
             ),
             const Spacer(),
@@ -74,7 +96,6 @@ class Top10MelhoreLojasWidget extends StatelessWidget {
             ),
           ],
         ),
-        const GutterSmall(),
         const SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
