@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:comparador_de_precos/data/models/produto.dart';
 import 'package:comparador_de_precos/data/repositories/product_catalog_repository.dart';
-import 'package:comparador_de_precos/features/client/product_catalog/bloc/product_catalog_event.dart';
-import 'package:comparador_de_precos/features/client/product_catalog/bloc/product_catalog_state.dart';
+import 'package:comparador_de_precos/features/consumer/product_catalog/bloc/product_catalog_event.dart';
+import 'package:comparador_de_precos/features/consumer/product_catalog/bloc/product_catalog_state.dart';
 
 class ProductCatalogBloc extends Bloc<ProductCatalogEvent, ProductCatalogState> {
   final ProductCatalogRepository _repository;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:comparador_de_precos/features/client/application/bloc/bloc.dart';
+import 'package:comparador_de_precos/features/consumer/application/bloc/bloc.dart';
 
 /// {@template application_body}
 /// Body of the ApplicationPage.

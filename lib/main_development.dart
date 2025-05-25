@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:comparador_de_precos/app/app.dart';
 import 'package:comparador_de_precos/app/config/dependencies.dart';
 import 'package:comparador_de_precos/bootstrap.dart';
@@ -17,6 +19,14 @@ Future<void> main() async {
         'UxOTcsImV4cCI6MjA2Mjc1MTE5N30.PzqUT8blpH0Dk13oMKjZop9W08-WmQUI8GX'
         'ZWnKJvRw',
   );
+
+  // if is running on android, device preview is not available
+  if (Platform.isAndroid) {
+    await bootstrap(
+      () => const App(),
+    );
+    return;
+  }
 
   await bootstrap(
     () => DevicePreview(

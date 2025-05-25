@@ -3,7 +3,7 @@ import 'package:comparador_de_precos/data/repositories/authentication_repository
 import 'package:comparador_de_precos/features/auth/signin/bloc/bloc.dart';
 import 'package:comparador_de_precos/features/auth/signin/widgets/signin_body.dart';
 import 'package:comparador_de_precos/features/auth/signup/bloc/signup_bloc.dart';
-import 'package:comparador_de_precos/features/client/application/view/application_page.dart';
+import 'package:comparador_de_precos/features/consumer/application/view/application_page.dart';
 import 'package:flutter/material.dart';
 
 /// {@template signin_page}

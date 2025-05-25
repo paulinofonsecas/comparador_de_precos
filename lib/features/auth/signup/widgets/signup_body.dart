@@ -40,11 +40,8 @@ class _SignupBodyState extends State<SignupBody> {
               controller: _nameController,
             ),
             const Gutter(),
-            Hero(
-              tag: 'auth_email',
-              child: EmailTextField(
-                controller: _emailController,
-              ),
+            EmailTextField(
+              controller: _emailController,
             ),
             const Gutter(),
             BITextField(
@@ -55,11 +52,8 @@ class _SignupBodyState extends State<SignupBody> {
               controller: _telefoneController,
             ),
             const Gutter(),
-            Hero(
-              tag: 'auth_senha',
-              child: PasswordTextField(
-                controller: _senhaController,
-              ),
+            PasswordTextField(
+              controller: _senhaController,
             ),
             const GutterLarge(),
             ElevatedButton(
@@ -79,9 +73,9 @@ class _SignupBodyState extends State<SignupBody> {
                     senha: senha,
                   );
 
-                  context.read<SignupBloc>().add(
-                        CadastrarNovoUsuarioEvent(newUserFormParam)
-                      );
+                  context
+                      .read<SignupBloc>()
+                      .add(CadastrarNovoUsuarioEvent(newUserFormParam));
                 }
               },
               style: ElevatedButton.styleFrom(

@@ -1,5 +1,5 @@
-import 'package:comparador_de_precos/features/client/inicio/widgets/market_scroll_list_item.dart';
-import 'package:comparador_de_precos/features/client/inicio/widgets/market_scroll_vertical_list_item.dart';
+import 'package:comparador_de_precos/features/consumer/inicio/widgets/market_scroll_list_item.dart';
+import 'package:comparador_de_precos/features/consumer/inicio/widgets/market_scroll_vertical_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
 

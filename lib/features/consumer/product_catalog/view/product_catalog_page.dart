@@ -1,10 +1,10 @@
 import 'package:comparador_de_precos/data/repositories/product_catalog_repository.dart';
-import 'package:comparador_de_precos/features/client/product_catalog/bloc/product_catalog_bloc.dart';
-import 'package:comparador_de_precos/features/client/product_catalog/bloc/product_catalog_event.dart';
-import 'package:comparador_de_precos/features/client/product_catalog/bloc/product_catalog_state.dart';
-import 'package:comparador_de_precos/features/client/product_catalog/view/product_details_page.dart';
-import 'package:comparador_de_precos/features/client/product_catalog/widgets/category_filter.dart';
-import 'package:comparador_de_precos/features/client/product_catalog/widgets/product_item.dart';
+import 'package:comparador_de_precos/features/consumer/product_catalog/bloc/product_catalog_bloc.dart';
+import 'package:comparador_de_precos/features/consumer/product_catalog/bloc/product_catalog_event.dart';
+import 'package:comparador_de_precos/features/consumer/product_catalog/bloc/product_catalog_state.dart';
+import 'package:comparador_de_precos/features/consumer/product_catalog/view/product_details_page.dart';
+import 'package:comparador_de_precos/features/consumer/product_catalog/widgets/category_filter.dart';
+import 'package:comparador_de_precos/features/consumer/product_catalog/widgets/product_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

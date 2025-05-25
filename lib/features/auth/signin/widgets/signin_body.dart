@@ -86,18 +86,12 @@ class _Body extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            Hero(
-              tag: 'auth_email',
-              child: EmailTextField(
-                emailController: _emailController,
-                focusNode: _focusNode,
-              ),
+            EmailTextField(
+              emailController: _emailController,
+              focusNode: _focusNode,
             ),
             const Gutter(),
-            Hero(
-              tag: 'auth_senha',
-              child: SenhaTextField(passwordController: _passwordController),
-            ),
+            SenhaTextField(passwordController: _passwordController),
             const GutterLarge(),
             _buildEntrarButton(context),
             const GutterMedium(),

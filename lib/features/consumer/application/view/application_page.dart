@@ -1,7 +1,7 @@
-import 'package:comparador_de_precos/features/client/inicio/inicio.dart';
+import 'package:comparador_de_precos/features/consumer/inicio/inicio.dart';
 import 'package:flutter/material.dart';
-import 'package:comparador_de_precos/features/client/application/bloc/bloc.dart';
-import 'package:comparador_de_precos/features/client/application/widgets/application_body.dart';
+import 'package:comparador_de_precos/features/consumer/application/bloc/bloc.dart';
+import 'package:comparador_de_precos/features/consumer/application/widgets/application_body.dart';
 
 /// {@template application_page}
 /// A description for ApplicationPage

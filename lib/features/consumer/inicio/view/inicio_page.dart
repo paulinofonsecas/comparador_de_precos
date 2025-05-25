@@ -1,5 +1,5 @@
-import 'package:comparador_de_precos/features/client/inicio/bloc/bloc.dart';
-import 'package:comparador_de_precos/features/client/inicio/widgets/inicio_body.dart';
+import 'package:comparador_de_precos/features/consumer/inicio/bloc/bloc.dart';
+import 'package:comparador_de_precos/features/consumer/inicio/widgets/inicio_body.dart';
 import 'package:flutter/material.dart';
 
 /// {@template inicio_page}
