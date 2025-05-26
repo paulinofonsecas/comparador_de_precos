@@ -1,7 +1,7 @@
-import 'package:comparador_de_precos/features/consumer/inicio/inicio.dart';
-import 'package:flutter/material.dart';
 import 'package:comparador_de_precos/features/consumer/application/bloc/bloc.dart';
-import 'package:comparador_de_precos/features/consumer/application/widgets/application_body.dart';
+import 'package:comparador_de_precos/features/consumer/inicio/inicio.dart';
+import 'package:comparador_de_precos/features/consumer/search/view/search_page.dart';
+import 'package:flutter/material.dart';
 
 /// {@template application_page}
 /// A description for ApplicationPage
@@ -23,8 +23,8 @@ class _ApplicationPageState extends State<ApplicationPage> {
   var _currentIndex = 0;
 
   final List<Widget> _pages = [
-    InicioPage(),
-    const Center(child: Text('Pesquisar')),
+    const InicioPage(),
+    const SearchPage(),
     const Center(child: Text('Favoritos')),
     const Center(child: Text('Perfil')),
   ];
@@ -75,18 +75,5 @@ class _ApplicationPageState extends State<ApplicationPage> {
         ),
       ),
     );
-  }
-}
-
-/// {@template application_view}
-/// Displays the Body of ApplicationView
-/// {@endtemplate}
-class ApplicationView extends StatelessWidget {
-  /// {@macro application_view}
-  const ApplicationView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const ApplicationBody();
   }
 }
