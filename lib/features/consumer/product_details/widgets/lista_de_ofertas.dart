@@ -1,5 +1,6 @@
 import 'package:comparador_de_precos/data/models/produto.dart';
 import 'package:comparador_de_precos/features/consumer/product_details/cubit/get_similar_products_cubit.dart';
+import 'package:comparador_de_precos/features/consumer/product_details/view/product_details_page.dart';
 import 'package:comparador_de_precos/features/consumer/product_details/widgets/oferta_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,7 +47,17 @@ class ListaDeOfertas extends StatelessWidget {
               ofertas.length,
               (index) => OfertaItem(
                 oferta: ofertas.elementAt(index),
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    // ignore: inference_failure_on_instance_creation
+                    MaterialPageRoute(
+                      builder: (context) => ProductDetailsPage(
+                        productId: ofertas.elementAt(index).id,
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           );

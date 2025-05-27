@@ -79,6 +79,7 @@ class ProductCatalogRepository {
       final minimalPrice = await _supabaseClient
           .from('precos')
           .select('preco')
+          .eq('produto_id', id)
           .order('preco', ascending: true)
           .limit(1);
 

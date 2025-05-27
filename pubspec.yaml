@@ -25,6 +25,7 @@ dependencies:
   hugeicons: ^0.0.11
   cached_network_image: ^3.4.1
   star_rating: ^0.11.0
+  timeago: ^3.7.1
 
 dev_dependencies:
   bloc_test: ^9.1.7

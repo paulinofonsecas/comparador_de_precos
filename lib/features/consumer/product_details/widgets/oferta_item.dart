@@ -3,6 +3,7 @@ import 'package:comparador_de_precos/data/models/oferta_model.dart';
 import 'package:comparador_de_precos/widgets/default_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class OfertaItem extends StatelessWidget {
   const OfertaItem({
@@ -70,23 +71,29 @@ class OfertaItem extends StatelessWidget {
                         ),
                       ),
                       const GutterSmall(),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 4,
-                          vertical: 2,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: Theme.of(context).colorScheme.primaryContainer,
-                        ),
-                        child: const Text(
-                          'Há 2 dias',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
+                      if (oferta.lastPriceUpdate != null) ...[
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 4,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color:
+                                Theme.of(context).colorScheme.primaryContainer,
+                          ),
+                          child: Text(
+                            'Há ${timeago.format(
+                              oferta.lastPriceUpdate!,
+                              locale: 'pt_BR_short',
+                            )}',
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
-                      ),
+                      ],
                     ],
                   ),
                   Text(

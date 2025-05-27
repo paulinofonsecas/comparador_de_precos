@@ -5,12 +5,15 @@ import 'package:comparador_de_precos/app/config/dependencies.dart';
 import 'package:comparador_de_precos/bootstrap.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await setupDependencies();
+  Intl.defaultLocale = 'pt_AO';
+  timeago.setLocaleMessages('pt_BR_short', timeago.PtBrShortMessages());
 
   await Supabase.initialize(
     url: 'https://yrouhkfyreqgsugljnbt.supabase.co',
@@ -19,6 +22,8 @@ Future<void> main() async {
         'UxOTcsImV4cCI6MjA2Mjc1MTE5N30.PzqUT8blpH0Dk13oMKjZop9W08-WmQUI8GX'
         'ZWnKJvRw',
   );
+
+  await setupDependencies();
 
   // if is running on android, device preview is not available
   if (Platform.isAndroid) {
