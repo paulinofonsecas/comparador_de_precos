@@ -83,7 +83,8 @@ class ProductCatalogRepository {
           .order('preco', ascending: true)
           .limit(1);
 
-      final precoMinimo = minimalPrice[0]['preco'] as double;
+      final precoMinimo =
+          minimalPrice.isNotEmpty ? minimalPrice[0]['preco'] as double : null;
 
       final produto =
           Produto.fromMap(response).copyWith(precoMinimo: precoMinimo);
@@ -116,6 +117,55 @@ class ProductCatalogRepository {
       return ofertas;
     } catch (e) {
       throw Exception('Erro ao buscar ofertas: $e');
+    }
+  }
+
+  /// Verifica se um produto está nos favoritos
+  Future<bool> isFavorite(String productId) async {
+    try {
+      final userId = _supabaseClient.auth.currentUser?.id;
+      if (userId == null) return false;
+
+      final response = await _supabaseClient
+          .from('favoritos')
+          .select()
+          .eq('user_id', userId)
+          .eq('product_id', productId)
+          .maybeSingle();
+
+      return response != null;
+    } catch (e) {
+      throw Exception('Erro ao verificar favorito: $e');
+    }
+  }
+
+  /// Adiciona ou remove um produto dos favoritos
+  Future<bool> toggleFavorite(String productId) async {
+    try {
+      final userId = _supabaseClient.auth.currentUser?.id;
+      if (userId == null) throw Exception('Usuário não autenticado');
+
+      final isFav = await isFavorite(productId);
+
+      if (isFav) {
+        // Remove dos favoritos
+        await _supabaseClient
+            .from('favoritos')
+            .delete()
+            .eq('user_id', userId)
+            .eq('product_id', productId);
+
+        return false;
+      } else {
+        // Adiciona aos favoritos
+        await _supabaseClient.from('favoritos').insert({
+          'user_id': userId,
+          'product_id': productId,
+        });
+        return true;
+      }
+    } catch (e) {
+      throw Exception('Erro ao alternar favorito: $e');
     }
   }
 }

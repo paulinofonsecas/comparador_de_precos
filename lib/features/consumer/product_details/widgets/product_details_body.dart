@@ -1,8 +1,10 @@
 import 'package:comparador_de_precos/app/utils/number_format.dart';
 import 'package:comparador_de_precos/data/models/produto.dart';
+import 'package:comparador_de_precos/features/consumer/product_details/cubit/favorite_cubit.dart';
 import 'package:comparador_de_precos/features/consumer/product_details/widgets/lista_de_ofertas.dart';
 import 'package:comparador_de_precos/widgets/default_image_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
 import 'package:star_rating/star_rating.dart';
 
@@ -68,12 +70,27 @@ class ProductDetailsBody extends StatelessWidget {
                       ],
                     ],
                   ),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.favorite,
-                      color: Colors.red,
-                    ),
-                    onPressed: () {},
+                  BlocBuilder<FavoriteCubit, FavoriteState>(
+                    builder: (context, state) {
+                      final isFavorite = state is FavoriteLoaded ? state.isFavorite : false;
+                      final isLoading = state is FavoriteLoading;
+
+                      if (state is FavoriteError) {
+                        print(state.message);
+                      }
+
+                      return IconButton(
+                        icon: Icon(
+                          isFavorite ? Icons.favorite : Icons.favorite_border,
+                          color: isFavorite ? Colors.red : Colors.grey,
+                        ),
+                        onPressed: isLoading
+                            ? null
+                            : () => context
+                                .read<FavoriteCubit>()
+                                .toggleFavorite(produto.id),
+                      );
+                    },
                   ),
                 ],
               ),

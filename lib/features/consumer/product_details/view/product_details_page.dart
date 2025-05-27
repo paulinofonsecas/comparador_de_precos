@@ -1,8 +1,9 @@
 import 'package:comparador_de_precos/app/config/dependencies.dart';
-import 'package:comparador_de_precos/features/consumer/product_details/cubit/get_similar_products_cubit.dart';
-import 'package:flutter/material.dart';
 import 'package:comparador_de_precos/features/consumer/product_details/bloc/bloc.dart';
+import 'package:comparador_de_precos/features/consumer/product_details/cubit/favorite_cubit.dart';
+import 'package:comparador_de_precos/features/consumer/product_details/cubit/get_similar_products_cubit.dart';
 import 'package:comparador_de_precos/features/consumer/product_details/widgets/product_details_body.dart';
+import 'package:flutter/material.dart';
 
 /// {@template product_details_page}
 /// A description for ProductDetailsPage
@@ -30,6 +31,10 @@ class ProductDetailsPage extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => GetSimilarProductsCubit(getIt()),
+        ),
+        BlocProvider(
+          create: (context) => FavoriteCubit(repository: getIt())
+            ..checkFavoriteStatus(productId),
         ),
       ],
       child: Scaffold(
