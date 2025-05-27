@@ -1,4 +1,6 @@
 import 'package:comparador_de_precos/data/repositories/authentication_repository.dart';
+import 'package:comparador_de_precos/data/repositories/product_catalog_repository.dart';
+import 'package:comparador_de_precos/data/repositories/search_repository.dart';
 import 'package:comparador_de_precos/features/auth/bloc/auth_bloc.dart';
 import 'package:comparador_de_precos/features/auth/signup/bloc/signup_bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -24,6 +26,21 @@ Future<void> setupDependencies() async {
     );
 
   setupBlocs();
+  setupRepositories();
+}
+
+void setupRepositories() {
+  getIt
+    ..registerLazySingleton<ProductCatalogRepository>(
+      () => ProductCatalogRepository(
+        supabaseClient: getIt<SupabaseClient>(),
+      ),
+    )
+    ..registerLazySingleton<SearchProductRepository>(
+      () => SearchProductRepository(
+        supabaseClient: getIt<SupabaseClient>(),
+      ),
+    );
 }
 
 void setupBlocs() {

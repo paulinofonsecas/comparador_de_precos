@@ -1,19 +1,30 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:comparador_de_precos/data/models/produto.dart';
+import 'package:comparador_de_precos/data/repositories/search_repository.dart';
 import 'package:equatable/equatable.dart';
 part 'search_event.dart';
 part 'search_state.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
-  SearchBloc() : super(const SearchInitial()) {
-    on<CustomSearchEvent>(_onCustomSearchEvent);
+  SearchBloc(this._repository) : super(const SearchInitial()) {
+    on<SearchProductEvent>(_onSearchProductEvent);
   }
 
-  FutureOr<void> _onCustomSearchEvent(
-    CustomSearchEvent event,
+  final SearchProductRepository _repository;
+
+  FutureOr<void> _onSearchProductEvent(
+    SearchProductEvent event,
     Emitter<SearchState> emit,
-  ) {
-    // TODO: Add Logic
+  ) async {
+    try {
+      emit(SearchProductsLoading());
+
+      final products = await _repository.searchProducts(event.searchText);
+      emit(SearchProductsSuccess(products));
+    } catch (e) {
+      emit(SearchProductsError(e.toString()));
+    }
   }
 }

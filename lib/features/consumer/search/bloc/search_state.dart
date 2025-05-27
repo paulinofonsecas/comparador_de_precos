@@ -32,3 +32,25 @@ class SearchInitial extends SearchState {
   /// {@macro search_initial}
   const SearchInitial() : super();
 }
+
+class SearchProductsLoading extends SearchState {}
+
+class SearchProductsEmpty extends SearchState {}
+
+class SearchProductsSuccess extends SearchState {
+  const SearchProductsSuccess(this.produtsResult);
+
+  final List<Produto> produtsResult;
+
+  @override
+  List<Object> get props => [produtsResult];
+}
+
+class SearchProductsError extends SearchState {
+  const SearchProductsError(this.message);
+
+  final String message;
+
+  @override
+  List<Object> get props => [message];
+}

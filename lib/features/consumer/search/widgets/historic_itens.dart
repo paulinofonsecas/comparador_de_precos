@@ -29,16 +29,21 @@ class HistoricItens extends StatelessWidget {
                 ),
           ),
           const GutterSmall(),
-          Column(
-            children: history
-                .take(6)
-                .map((e) => HistoryListItem(
+          if (history.isEmpty)
+            const Text('Nenhum historico encontrado')
+          else
+            Column(
+              children: history
+                  .take(6)
+                  .map(
+                    (e) => HistoryListItem(
                       title: e,
                       onItemTap: onItemTap,
                       onRemoveTap: onRemoveTap,
-                    ))
-                .toList(),
-          ),
+                    ),
+                  )
+                  .toList(),
+            ),
         ],
       ),
     );

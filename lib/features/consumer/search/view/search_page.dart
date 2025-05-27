@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:comparador_de_precos/app/config/dependencies.dart';
 import 'package:comparador_de_precos/features/consumer/search/bloc/bloc.dart';
+import 'package:comparador_de_precos/features/consumer/search/cubit/search_history_cubit.dart';
 import 'package:comparador_de_precos/features/consumer/search/widgets/search_body.dart';
+import 'package:flutter/material.dart';
 
 /// {@template search_page}
 /// A description for SearchPage
@@ -16,13 +18,20 @@ class SearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => SearchBloc(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => SearchBloc(getIt()),
+        ),
+        BlocProvider(
+          create: (context) => SearchHistoryCubit(),
+        ),
+      ],
       child: const Scaffold(
         body: SearchView(),
       ),
     );
-  }    
+  }
 }
 
 /// {@template search_view}
