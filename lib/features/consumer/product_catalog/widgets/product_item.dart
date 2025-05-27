@@ -1,4 +1,5 @@
 import 'package:comparador_de_precos/data/models/produto.dart';
+import 'package:comparador_de_precos/widgets/default_image_widget.dart';
 import 'package:flutter/material.dart';
 
 class ProductListItem extends StatelessWidget {
@@ -26,47 +27,11 @@ class ProductListItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Imagem do produto
-              ClipRRect(
+              DefaultImageWidget(
+                imageUrl: produto.imagemUrl,
+                width: 100,
+                height: 100,
                 borderRadius: BorderRadius.circular(8),
-                child: SizedBox(
-                  width: 100,
-                  height: 100,
-                  child: produto.imagemUrl != null
-                      ? Image.network(
-                          produto.imagemUrl!,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              color: Colors.grey[200],
-                              child: const Icon(
-                                Icons.image_not_supported,
-                                size: 40,
-                                color: Colors.grey,
-                              ),
-                            );
-                          },
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return Center(
-                              child: CircularProgressIndicator(
-                                value: loadingProgress.expectedTotalBytes !=
-                                        null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                        loadingProgress.expectedTotalBytes!
-                                    : null,
-                              ),
-                            );
-                          },
-                        )
-                      : Container(
-                          color: Colors.grey[200],
-                          child: const Icon(
-                            Icons.image_not_supported,
-                            size: 40,
-                            color: Colors.grey,
-                          ),
-                        ),
-                ),
               ),
               const SizedBox(width: 16),
               // Informações do produto

@@ -2,16 +2,16 @@ import 'package:comparador_de_precos/data/models/categoria.dart';
 import 'package:flutter/material.dart';
 
 class CategoryFilter extends StatelessWidget {
+  const CategoryFilter({
+    required this.categorias,
+    required this.onCategorySelected,
+    this.selectedCategoryId,
+    super.key,
+  });
+
   final List<Categoria> categorias;
   final String? selectedCategoryId;
   final void Function(String?) onCategorySelected;
-
-  const CategoryFilter({
-    super.key,
-    required this.categorias,
-    this.selectedCategoryId,
-    required this.onCategorySelected,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,20 +20,10 @@ class CategoryFilter extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 8),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: categorias.length + 1, // +1 para o item "Todos"
+        itemCount: categorias.length,
         padding: const EdgeInsets.symmetric(horizontal: 8),
         itemBuilder: (context, index) {
-          // Primeiro item é "Todos"
-          if (index == 0) {
-            final isSelected = selectedCategoryId == '0';
-            return _buildCategoryChip(
-              'Todos',
-              isSelected,
-              () => onCategorySelected('0'),
-            );
-          }
-
-          final categoria = categorias[index - 1];
+          final categoria = categorias[index];
           final isSelected = categoria.id == selectedCategoryId;
           return _buildCategoryChip(
             categoria.nome,

@@ -7,14 +7,14 @@ import 'package:comparador_de_precos/features/consumer/product_details/view/prod
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ProductCatalogView extends StatefulWidget {
-  const ProductCatalogView({super.key});
+class ProductCatalogBody extends StatefulWidget {
+  const ProductCatalogBody({super.key});
 
   @override
-  State<ProductCatalogView> createState() => _ProductCatalogViewState();
+  State<ProductCatalogBody> createState() => _ProductCatalogBodyState();
 }
 
-class _ProductCatalogViewState extends State<ProductCatalogView> {
+class _ProductCatalogBodyState extends State<ProductCatalogBody> {
   final _scrollController = ScrollController();
 
   @override
@@ -47,47 +47,32 @@ class _ProductCatalogViewState extends State<ProductCatalogView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Catálogo de Produtos'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: () {
-              context
-                  .read<ProductCatalogBloc>()
-                  .add(const LoadProducts(refresh: true));
-            },
-          ),
-        ],
-      ),
-      body: BlocBuilder<ProductCatalogBloc, ProductCatalogState>(
-        builder: (context, state) {
-          // Exibe o filtro de categorias se houver categorias carregadas
-          final hasCategories = state.categorias.isNotEmpty;
-
-          return Column(
-            children: [
-              // Filtro de categorias
-              if (hasCategories)
-                CategoryFilter(
-                  categorias: state.categorias,
-                  selectedCategoryId: state.selectedCategoryId,
-                  onCategorySelected: (categoryId) {
-                    context
-                        .read<ProductCatalogBloc>()
-                        .add(FilterByCategory(categoryId));
-                  },
-                ),
-
-              // Lista de produtos
-              Expanded(
-                child: _buildProductList(context, state),
+    return BlocBuilder<ProductCatalogBloc, ProductCatalogState>(
+      builder: (context, state) {
+        // Exibe o filtro de categorias se houver categorias carregadas
+        final hasCategories = state.categorias.isNotEmpty;
+    
+        return Column(
+          children: [
+            // Filtro de categorias
+            if (hasCategories)
+              CategoryFilter(
+                categorias: state.categorias,
+                selectedCategoryId: state.selectedCategoryId,
+                onCategorySelected: (categoryId) {
+                  context
+                      .read<ProductCatalogBloc>()
+                      .add(FilterByCategory(categoryId));
+                },
               ),
-            ],
-          );
-        },
-      ),
+    
+            // Lista de produtos
+            Expanded(
+              child: _buildProductList(context, state),
+            ),
+          ],
+        );
+      },
     );
   }
 
