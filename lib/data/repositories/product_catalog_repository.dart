@@ -168,4 +168,22 @@ class ProductCatalogRepository {
       throw Exception('Erro ao alternar favorito: $e');
     }
   }
+
+  Future<List<Produto>> getProductsByMarketId({
+    required String marketId,
+  }) async {
+    try {
+      final response = await _supabaseClient
+          .from('precos')
+          .select('*, produtos:produto_id(*)')
+          .eq('loja_id', marketId);
+
+      return response.map((item) {
+        final produto = item['produtos'] as Map<String, dynamic>;
+        return Produto.fromMap(produto);
+      }).toList();
+    } catch (e) {
+      throw Exception('Erro ao buscar produtos: $e');
+    }
+  }
 }

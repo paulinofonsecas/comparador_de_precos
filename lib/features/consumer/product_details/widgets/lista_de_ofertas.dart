@@ -1,4 +1,5 @@
 import 'package:comparador_de_precos/data/models/produto.dart';
+import 'package:comparador_de_precos/features/consumer/oferta_details/view/oferta_details_page.dart';
 import 'package:comparador_de_precos/features/consumer/product_details/cubit/get_similar_products_cubit.dart';
 import 'package:comparador_de_precos/features/consumer/product_details/view/product_details_page.dart';
 import 'package:comparador_de_precos/features/consumer/product_details/widgets/oferta_item.dart';
@@ -48,14 +49,9 @@ class ListaDeOfertas extends StatelessWidget {
               (index) => OfertaItem(
                 oferta: ofertas.elementAt(index),
                 onTap: () {
-                  Navigator.push(
+                  OfertaDetailsBottomSheet.show(
                     context,
-                    // ignore: inference_failure_on_instance_creation
-                    MaterialPageRoute(
-                      builder: (context) => ProductDetailsPage(
-                        productId: ofertas.elementAt(index).id,
-                      ),
-                    ),
+                    oferta: ofertas[index],
                   );
                 },
               ),

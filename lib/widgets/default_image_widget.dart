@@ -23,7 +23,16 @@ class DefaultImageWidget extends StatelessWidget {
       return Container(
         height: height,
         width: width,
-        color: Colors.grey,
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.errorContainer,
+          borderRadius: borderRadius,
+        ),
+        child: Center(
+          child: Icon(
+            Icons.error,
+            color: Theme.of(context).colorScheme.onErrorContainer,
+          ),
+        ),
       );
     }
 
