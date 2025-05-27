@@ -2,9 +2,9 @@ import 'package:comparador_de_precos/data/repositories/product_catalog_repositor
 import 'package:comparador_de_precos/features/consumer/product_catalog/bloc/product_catalog_bloc.dart';
 import 'package:comparador_de_precos/features/consumer/product_catalog/bloc/product_catalog_event.dart';
 import 'package:comparador_de_precos/features/consumer/product_catalog/bloc/product_catalog_state.dart';
-import 'package:comparador_de_precos/features/consumer/product_catalog/view/product_details_page.dart';
 import 'package:comparador_de_precos/features/consumer/product_catalog/widgets/category_filter.dart';
 import 'package:comparador_de_precos/features/consumer/product_catalog/widgets/product_item.dart';
+import 'package:comparador_de_precos/features/consumer/product_details/view/product_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,7 +16,9 @@ class ProductCatalogPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => ProductCatalogBloc(
         repository: ProductCatalogRepository(),
-      )..add(LoadCategories())..add(const LoadProducts()),
+      )
+        ..add(LoadCategories())
+        ..add(const LoadProducts()),
       child: const ProductCatalogView(),
     );
   }
@@ -69,7 +71,9 @@ class _ProductCatalogViewState extends State<ProductCatalogView> {
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () {
-              context.read<ProductCatalogBloc>().add(const LoadProducts(refresh: true));
+              context
+                  .read<ProductCatalogBloc>()
+                  .add(const LoadProducts(refresh: true));
             },
           ),
         ],
@@ -78,7 +82,7 @@ class _ProductCatalogViewState extends State<ProductCatalogView> {
         builder: (context, state) {
           // Exibe o filtro de categorias se houver categorias carregadas
           final hasCategories = state.categorias.isNotEmpty;
-          
+
           return Column(
             children: [
               // Filtro de categorias
@@ -87,10 +91,12 @@ class _ProductCatalogViewState extends State<ProductCatalogView> {
                   categorias: state.categorias,
                   selectedCategoryId: state.selectedCategoryId,
                   onCategorySelected: (categoryId) {
-                    context.read<ProductCatalogBloc>().add(FilterByCategory(categoryId));
+                    context
+                        .read<ProductCatalogBloc>()
+                        .add(FilterByCategory(categoryId));
                   },
                 ),
-              
+
               // Lista de produtos
               Expanded(
                 child: _buildProductList(context, state),
@@ -110,7 +116,7 @@ class _ProductCatalogViewState extends State<ProductCatalogView> {
           return const Center(child: CircularProgressIndicator());
         }
         return _buildProductListView(context, state);
-      
+
       case ProductCatalogStatus.success:
         if (state.produtos.isEmpty) {
           return const Center(
@@ -121,7 +127,7 @@ class _ProductCatalogViewState extends State<ProductCatalogView> {
           );
         }
         return _buildProductListView(context, state);
-      
+
       case ProductCatalogStatus.failure:
         return Center(
           child: Column(
@@ -134,7 +140,9 @@ class _ProductCatalogViewState extends State<ProductCatalogView> {
               const SizedBox(height: 8),
               ElevatedButton(
                 onPressed: () {
-                  context.read<ProductCatalogBloc>().add(const LoadProducts(refresh: true));
+                  context
+                      .read<ProductCatalogBloc>()
+                      .add(const LoadProducts(refresh: true));
                 },
                 child: const Text('Tentar novamente'),
               ),
@@ -144,10 +152,13 @@ class _ProductCatalogViewState extends State<ProductCatalogView> {
     }
   }
 
-  Widget _buildProductListView(BuildContext context, ProductCatalogState state) {
+  Widget _buildProductListView(
+      BuildContext context, ProductCatalogState state) {
     return RefreshIndicator(
       onRefresh: () async {
-        context.read<ProductCatalogBloc>().add(const LoadProducts(refresh: true));
+        context
+            .read<ProductCatalogBloc>()
+            .add(const LoadProducts(refresh: true));
       },
       child: ListView.builder(
         controller: _scrollController,
@@ -165,12 +176,13 @@ class _ProductCatalogViewState extends State<ProductCatalogView> {
           }
 
           final produto = state.produtos[index];
-          return ProductItem(
+          return ProductListItem(
             produto: produto,
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute<void>(
-                  builder: (context) => ProductDetailsPage(productId: produto.id),
+                  builder: (context) =>
+                      ProductDetailsPage(productId: produto.id),
                 ),
               );
             },

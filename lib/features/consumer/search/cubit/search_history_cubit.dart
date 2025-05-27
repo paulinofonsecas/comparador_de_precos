@@ -13,6 +13,7 @@ class SearchHistoryCubit extends Cubit<SearchHistoryState> {
 
   Future<void> saveItem(String newItem) async {
     final listaAntiga = sp.getStringList(storageKey) ?? []
+      ..removeWhere((e) => e == newItem)
       ..add(newItem);
 
     await sp.setStringList(storageKey, listaAntiga);

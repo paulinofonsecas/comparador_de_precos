@@ -23,6 +23,8 @@ dependencies:
   flutter_gutter: ^2.2.0
   shared_preferences: ^2.5.3
   hugeicons: ^0.0.11
+  cached_network_image: ^3.4.1
+  star_rating: ^0.11.0
 
 dev_dependencies:
   bloc_test: ^9.1.7

@@ -1,5 +1,6 @@
 import 'package:comparador_de_precos/features/consumer/application/bloc/bloc.dart';
 import 'package:comparador_de_precos/features/consumer/inicio/inicio.dart';
+import 'package:comparador_de_precos/features/consumer/product_catalog/view/product_catalog_page.dart';
 import 'package:comparador_de_precos/features/consumer/search/view/search_page.dart';
 import 'package:flutter/material.dart';
 
@@ -25,7 +26,7 @@ class _ApplicationPageState extends State<ApplicationPage> {
   final List<Widget> _pages = [
     const InicioPage(),
     const SearchPage(),
-    const Center(child: Text('Favoritos')),
+    const ProductCatalogPage(),
     const Center(child: Text('Perfil')),
   ];
 
@@ -64,8 +65,8 @@ class _ApplicationPageState extends State<ApplicationPage> {
               label: 'Pesquisar',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.favorite_outline),
-              label: 'Favoritos',
+              icon: Icon(Icons.store),
+              label: 'Catalogo',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person_outline),

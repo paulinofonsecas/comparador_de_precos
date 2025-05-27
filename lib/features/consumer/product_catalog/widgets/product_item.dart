@@ -1,23 +1,25 @@
 import 'package:comparador_de_precos/data/models/produto.dart';
 import 'package:flutter/material.dart';
 
-class ProductItem extends StatelessWidget {
-  final Produto produto;
-  final VoidCallback onTap;
-
-  const ProductItem({
-    super.key,
+class ProductListItem extends StatelessWidget {
+  const ProductListItem({
     required this.produto,
     required this.onTap,
+    super.key,
   });
+
+  final Produto produto;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 2,
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      color: Theme.of(context).colorScheme.surface,
+      elevation: .5,
       child: InkWell(
         onTap: onTap,
+        borderRadius: BorderRadius.circular(8),
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Row(
@@ -47,7 +49,8 @@ class ProductItem extends StatelessWidget {
                             if (loadingProgress == null) return child;
                             return Center(
                               child: CircularProgressIndicator(
-                                value: loadingProgress.expectedTotalBytes != null
+                                value: loadingProgress.expectedTotalBytes !=
+                                        null
                                     ? loadingProgress.cumulativeBytesLoaded /
                                         loadingProgress.expectedTotalBytes!
                                     : null,
@@ -80,16 +83,6 @@ class ProductItem extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    if (produto.marca != null && produto.marca!.isNotEmpty) ...[
-                      const SizedBox(height: 4),
-                      Text(
-                        produto.marca!,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey[700],
-                        ),
-                      ),
-                    ],
                     if (produto.categoria != null) ...[
                       const SizedBox(height: 4),
                       Container(
@@ -110,16 +103,22 @@ class ProductItem extends StatelessWidget {
                         ),
                       ),
                     ],
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.arrow_forward,
-                          size: 16,
-                          color: Colors.blue,
-                        ),
-                        const SizedBox(width: 4),
-                        const Text(
+                    const SizedBox(height: 4),
+                    Text(
+                      'Disponível em 4 lojas',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[700],
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton.icon(
+                        icon: const Icon(Icons.chevron_right),
+                        iconAlignment: IconAlignment.end,
+                        onPressed: onTap,
+                        label: const Text(
                           'Ver detalhes',
                           style: TextStyle(
                             fontSize: 12,
@@ -127,7 +126,7 @@ class ProductItem extends StatelessWidget {
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                      ],
+                      ),
                     ),
                   ],
                 ),

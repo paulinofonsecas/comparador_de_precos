@@ -1,4 +1,5 @@
 import 'package:comparador_de_precos/data/models/produto.dart';
+import 'package:comparador_de_precos/features/consumer/product_details/view/product_details_page.dart';
 import 'package:comparador_de_precos/features/consumer/search/cubit/search_history_cubit.dart'
     show SearchHistoryCubit;
 import 'package:comparador_de_precos/features/consumer/search/search.dart';
@@ -138,6 +139,12 @@ class _ResultSearchListState extends State<ResultSearchList> {
                           context.read<SearchHistoryCubit>().saveItem(
                                 widget.searchText,
                               );
+                          Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                              builder: (context) =>
+                                  ProductDetailsPage(productId: item.id),
+                            ),
+                          );
                         },
                       );
                     },
