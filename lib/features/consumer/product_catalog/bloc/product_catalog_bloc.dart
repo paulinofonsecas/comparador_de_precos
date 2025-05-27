@@ -4,7 +4,8 @@ import 'package:comparador_de_precos/data/repositories/product_catalog_repositor
 import 'package:comparador_de_precos/features/consumer/product_catalog/bloc/product_catalog_event.dart';
 import 'package:comparador_de_precos/features/consumer/product_catalog/bloc/product_catalog_state.dart';
 
-class ProductCatalogBloc extends Bloc<ProductCatalogEvent, ProductCatalogState> {
+class ProductCatalogBloc
+    extends Bloc<ProductCatalogEvent, ProductCatalogState> {
   final ProductCatalogRepository _repository;
   static const int _pageSize = 15;
 
@@ -34,7 +35,7 @@ class ProductCatalogBloc extends Bloc<ProductCatalogEvent, ProductCatalogState> 
       ));
 
       final produtos = await _repository.getProdutos(
-        categoriaId: state.selectedCategoryId,
+        categoriaId: event.categoryId == '0' ? null : event.categoryId,
         page: 0,
         pageSize: _pageSize,
       );
@@ -111,7 +112,7 @@ class ProductCatalogBloc extends Bloc<ProductCatalogEvent, ProductCatalogState> 
       hasReachedMax: false,
     ));
 
-    add(const LoadProducts());
+    add(LoadProducts(categoryId: event.categoryId));
   }
 
   Future<void> _onLoadCategories(

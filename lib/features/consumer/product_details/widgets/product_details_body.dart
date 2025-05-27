@@ -1,3 +1,4 @@
+import 'package:comparador_de_precos/app/utils/number_format.dart';
 import 'package:comparador_de_precos/data/models/produto.dart';
 import 'package:comparador_de_precos/features/consumer/product_details/widgets/lista_de_ofertas.dart';
 import 'package:comparador_de_precos/widgets/default_image_widget.dart';
@@ -54,14 +55,17 @@ class ProductDetailsBody extends StatelessWidget {
                         color: Colors.amber,
                         starSize: 18,
                       ),
-                      const GutterTiny(),
-                      const Text(
-                        'Menor preço: 1.250,00 Kz',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
+                      if (produto.precoMinimo != null) ...[
+                        const GutterTiny(),
+                        Text(
+                          'Menor preço: '
+                          '${numberFormat.format(produto.precoMinimo)}',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        )
+                      ],
                     ],
                   ),
                   IconButton(

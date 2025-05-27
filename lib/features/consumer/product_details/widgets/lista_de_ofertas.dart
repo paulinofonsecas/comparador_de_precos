@@ -33,9 +33,7 @@ class ListaDeOfertas extends StatelessWidget {
         }
 
         if (state is GetSimilarProductsSuccess) {
-          final ofertas = state.similarProducts.where(
-            (oferta) => oferta.id != produto.id,
-          );
+          final ofertas = state.similarProducts;
 
           if (ofertas.isEmpty) {
             return const Center(

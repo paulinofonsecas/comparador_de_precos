@@ -76,7 +76,16 @@ class ProductCatalogRepository {
           .eq('id', id)
           .single();
 
-      final produto = Produto.fromMap(response);
+      final minimalPrice = await _supabaseClient
+          .from('precos')
+          .select('preco')
+          .order('preco', ascending: true)
+          .limit(1);
+
+      final precoMinimo = minimalPrice[0]['preco'] as double;
+
+      final produto =
+          Produto.fromMap(response).copyWith(precoMinimo: precoMinimo);
 
       // Adiciona a categoria se estiver presente na resposta
       if (response['categorias'] != null) {

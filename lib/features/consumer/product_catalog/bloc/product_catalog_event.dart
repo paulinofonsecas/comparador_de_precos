@@ -8,21 +8,21 @@ abstract class ProductCatalogEvent extends Equatable {
 }
 
 class LoadProducts extends ProductCatalogEvent {
+  const LoadProducts({this.refresh = false, this.categoryId = '0'});
   final bool refresh;
-  
-  const LoadProducts({this.refresh = false});
-  
+  final String? categoryId;
+
   @override
-  List<Object?> get props => [refresh];
+  List<Object?> get props => [categoryId, refresh];
 }
 
 class LoadMoreProducts extends ProductCatalogEvent {}
 
 class FilterByCategory extends ProductCatalogEvent {
   final String? categoryId;
-  
+
   const FilterByCategory(this.categoryId);
-  
+
   @override
   List<Object?> get props => [categoryId];
 }

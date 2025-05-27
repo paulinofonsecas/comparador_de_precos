@@ -3,14 +3,6 @@ import 'dart:convert';
 import 'package:comparador_de_precos/data/models/categoria.dart';
 
 class Produto {
-  final String id;
-  final String nome;
-  final String? marca;
-  final String? descricao;
-  final String? imagemUrl;
-  final String? categoriaId;
-  final Categoria? categoria;
-
   Produto({
     required this.id,
     required this.nome,
@@ -19,7 +11,35 @@ class Produto {
     this.imagemUrl,
     this.categoriaId,
     this.categoria,
+    this.precoMinimo,
   });
+
+  factory Produto.fromMap(Map<String, dynamic> map) {
+    return Produto(
+      id: map['id'] as String,
+      nome: map['nome'] as String,
+      marca: map['marca'] as String?,
+      descricao: map['descricao'] as String?,
+      imagemUrl: map['imagem_url'] as String?,
+      categoriaId: map['categoria_id'] as String?,
+      categoria: map['categoria'] != null
+          ? Categoria.fromMap(map['categoria'] as Map<String, dynamic>)
+          : null,
+      precoMinimo: map['preco_minimo'] as double?,
+    );
+  }
+
+  factory Produto.fromJson(String source) =>
+      Produto.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  final String id;
+  final String nome;
+  final String? marca;
+  final String? descricao;
+  final String? imagemUrl;
+  final String? categoriaId;
+  final Categoria? categoria;
+  final double? precoMinimo;
 
   Produto copyWith({
     String? id,
@@ -29,6 +49,7 @@ class Produto {
     String? imagemUrl,
     String? categoriaId,
     Categoria? categoria,
+    double? precoMinimo,
   }) {
     return Produto(
       id: id ?? this.id,
@@ -38,6 +59,7 @@ class Produto {
       imagemUrl: imagemUrl ?? this.imagemUrl,
       categoriaId: categoriaId ?? this.categoriaId,
       categoria: categoria ?? this.categoria,
+      precoMinimo: precoMinimo ?? this.precoMinimo,
     );
   }
 
@@ -50,31 +72,15 @@ class Produto {
       'imagem_url': imagemUrl,
       'categoria_id': categoriaId,
       'categoria': categoria?.toMap(),
+      'preco_minimo': precoMinimo,
     };
-  }
-
-  factory Produto.fromMap(Map<String, dynamic> map) {
-    return Produto(
-      id: map['id'] as String,
-      nome: map['nome'] as String,
-      marca: map['marca'] as String?,
-      descricao: map['descricao'] as String?,
-      imagemUrl: map['imagem_url'] as String?,
-      categoriaId: map['categoria_id'] as String?,
-      categoria: map['categoria'] != null 
-          ? Categoria.fromMap(map['categoria'] as Map<String, dynamic>) 
-          : null,
-    );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory Produto.fromJson(String source) =>
-      Produto.fromMap(json.decode(source) as Map<String, dynamic>);
-
   @override
   String toString() {
-    return 'Produto(id: $id, nome: $nome, marca: $marca, descricao: $descricao, imagemUrl: $imagemUrl, categoriaId: $categoriaId, categoria: $categoria)';
+    return 'Produto(id: $id, nome: $nome, marca: $marca, descricao: $descricao, imagemUrl: $imagemUrl, categoriaId: $categoriaId, categoria: $categoria, precoMinimo: $precoMinimo)';
   }
 
   @override
@@ -88,7 +94,8 @@ class Produto {
         other.descricao == descricao &&
         other.imagemUrl == imagemUrl &&
         other.categoriaId == categoriaId &&
-        other.categoria == categoria;
+        other.categoria == categoria &&
+        other.precoMinimo == precoMinimo;
   }
 
   @override
@@ -99,6 +106,7 @@ class Produto {
         descricao.hashCode ^
         imagemUrl.hashCode ^
         categoriaId.hashCode ^
-        categoria.hashCode;
+        categoria.hashCode ^
+        precoMinimo.hashCode;
   }
 }

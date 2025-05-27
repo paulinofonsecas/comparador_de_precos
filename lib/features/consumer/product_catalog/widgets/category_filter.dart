@@ -25,17 +25,16 @@ class CategoryFilter extends StatelessWidget {
         itemBuilder: (context, index) {
           // Primeiro item é "Todos"
           if (index == 0) {
-            final isSelected = selectedCategoryId == null;
+            final isSelected = selectedCategoryId == '0';
             return _buildCategoryChip(
               'Todos',
               isSelected,
-              () => onCategorySelected(null),
+              () => onCategorySelected('0'),
             );
           }
 
           final categoria = categorias[index - 1];
           final isSelected = categoria.id == selectedCategoryId;
-          
           return _buildCategoryChip(
             categoria.nome,
             isSelected,
