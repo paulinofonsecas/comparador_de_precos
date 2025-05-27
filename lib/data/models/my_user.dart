@@ -3,19 +3,32 @@ import 'dart:convert';
 import 'package:flutter/widgets.dart';
 
 class MyUser {
-  final String id;
-  final String email;
-  final String? displayName;
-  final String? photoURL;
-  final String? userType;
-  
   MyUser({
     required this.id,
     required this.email,
     this.displayName,
     this.photoURL,
-     this.userType,
+    this.userType,
   });
+
+  factory MyUser.fromMap(Map<String, dynamic> map) {
+    return MyUser(
+      id: map['id'] as String,
+      email: map['email'] as String,
+      displayName: map['displayName'] as String?,
+      photoURL: map['photoURL'] as String?,
+      userType: map['userType'] as String? ?? 'default',
+    );
+  }
+
+  factory MyUser.fromJson(String source) =>
+      MyUser.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  final String id;
+  final String email;
+  final String? displayName;
+  final String? photoURL;
+  final String? userType;
 
   MyUser copyWith({
     String? id,
@@ -43,27 +56,16 @@ class MyUser {
     };
   }
 
-  factory MyUser.fromMap(Map<String, dynamic> map) {
-    return MyUser(
-      id: map['id'] as String ?? "",
-      email: map['email'] as String ?? '',
-      displayName: map['displayName'] as String?,
-      photoURL: map['photoURL'] as String?,
-      userType: map['userType'] as String? ?? 'default',
-    );
-  }
-
   String toJson() => json.encode(toMap());
-
-  factory MyUser.fromJson(String source) =>
-      MyUser.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
+    // ignore: lines_longer_than_80_chars
     return 'MyUser(id: $id, email: $email, displayName: $displayName, photoURL: $photoURL, userType: $userType)';
   }
 
   @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
@@ -76,6 +78,7 @@ class MyUser {
   }
 
   @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
   int get hashCode {
     return id.hashCode ^
         email.hashCode ^
