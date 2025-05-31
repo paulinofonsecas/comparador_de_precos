@@ -3,6 +3,7 @@ import 'package:comparador_de_precos/data/models/oferta_model.dart';
 import 'package:comparador_de_precos/data/models/produto.dart';
 import 'package:comparador_de_precos/features/consumer/oferta_details/bloc/bloc.dart';
 import 'package:comparador_de_precos/features/consumer/oferta_details/cubit/get_loja_cubit.dart';
+import 'package:comparador_de_precos/features/consumer/loja_details/view/loja_details_page.dart'; // Added import
 import 'package:comparador_de_precos/features/consumer/oferta_details/cubit/get_more_products_of_market_cubit.dart';
 import 'package:comparador_de_precos/features/consumer/oferta_details/widgets/product_info_section.dart';
 import 'package:comparador_de_precos/widgets/default_image_widget.dart';
@@ -79,51 +80,62 @@ class LojaInfoSection extends StatelessWidget {
         if (state is GetLojaSuccess) {
           final loja = state.loja;
 
-          return Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  loja.nome,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+          // Wrapped with GestureDetector
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (_) => LojaDetailsPage(loja: loja),
                 ),
-                const GutterTiny(),
-                const Text('Rua Silva Porto, Cuito, Bié'),
-                const GutterTiny(),
-                const Text('Telefone: 925412030'),
-                const GutterLarge(),
-                const Text(
-                  'Localização da loja',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    loja.nome,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                const GutterSmall(),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: const MapControllerWidget(
-                    localizacao: LatLng(-12.391970665011454, 16.93843950388629),
-                    width: double.infinity,
-                    initialZoom: 14,
+                  const GutterTiny(),
+                  const Text('Rua Silva Porto, Cuito, Bié'),
+                  const GutterTiny(),
+                  const Text('Telefone: 925412030'),
+                  const GutterLarge(),
+                  const Text(
+                    'Localização da loja',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                const GutterLarge(),
-                const Text(
-                  'Outros produtos da loja',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                  const GutterSmall(),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: const MapControllerWidget(
+                      localizacao: LatLng(-12.391970665011454, 16.93843950388629),
+                      width: double.infinity,
+                      initialZoom: 14,
+                    ),
                   ),
-                ),
-                const GutterSmall(),
-                // horizontal list
-                const ShowMoreProcuctsOfmarket(),
-              ],
+                  const GutterLarge(),
+                  const Text(
+                    'Outros produtos da loja',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const GutterSmall(),
+                  // horizontal list
+                  const ShowMoreProcuctsOfmarket(),
+                ],
+              ),
             ),
           );
         }
