@@ -2,6 +2,7 @@ import 'package:comparador_de_precos/data/repositories/authentication_repository
 import 'package:comparador_de_precos/data/repositories/loja_repository.dart';
 import 'package:comparador_de_precos/data/repositories/product_catalog_repository.dart';
 import 'package:comparador_de_precos/data/repositories/search_repository.dart';
+import 'package:comparador_de_precos/data/services/location_service.dart';
 import 'package:comparador_de_precos/features/auth/bloc/auth_bloc.dart';
 import 'package:comparador_de_precos/features/auth/signup/bloc/signup_bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -46,6 +47,9 @@ void setupRepositories() {
       () => LojaRepository(
         supabaseClient: getIt<SupabaseClient>(),
       ),
+    )
+    ..registerLazySingleton<LocationService>(
+      LocationService.new,
     );
 }
 

@@ -1,5 +1,6 @@
 import 'package:comparador_de_precos/features/consumer/inicio/widgets/market_scroll_list_item.dart';
 import 'package:comparador_de_precos/features/consumer/inicio/widgets/market_scroll_vertical_list_item.dart';
+import 'package:comparador_de_precos/features/consumer/lojas_proximas/view/lojas_proximas_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
 
@@ -89,7 +90,13 @@ class Top10MelhoreLojasWidget extends StatelessWidget {
             ),
             const Spacer(),
             TextButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (context) => const LojasProximasPage(),
+                  ),
+                );
+              },
               icon: const Icon(Icons.chevron_right),
               iconAlignment: IconAlignment.end,
               label: const Text('Ver todas', style: TextStyle(fontSize: 13)),
