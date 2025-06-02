@@ -1,9 +1,8 @@
-import 'package:comparador_de_precos/data/models/loja.dart';
 import 'package:comparador_de_precos/data/models/oferta_model.dart';
 import 'package:comparador_de_precos/data/models/produto.dart';
+import 'package:comparador_de_precos/features/consumer/loja_details/view/loja_details_page.dart'; // Added import
 import 'package:comparador_de_precos/features/consumer/oferta_details/bloc/bloc.dart';
 import 'package:comparador_de_precos/features/consumer/oferta_details/cubit/get_loja_cubit.dart';
-import 'package:comparador_de_precos/features/consumer/loja_details/view/loja_details_page.dart'; // Added import
 import 'package:comparador_de_precos/features/consumer/oferta_details/cubit/get_more_products_of_market_cubit.dart';
 import 'package:comparador_de_precos/features/consumer/oferta_details/widgets/product_info_section.dart';
 import 'package:comparador_de_precos/widgets/default_image_widget.dart';
@@ -86,7 +85,7 @@ class LojaInfoSection extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute<void>(
-                  builder: (_) => LojaDetailsPage(loja: loja),
+                  builder: (_) => LojaDetailsPage(lojaId: loja.id),
                 ),
               );
             },
@@ -118,7 +117,8 @@ class LojaInfoSection extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: const MapControllerWidget(
-                      localizacao: LatLng(-12.391970665011454, 16.93843950388629),
+                      localizacao:
+                          LatLng(-12.391970665011454, 16.93843950388629),
                       width: double.infinity,
                       initialZoom: 14,
                     ),

@@ -6,7 +6,7 @@ class LojaRepository {
 
   final SupabaseClient supabaseClient;
 
-  Future<Loja> getLojaById(String id) async {
+  Future<Loja?> getLojaById(String id) async {
     try {
       final response =
           await supabaseClient.from('lojas').select().eq('id', id).single();

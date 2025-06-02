@@ -15,6 +15,11 @@ class GetLojaCubit extends Cubit<GetLojaState> {
     try {
       final loja = await lojaRepository.getLojaById(id);
 
+      if (loja == null) {
+        emit(const GetLojaFailure('Loja não encontrada'));
+        return;
+      }
+
       emit(GetLojaSuccess(loja));
     } catch (e) {
       emit(GetLojaFailure(e.toString()));

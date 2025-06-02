@@ -1,5 +1,4 @@
 part of 'loja_details_cubit.dart';
-import 'package:comparador_de_precos/data/models/loja.dart';
 
 abstract class LojaDetailsState extends Equatable {
   const LojaDetailsState();

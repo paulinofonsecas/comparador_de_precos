@@ -23,7 +23,7 @@ class LojaDetailsBody extends StatelessWidget {
           if (loja.endereco != null) Text('Endereço: ${loja.endereco}'),
           const GutterSmall(),
            // Assuming Loja model has a 'telefone' field
-          if (loja.telefone != null) Text('Telefone: ${loja.telefone}'),
+          if (loja.telefoneContato != null) Text('Telefone: ${loja.telefoneContato}'),
           // Add more store details here
           // e.g., list of products, opening hours, etc.
         ],
