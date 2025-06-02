@@ -1,5 +1,7 @@
 import 'package:comparador_de_precos/app/config/dependencies.dart';
+import 'package:comparador_de_precos/data/repositories/avaliacao_repository.dart';
 import 'package:comparador_de_precos/data/repositories/loja_repository.dart';
+import 'package:comparador_de_precos/features/consumer/loja_details/cubit/avaliacao_cubit.dart';
 import 'package:comparador_de_precos/features/consumer/loja_details/cubit/loja_details_cubit.dart';
 import 'package:comparador_de_precos/features/consumer/loja_details/widgets/loja_details_body.dart';
 import 'package:flutter/material.dart';
@@ -17,15 +19,19 @@ class LojaDetailsPage extends StatefulWidget {
 class _LojaDetailsPageState extends State<LojaDetailsPage> {
   @override
   Widget build(BuildContext context) {
-    // For now, we pass the initial Loja object directly.
-    // The Cubit can be used to fetch additional details or refresh data.
-    // If LojaRepository is not easily accessible here, this BlocProvider setup might need adjustment
-    // or be moved higher up in the widget tree if LojaRepository is provided via DI.
-    return BlocProvider(
-      create: (context) => LojaDetailsCubit(
-        getIt<LojaRepository>(),
-      ) // Assuming LojaRepository is provided via BlocProvider/RepositoryProvider higher up
-        ..fetchLojaDetails(widget.lojaId), // Fetch details when page loads
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => LojaDetailsCubit(
+            getIt<LojaRepository>(),
+          )..fetchLojaDetails(widget.lojaId),
+        ),
+        BlocProvider(
+          create: (context) => AvaliacaoCubit(
+            getIt<AvaliacaoRepository>(),
+          )..fetchAvaliacoes(widget.lojaId),
+        ),
+      ],
       child: Builder(
         builder: (context) {
           return Scaffold(

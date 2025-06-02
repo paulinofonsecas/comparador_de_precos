@@ -9,6 +9,8 @@ class Loja {
   final String? descricao;
   final String? logoUrl;
   final bool? aprovada;
+  final double classificacaoMedia;
+  final int numeroAvaliacoes;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -23,6 +25,8 @@ class Loja {
     this.descricao,
     this.logoUrl,
     this.aprovada,
+    this.classificacaoMedia = 0.0,
+    this.numeroAvaliacoes = 0,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -39,6 +43,12 @@ class Loja {
       descricao: json['descricao'] as String?,
       logoUrl: json['logo_url'] as String?,
       aprovada: json['aprovada'] as bool?,
+      classificacaoMedia: json['classificacao_media'] != null 
+          ? (json['classificacao_media'] as num).toDouble() 
+          : 0.0,
+      numeroAvaliacoes: json['numero_avaliacoes'] != null 
+          ? (json['numero_avaliacoes'] as num).toInt() 
+          : 0,
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
     );
@@ -56,6 +66,8 @@ class Loja {
       'descricao': descricao,
       'logo_url': logoUrl,
       'aprovada': aprovada,
+      'classificacao_media': classificacaoMedia,
+      'numero_avaliacoes': numeroAvaliacoes,
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
     };
