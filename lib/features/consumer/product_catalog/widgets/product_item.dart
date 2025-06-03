@@ -14,24 +14,42 @@ class ProductListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      color: Theme.of(context).colorScheme.surface,
-      elevation: .5,
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 2,
+      shadowColor: Colors.black.withOpacity(0.1),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Imagem do produto
-              DefaultImageWidget(
-                imageUrl: produto.imagemUrl,
-                width: 100,
-                height: 100,
-                borderRadius: BorderRadius.circular(8),
+              // Imagem do produto com efeito de sombra
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: DefaultImageWidget(
+                    imageUrl: produto.imagemUrl,
+                    width: 110,
+                    height: 110,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
               ),
               const SizedBox(width: 16),
               // Informações do produto
@@ -41,53 +59,74 @@ class ProductListItem extends StatelessWidget {
                   children: [
                     Text(
                       produto.nome,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
+                        color: theme.colorScheme.onSurface,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    if (produto.categoria != null) ...[
-                      const SizedBox(height: 4),
+                    const SizedBox(height: 8),
+                    // Categoria com design aprimorado
+                    if (produto.categoria != null) ...[                      
                       Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 2,
+                          horizontal: 10,
+                          vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.blue.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(12),
+                          color: theme.colorScheme.primary.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
                           produto.categoria!.nome,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 12,
-                            color: Colors.blue,
+                            fontWeight: FontWeight.w500,
+                            color: theme.colorScheme.primary,
                           ),
                         ),
                       ),
+                      const SizedBox(height: 8),
                     ],
-                    const SizedBox(height: 4),
-                    Text(
-                      'Disponível em 4 lojas',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[700],
-                      ),
+                    // Informação de disponibilidade com ícone
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.store_outlined,
+                          size: 16,
+                          color: theme.colorScheme.secondary,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          'Disponível em 4 lojas',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: theme.colorScheme.secondary,
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 8),
+                    // Botão de detalhes
                     Align(
                       alignment: Alignment.centerRight,
-                      child: TextButton.icon(
-                        icon: const Icon(Icons.chevron_right),
-                        iconAlignment: IconAlignment.end,
+                      child: ElevatedButton.icon(
                         onPressed: onTap,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: theme.colorScheme.primaryContainer,
+                          foregroundColor: theme.colorScheme.onPrimaryContainer,
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        icon: const Icon(Icons.visibility_outlined, size: 16),
                         label: const Text(
                           'Ver detalhes',
                           style: TextStyle(
                             fontSize: 12,
-                            color: Colors.blue,
                             fontWeight: FontWeight.w500,
                           ),
                         ),

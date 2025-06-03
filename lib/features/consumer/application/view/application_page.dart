@@ -69,6 +69,10 @@ class _ApplicationPageState extends State<ApplicationPage> {
               label: 'Catálogo',
             ),
             BottomNavigationBarItem(
+              icon: Icon(Icons.list),
+              label: 'Listas',
+            ),
+            BottomNavigationBarItem(
               icon: Icon(Icons.person_outline),
               label: 'Perfil',
             ),
