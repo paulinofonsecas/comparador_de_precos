@@ -1,8 +1,10 @@
 import 'package:comparador_de_precos/features/consumer/application/bloc/bloc.dart';
 import 'package:comparador_de_precos/features/consumer/inicio/inicio.dart';
+import 'package:comparador_de_precos/features/consumer/lista_compra/lista_compra_page.dart';
 import 'package:comparador_de_precos/features/consumer/product_catalog/view/product_catalog_page.dart';
 import 'package:comparador_de_precos/features/consumer/search/view/search_page.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// {@template application_page}
 /// A description for ApplicationPage
@@ -27,6 +29,9 @@ class _ApplicationPageState extends State<ApplicationPage> {
     const InicioPage(),
     const SearchPage(),
     const ProductCatalogPage(),
+    ListaCompraPage(
+      userId: Supabase.instance.client.auth.currentUser!.id,
+    ),
     const Center(child: Text('Perfil')),
   ];
 

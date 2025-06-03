@@ -1,6 +1,11 @@
 import 'package:comparador_de_precos/data/models/produto.dart';
+import 'package:comparador_de_precos/data/repositories/lista_compra_repository.dart';
+import 'package:comparador_de_precos/data/repositories/product_catalog_repository.dart';
+import 'package:comparador_de_precos/features/consumer/lista_compra/lista_compra_page.dart';
+import 'package:comparador_de_precos/features/consumer/lista_compra/widgets/item_lista_compra_form.dart';
 import 'package:comparador_de_precos/widgets/default_image_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProductListItem extends StatelessWidget {
   const ProductListItem({
@@ -12,10 +17,112 @@ class ProductListItem extends StatelessWidget {
   final Produto produto;
   final VoidCallback onTap;
 
+  // Constrói o bottom sheet para adicionar produto à lista de compras
+  Widget _buildAddToListBottomSheet(BuildContext context) {
+    final theme = Theme.of(context);
+    final listaCompraRepository = ListaCompraRepository();
+
+    return StatefulBuilder(
+      builder: (context, setState) {
+        return Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: theme.scaffoldBackgroundColor,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Text(
+                'Adicionar à Lista de Compras',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+              // Opções para o usuário
+              ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.pop(context);
+                  // Verifica se o usuário está logado e obtém o ID
+                  final userId = Supabase.instance.client.auth.currentUser!
+                      .id; // Substituir por autenticação real
+
+                  // Abre o formulário para adicionar o produto a uma lista existente
+                  Navigator.push<void>(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (context) => ListaCompraPage(
+                        userId: userId,
+                      ),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.list),
+                label: const Text('Ver Minhas Listas'),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 12,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              ElevatedButton.icon(
+                onPressed: () {
+                  // Verifica se o usuário está logado e obtém o ID
+                  const userId = 'user123'; // Substituir por autenticação real
+
+                  // Abre o formulário para criar uma nova lista com este produto
+                  showModalBottomSheet<void>(
+                    context: context,
+                    isScrollControlled: true,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(16)),
+                    ),
+                    builder: (context) => Padding(
+                      padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom,
+                      ),
+                      child: ItemListaCompraForm(
+                        listaId:
+                            'nova_lista', // Valor especial para indicar nova lista
+                        produtoPreSelecionado: produto,
+                        listaCompraRepository: listaCompraRepository,
+                        productRepository: ProductCatalogRepository(),
+                      ),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.add_shopping_cart),
+                label: const Text('Adicionar a Nova Lista'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: theme.colorScheme.primary,
+                  foregroundColor: theme.colorScheme.onPrimary,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 12,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancelar'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -69,7 +176,7 @@ class ProductListItem extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     // Categoria com design aprimorado
-                    if (produto.categoria != null) ...[                      
+                    if (produto.categoria != null) ...[
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 10,
@@ -109,28 +216,65 @@ class ProductListItem extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    // Botão de detalhes
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: ElevatedButton.icon(
-                        onPressed: onTap,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: theme.colorScheme.primaryContainer,
-                          foregroundColor: theme.colorScheme.onPrimaryContainer,
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
+                    // Botões de ação
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        // Botão para adicionar à lista de compras
+                        OutlinedButton.icon(
+                          onPressed: () {
+                            showModalBottomSheet<void>(
+                              context: context,
+                              isScrollControlled: true,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(16)),
+                              ),
+                              builder: (context) =>
+                                  _buildAddToListBottomSheet(context),
+                            );
+                          },
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 4),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            side: BorderSide(color: theme.colorScheme.primary),
+                          ),
+                          icon: const Icon(Icons.add_shopping_cart, size: 16),
+                          label: const Text(
+                            'Lista',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
-                        icon: const Icon(Icons.visibility_outlined, size: 16),
-                        label: const Text(
-                          'Ver detalhes',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
+                        const SizedBox(width: 8),
+                        // Botão de detalhes
+                        ElevatedButton.icon(
+                          onPressed: onTap,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: theme.colorScheme.primaryContainer,
+                            foregroundColor:
+                                theme.colorScheme.onPrimaryContainer,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 8),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                          icon: const Icon(Icons.visibility_outlined, size: 16),
+                          label: const Text(
+                            'Ver detalhes',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
                   ],
                 ),
