@@ -1,15 +1,16 @@
-import 'package:comparador_de_precos/app/config/dependencies.dart';
 import 'package:comparador_de_precos/data/models/categoria.dart';
 import 'package:comparador_de_precos/data/models/loja.dart';
-import 'package:comparador_de_precos/data/models/my_user.dart';
 import 'package:comparador_de_precos/data/models/produto.dart';
-import 'package:comparador_de_precos/data/repositories/avaliacao_repository.dart';
+import 'package:comparador_de_precos/widgets/map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../cubit/avaliacao_cubit.dart';
+import '../cubit/loja_products_cubit.dart';
+import '../cubit/loja_products_state.dart';
 
 class LojaDetailsBody extends StatefulWidget {
   const LojaDetailsBody({super.key, required this.loja});
@@ -23,114 +24,21 @@ class LojaDetailsBody extends StatefulWidget {
 class _LojaDetailsBodyState extends State<LojaDetailsBody>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  String _searchQuery = '';
-  String? _selectedCategory;
   final List<String> _priceFilters = ['Todos', 'Menor preço', 'Maior preço'];
-  String _selectedPriceFilter = 'Todos';
-
-  // Mock data for demonstration
-  final List<Produto> _mockProducts = [
-    Produto(
-      id: '1',
-      nome: 'Arroz Tio João',
-      marca: 'Tio João',
-      descricao: 'Arroz branco tipo 1, pacote de 5kg',
-      imagemUrl:
-          'https://images.unsplash.com/photo-1586201375761-83865001e8ac?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1050&q=80',
-      categoriaId: '1',
-      categoria: Categoria(id: '1', nome: 'Alimentos'),
-      precoMinimo: 25.99,
-    ),
-    Produto(
-      id: '2',
-      nome: 'Feijão Camil',
-      marca: 'Camil',
-      descricao: 'Feijão carioca tipo 1, pacote de 1kg',
-      imagemUrl:
-          'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1050&q=80',
-      categoriaId: '1',
-      categoria: Categoria(id: '1', nome: 'Alimentos'),
-      precoMinimo: 8.99,
-    ),
-    Produto(
-      id: '3',
-      nome: 'Sabonete Dove',
-      marca: 'Dove',
-      descricao: 'Sabonete hidratante, 90g',
-      imagemUrl:
-          'https://images.unsplash.com/photo-1584305574647-ac45d7a2e6a7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1050&q=80',
-      categoriaId: '2',
-      categoria: Categoria(id: '2', nome: 'Higiene'),
-      precoMinimo: 3.49,
-    ),
-    Produto(
-      id: '4',
-      nome: 'Detergente Ypê',
-      marca: 'Ypê',
-      descricao: 'Detergente líquido, 500ml',
-      imagemUrl:
-          'https://images.unsplash.com/photo-1585421514738-01798e348b17?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1050&q=80',
-      categoriaId: '3',
-      categoria: Categoria(id: '3', nome: 'Limpeza'),
-      precoMinimo: 2.99,
-    ),
-    Produto(
-      id: '5',
-      nome: 'Coca-Cola',
-      marca: 'Coca-Cola',
-      descricao: 'Refrigerante, 2L',
-      imagemUrl:
-          'https://images.unsplash.com/photo-1554866585-cd94860890b7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1050&q=80',
-      categoriaId: '4',
-      categoria: Categoria(id: '4', nome: 'Bebidas'),
-      precoMinimo: 9.99,
-    ),
-  ];
-
-  final List<Categoria> _mockCategories = [
-    Categoria(id: '0', nome: 'Todas'),
-    Categoria(id: '1', nome: 'Alimentos'),
-    Categoria(id: '2', nome: 'Higiene'),
-    Categoria(id: '3', nome: 'Limpeza'),
-    Categoria(id: '4', nome: 'Bebidas'),
-  ];
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+
+    // Load products when the widget is initialized
+    context.read<LojaProductsCubit>().loadProducts();
   }
 
   @override
   void dispose() {
     _tabController.dispose();
     super.dispose();
-  }
-
-  List<Produto> get _filteredProducts {
-    return _mockProducts.where((product) {
-      // Apply search filter
-      final matchesSearch = _searchQuery.isEmpty ||
-          product.nome.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          (product.marca?.toLowerCase().contains(_searchQuery.toLowerCase()) ??
-              false);
-
-      // Apply category filter
-      final matchesCategory = _selectedCategory == null ||
-          _selectedCategory == '0' ||
-          product.categoriaId == _selectedCategory;
-
-      return matchesSearch && matchesCategory;
-    }).toList()
-      ..sort((a, b) {
-        // Apply price filter
-        if (_selectedPriceFilter == 'Menor preço') {
-          return (a.precoMinimo ?? 0).compareTo(b.precoMinimo ?? 0);
-        } else if (_selectedPriceFilter == 'Maior preço') {
-          return (b.precoMinimo ?? 0).compareTo(a.precoMinimo ?? 0);
-        }
-        return 0;
-      });
   }
 
   @override
@@ -325,101 +233,134 @@ class _LojaDetailsBodyState extends State<LojaDetailsBody>
   }
 
   Widget _buildProductsTab() {
-    return Column(
-      children: [
-        // Search bar
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: TextField(
-            onChanged: (value) {
-              setState(() {
-                _searchQuery = value;
-              });
-            },
-            decoration: InputDecoration(
-              hintText: 'Buscar produtos...',
-              prefixIcon: const Icon(Icons.search),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide.none,
+    return BlocBuilder<LojaProductsCubit, LojaProductsState>(
+      builder: (context, state) {
+        return Column(
+          children: [
+            // Search bar
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: TextField(
+                onChanged: (value) {
+                  context.read<LojaProductsCubit>().updateSearchQuery(value);
+                },
+                decoration: InputDecoration(
+                  hintText: 'Buscar produtos...',
+                  prefixIcon: const Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                  filled: true,
+                  fillColor: Colors.grey[200],
+                  contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                ),
               ),
-              filled: true,
-              fillColor: Colors.grey[200],
-              contentPadding: const EdgeInsets.symmetric(vertical: 0),
             ),
-          ),
-        ),
-        // Filters
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            children: [
-              // Category filter
-              Container(
-                padding: const EdgeInsets.only(right: 8),
-                child: DropdownButton<String>(
-                  hint: const Text('Categoria'),
-                  value: _selectedCategory,
-                  underline: const SizedBox(),
-                  icon: const Icon(Icons.arrow_drop_down),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedCategory = newValue;
-                    });
-                  },
-                  items: _mockCategories
-                      .map<DropdownMenuItem<String>>((Categoria category) {
-                    return DropdownMenuItem<String>(
-                      value: category.id,
-                      child: Text(category.nome),
-                    );
-                  }).toList(),
-                ),
+            // Filters
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  // Category filter
+                  Container(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: DropdownButton<String>(
+                      hint: const Text('Categoria'),
+                      value: state.selectedCategoryId,
+                      underline: const SizedBox(),
+                      icon: const Icon(Icons.arrow_drop_down),
+                      onChanged: (String? newValue) {
+                        context
+                            .read<LojaProductsCubit>()
+                            .updateCategoryFilter(newValue);
+                      },
+                      items: context
+                          .read<LojaProductsCubit>()
+                          .categorias
+                          .map<DropdownMenuItem<String>>((Categoria category) {
+                        return DropdownMenuItem<String>(
+                          value: category.id,
+                          child: Text(category.nome),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                  // Price filter
+                  Container(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: DropdownButton<String>(
+                      hint: const Text('Preço'),
+                      value: state.priceFilter,
+                      underline: const SizedBox(),
+                      icon: const Icon(Icons.arrow_drop_down),
+                      onChanged: (String? newValue) {
+                        if (newValue != null) {
+                          context
+                              .read<LojaProductsCubit>()
+                              .updatePriceFilter(newValue);
+                        }
+                      },
+                      items: _priceFilters
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ],
               ),
-              // Price filter
-              Container(
-                padding: const EdgeInsets.only(left: 8),
-                child: DropdownButton<String>(
-                  hint: const Text('Preço'),
-                  value: _selectedPriceFilter,
-                  underline: const SizedBox(),
-                  icon: const Icon(Icons.arrow_drop_down),
-                  onChanged: (String? newValue) {
-                    if (newValue != null) {
-                      setState(() {
-                        _selectedPriceFilter = newValue;
-                      });
-                    }
-                  },
-                  items: _priceFilters
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                ),
+            ),
+            const SizedBox(height: 8),
+            // Product list
+            Expanded(
+              child: _buildProductList(state),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildProductList(LojaProductsState state) {
+    switch (state.status) {
+      case LojaProductsStatus.initial:
+      case LojaProductsStatus.loading:
+        return const Center(child: CircularProgressIndicator());
+      case LojaProductsStatus.failure:
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error_outline, size: 48, color: Colors.red),
+              const SizedBox(height: 16),
+              Text('Erro ao carregar produtos: ${state.errorMessage}'),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  context.read<LojaProductsCubit>().loadProducts();
+                },
+                child: const Text('Tentar novamente'),
               ),
             ],
           ),
-        ),
-        const SizedBox(height: 8),
-        // Product list
-        Expanded(
-          child: _filteredProducts.isEmpty
-              ? const Center(child: Text('Nenhum produto encontrado'))
-              : ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: _filteredProducts.length,
-                  itemBuilder: (context, index) {
-                    final product = _filteredProducts[index];
-                    return _buildProductCard(product);
-                  },
-                ),
-        ),
-      ],
-    );
+        );
+      case LojaProductsStatus.success:
+        final filteredProducts = state.filteredProducts;
+        return filteredProducts.isEmpty
+            ? const Center(child: Text('Nenhum produto encontrado'))
+            : ListView.builder(
+                padding: const EdgeInsets.all(16),
+                itemCount: filteredProducts.length,
+                itemBuilder: (context, index) {
+                  final product = filteredProducts[index];
+                  return _buildProductCard(product);
+                },
+              );
+    }
   }
 
   Widget _buildProductCard(Produto product) {
@@ -428,7 +369,9 @@ class _LojaDetailsBodyState extends State<LojaDetailsBody>
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          // Navigator.push(
+        },
         borderRadius: BorderRadius.circular(12),
         child: Padding(
           padding: const EdgeInsets.all(12),
@@ -460,7 +403,7 @@ class _LojaDetailsBodyState extends State<LojaDetailsBody>
                         child: const Icon(Icons.image, size: 40),
                       ),
               ),
-              const SizedBox(height: 8),
+              const Gutter(),
               // Product info
               Expanded(
                 child: Column(
@@ -559,15 +502,33 @@ class _LojaDetailsBodyState extends State<LojaDetailsBody>
         _buildInfoSection(
           'Localização',
           [
-            Container(
-              height: 200,
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const Center(
-                child: Text('Mapa indisponível'),
-              ),
+            Stack(
+              alignment: Alignment.topRight,
+              fit: StackFit.passthrough,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: MapControllerWidget(
+                    localizacao: LatLng(
+                      widget.loja.latitude!,
+                      widget.loja.longitude!,
+                    ),
+                    width: double.infinity,
+                    height: 250,
+                    initialZoom: 17,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.fullscreen,
+                      size: 40,
+                    ),
+                    onPressed: () {},
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -578,7 +539,16 @@ class _LojaDetailsBodyState extends State<LojaDetailsBody>
   Widget _buildInfoSection(String title, List<Widget> children) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [],
+      children: [
+        Text(
+          title,
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+        ),
+        const GutterTiny(),
+        ...children,
+      ],
     );
   }
 
@@ -807,7 +777,7 @@ class _LojaDetailsBodyState extends State<LojaDetailsBody>
                   backgroundColor: Colors.grey[300],
                   child: Text(name[0]),
                 ),
-                const SizedBox(height: 8),
+                const GutterSmall(),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

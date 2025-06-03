@@ -7,6 +7,30 @@ class AvaliacaoRepository {
   final SupabaseClient _supabaseClient;
 
   AvaliacaoRepository(this._supabaseClient);
+  
+  /// Adiciona múltiplas avaliações de uma vez
+  /// Útil para inserção em lote
+  Future<List<Avaliacao>> adicionarMultiplasAvaliacoes(List<Map<String, dynamic>> avaliacoes) async {
+    final List<Map<String, dynamic>> dataToInsert = avaliacoes.map((avaliacao) {
+      final uuid = const Uuid().v4();
+      final now = DateTime.now();
+      
+      return {
+        'id': uuid,
+        'loja_id': avaliacao['loja_id'],
+        'usuario_id': avaliacao['usuario_id'],
+        'usuario_nome': avaliacao['usuario_nome'],
+        'classificacao': avaliacao['classificacao'],
+        'comentario': avaliacao['comentario'],
+        'created_at': now.toIso8601String(),
+        'updated_at': now.toIso8601String(),
+      };
+    }).toList();
+
+    await _supabaseClient.from('avaliacoes').insert(dataToInsert);
+
+    return dataToInsert.map((data) => Avaliacao.fromJson(data)).toList();
+  }
 
   Future<List<Avaliacao>> getAvaliacoesByLojaId(String lojaId) async {
     final response = await _supabaseClient

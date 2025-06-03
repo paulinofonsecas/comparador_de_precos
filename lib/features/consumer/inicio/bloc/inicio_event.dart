@@ -1,17 +1,16 @@
 part of 'inicio_bloc.dart';
 
-abstract class InicioEvent  extends Equatable {
+abstract class InicioEvent extends Equatable {
   const InicioEvent();
 
   @override
   List<Object> get props => [];
-
 }
 
-/// {@template custom_inicio_event}
-/// Event added when some custom logic happens
+/// {@template load_lojas_para_voce_event}
+/// Event added when the 'Para você' lojas need to be loaded
 /// {@endtemplate}
-class CustomInicioEvent extends InicioEvent {
-  /// {@macro custom_inicio_event}
-  const CustomInicioEvent();
+class LoadLojasParaVoceEvent extends InicioEvent {
+  /// {@macro load_lojas_para_voce_event}
+  const LoadLojasParaVoceEvent();
 }

@@ -1,8 +1,10 @@
 import 'package:comparador_de_precos/app/config/dependencies.dart';
 import 'package:comparador_de_precos/data/repositories/avaliacao_repository.dart';
 import 'package:comparador_de_precos/data/repositories/loja_repository.dart';
+import 'package:comparador_de_precos/data/repositories/product_catalog_repository.dart';
 import 'package:comparador_de_precos/features/consumer/loja_details/cubit/avaliacao_cubit.dart';
 import 'package:comparador_de_precos/features/consumer/loja_details/cubit/loja_details_cubit.dart';
+import 'package:comparador_de_precos/features/consumer/loja_details/cubit/loja_products_cubit.dart';
 import 'package:comparador_de_precos/features/consumer/loja_details/widgets/loja_details_body.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,6 +32,12 @@ class _LojaDetailsPageState extends State<LojaDetailsPage> {
           create: (context) => AvaliacaoCubit(
             getIt<AvaliacaoRepository>(),
           )..fetchAvaliacoes(widget.lojaId),
+        ),
+        BlocProvider(
+          create: (context) => LojaProductsCubit(
+            productRepository: getIt<ProductCatalogRepository>(),
+            lojaId: widget.lojaId,
+          ),
         ),
       ],
       child: Builder(

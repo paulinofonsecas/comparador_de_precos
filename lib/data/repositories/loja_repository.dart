@@ -64,4 +64,26 @@ class LojaRepository {
       throw Exception('Erro ao buscar todas as lojas: $e');
     }
   }
+  
+  /// Busca as lojas com melhor classificação
+  /// 
+  /// [limit] é o número máximo de lojas a retornar (padrão: 10)
+  Future<List<Loja>> getTopRatedLojas({int limit = 10}) async {
+    try {
+      final List<Map<String, dynamic>> response = await supabaseClient
+          .from('avaliacoes')
+          .select('lojas(*)')
+          .order('classificacao', ascending: false)
+          .limit(limit);
+
+      final List<Loja> lojas = response
+          .map((json) => Loja.fromJson(json['lojas'] as Map<String, dynamic>))
+          .where((loja) => loja.aprovada ?? false)
+          .toList();
+      
+      return lojas;
+    } catch (e) {
+      throw Exception('Erro ao buscar lojas melhores avaliadas: $e');
+    }
+  }
 }

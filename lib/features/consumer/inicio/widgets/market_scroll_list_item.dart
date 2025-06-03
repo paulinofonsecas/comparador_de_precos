@@ -1,9 +1,14 @@
+import 'package:comparador_de_precos/data/models/loja.dart';
+import 'package:comparador_de_precos/features/consumer/loja_details/view/loja_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
 
 class MarketScrollListItem extends StatelessWidget {
+  final Loja? loja;
+
   const MarketScrollListItem({
     super.key,
+    this.loja,
   });
 
   @override
@@ -25,10 +30,15 @@ class MarketScrollListItem extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Image.network(
-                  'https://www.pontotel.com.br/local/wp-content/uploads/2022/05/imagem-corporativa.webp',
+                  loja?.logoUrl ??
+                      'https://www.pontotel.com.br/local/wp-content/uploads/2022/05/imagem-corporativa.webp',
                   fit: BoxFit.cover,
                   width: double.infinity,
                   height: double.infinity,
+                  errorBuilder: (context, error, stackTrace) => Container(
+                    color: Colors.grey[300],
+                    child: const Center(child: Icon(Icons.store, size: 50)),
+                  ),
                 ),
               ),
             ),
@@ -38,35 +48,42 @@ class MarketScrollListItem extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Nome da loja',
-                    style: TextStyle(
+                  Text(
+                    loja?.nome ?? 'Nome da loja',
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  const Text(
-                    'Cuito, rua silva, 123',
-                    style: TextStyle(
+                  Text(
+                    loja?.endereco ?? 'Endereço não disponível',
+                    style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   const GutterTiny(),
-                  const Row(
-                    spacing: 2,
-                    children: [
-                      Icon(Icons.star, color: Colors.amber, size: 12),
-                      Icon(Icons.star, color: Colors.amber, size: 12),
-                      Icon(Icons.star, color: Colors.amber, size: 12),
-                      Icon(Icons.star_outline, color: Colors.amber, size: 12),
-                      Icon(Icons.star_outline, color: Colors.amber, size: 12),
-                    ],
-                  ),
+                  _buildRatingStars(loja?.classificacaoMedia ?? 0,
+                      loja?.numeroAvaliacoes ?? 0),
                   Expanded(
                     child: Center(
                       child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          if (loja != null) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LojaDetailsPage(
+                                  lojaId: loja!.id,
+                                ),
+                              ),
+                            );
+                          }
+                        },
                         child: const Text('Ver loja'),
                       ),
                     ),
@@ -77,6 +94,33 @@ class MarketScrollListItem extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildRatingStars(double rating, int numAvaliacoes) {
+    final int fullStars = rating.floor();
+    final bool hasHalfStar = rating - fullStars >= 0.5;
+    final int emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+
+    return Row(
+      spacing: 2,
+      children: [
+        ...List.generate(
+          fullStars,
+          (index) => const Icon(Icons.star, color: Colors.amber, size: 12),
+        ),
+        if (hasHalfStar)
+          const Icon(Icons.star_half, color: Colors.amber, size: 12),
+        ...List.generate(
+          emptyStars,
+          (index) =>
+              const Icon(Icons.star_outline, color: Colors.amber, size: 12),
+        ),
+        Text(
+          ' ($numAvaliacoes)',
+          style: const TextStyle(fontSize: 10),
+        ),
+      ],
     );
   }
 }
