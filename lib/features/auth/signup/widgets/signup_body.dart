@@ -108,6 +108,18 @@ class _SignupBodyState extends State<SignupBody> {
                 ),
               ),
             ),
+            TextButton(
+              onPressed: () {
+                
+              },
+              child: Text(
+                'Deseja cadastrar uma loja?',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                ),
+              ),
+            ),
           ],
         ),
       ),
