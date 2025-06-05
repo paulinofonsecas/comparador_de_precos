@@ -17,7 +17,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class InicioBody extends StatelessWidget {
   /// {@macro inicio_body}
   const InicioBody({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
     // Ensure the bloc is initialized and load lojas when the widget is built
@@ -63,8 +63,11 @@ class InicioBody extends StatelessWidget {
                 if (state.status == InicioStatus.loading) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (state.status == InicioStatus.failure) {
-                  return Center(child: Text(state.errorMessage ?? 'Erro ao carregar lojas'));
-                } else if (state.status == InicioStatus.success && state.lojasParaVoce.isNotEmpty) {
+                  return Center(
+                      child:
+                          Text(state.errorMessage ?? 'Erro ao carregar lojas'));
+                } else if (state.status == InicioStatus.success &&
+                    state.lojasParaVoce.isNotEmpty) {
                   return Column(
                     spacing: 16,
                     children: state.lojasParaVoce
@@ -161,9 +164,11 @@ class _Top10MelhoreLojasWidgetState extends State<Top10MelhoreLojasWidget> {
               children: _topLojas.isEmpty
                   ? const [Text('Nenhuma loja encontrada')]
                   : _topLojas
-                      .map((loja) => MarketScrollListItem(
-                            loja: loja,
-                          ))
+                      .map(
+                        (loja) => MarketScrollListItem(
+                          loja: loja,
+                        ),
+                      )
                       .toList(),
             ),
           ),
