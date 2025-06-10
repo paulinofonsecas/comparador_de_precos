@@ -4,10 +4,9 @@ import 'package:comparador_de_precos/data/models/produto.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProductCatalogRepository {
-  final SupabaseClient _supabaseClient;
-
   ProductCatalogRepository({SupabaseClient? supabaseClient})
       : _supabaseClient = supabaseClient ?? Supabase.instance.client;
+  final SupabaseClient _supabaseClient;
 
   /// Busca produtos paginados do Supabase
   /// [categoriaId] - ID da categoria para filtrar (opcional)

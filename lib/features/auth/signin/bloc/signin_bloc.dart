@@ -30,24 +30,19 @@ class SigninBloc extends Bloc<SigninEvent, SigninState> {
       final token = prefs.getString('token');
 
       if (token != null) {
-        final authResponse =
-            await Supabase.instance.client.auth.setSession(token);
+        final result = await _authenticationRepository.getUser(token);
 
-        final myUser = MyUser(
-          id: authResponse.user!.id,
-          email: authResponse.user!.email!,
-          displayName:
-              authResponse.user?.userMetadata!['displayName'] as String?,
-          photoURL: authResponse.user?.userMetadata!['photoURL'] as String?,
-          userType:
-              authResponse.user?.userMetadata!['userType'] as String? ?? 'user',
-        );
+        if (result == null) {
+          emit(const SigninInitial());
+          return;
+        }
 
-        emit(SigninSuccess(myUser));
+        emit(SigninSuccess(result));
       } else {
         emit(const SigninInitial());
       }
     } catch (e) {
+      log(e.toString());
       emit(const SigninInitial());
     }
   }
@@ -62,11 +57,6 @@ class SigninBloc extends Bloc<SigninEvent, SigninState> {
       final user = await _authenticationRepository.signInWithEmailAndPassword(
         event.email,
         event.password,
-      );
-
-      await getIt<SharedPreferences>().setString(
-        'token',
-        Supabase.instance.client.auth.currentSession?.refreshToken ?? '',
       );
 
       emit(SigninSuccess(user));

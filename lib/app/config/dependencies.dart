@@ -1,6 +1,7 @@
 import 'package:comparador_de_precos/data/repositories/authentication_repository.dart';
 import 'package:comparador_de_precos/data/repositories/avaliacao_repository.dart';
 import 'package:comparador_de_precos/data/repositories/lista_compra_repository.dart';
+import 'package:comparador_de_precos/data/repositories/logista_repository.dart';
 import 'package:comparador_de_precos/data/repositories/loja_repository.dart';
 import 'package:comparador_de_precos/data/repositories/product_catalog_repository.dart';
 import 'package:comparador_de_precos/data/repositories/search_repository.dart';
@@ -56,6 +57,8 @@ void setupRepositories() {
       ),
     )
     ..registerLazySingleton<LocationService>(LocationService.new)
+    ..registerLazySingleton<ILojistaRepository>(
+        () => LojistaRepository(getIt()))
     ..registerLazySingleton<ListaCompraRepository>(ListaCompraRepository.new);
 }
 
