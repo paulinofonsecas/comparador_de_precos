@@ -112,6 +112,7 @@ class _SignupBodyState extends State<SignupBody> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).push(
+                  // ignore: inference_failure_on_instance_creation
                   MaterialPageRoute(
                     builder: (_) => const SolicitarCadastroLojaPage(),
                   ),

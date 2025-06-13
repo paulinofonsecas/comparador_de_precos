@@ -13,8 +13,7 @@ class ProductCatalogRepository {
   /// [page] - Número da página (começa em 0)
   /// [pageSize] - Tamanho da página
   Future<List<Produto>> getProdutos({
-    String? categoriaId,
-    required int page,
+    required int page, String? categoriaId,
     int pageSize = 10,
   }) async {
     try {

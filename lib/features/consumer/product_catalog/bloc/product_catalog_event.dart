@@ -19,9 +19,9 @@ class LoadProducts extends ProductCatalogEvent {
 class LoadMoreProducts extends ProductCatalogEvent {}
 
 class FilterByCategory extends ProductCatalogEvent {
-  final String? categoryId;
 
   const FilterByCategory(this.categoryId);
+  final String? categoryId;
 
   @override
   List<Object?> get props => [categoryId];

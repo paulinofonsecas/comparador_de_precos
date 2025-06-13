@@ -49,7 +49,7 @@ class OfertaDetailsBody extends StatelessWidget {
 }
 
 class LojaInfoSection extends StatelessWidget {
-  const LojaInfoSection({super.key, required this.oferta});
+  const LojaInfoSection({required this.oferta, super.key});
 
   final OfertaModel oferta;
 
@@ -186,7 +186,7 @@ class ShowMoreProcuctsOfmarket extends StatelessWidget {
             child: Row(
               children: produtos.map((produto) {
                 return Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8),
                   child: MiniProductCard(produto: produto),
                 );
               }).toList(),
@@ -201,7 +201,7 @@ class ShowMoreProcuctsOfmarket extends StatelessWidget {
 }
 
 class MiniProductCard extends StatelessWidget {
-  const MiniProductCard({super.key, required this.produto});
+  const MiniProductCard({required this.produto, super.key});
 
   final Produto produto;
 

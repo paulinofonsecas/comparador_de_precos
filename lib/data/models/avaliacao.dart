@@ -1,12 +1,4 @@
 class Avaliacao {
-  final String id;
-  final String lojaId;
-  final String? usuarioId;
-  final String? usuarioNome;
-  final double classificacao; // Classificação de 1 a 5 estrelas
-  final String? comentario;
-  final DateTime createdAt;
-  final DateTime updatedAt;
 
   Avaliacao({
     required this.id,
@@ -31,6 +23,14 @@ class Avaliacao {
       updatedAt: DateTime.parse(json['updated_at'] as String),
     );
   }
+  final String id;
+  final String lojaId;
+  final String? usuarioId;
+  final String? usuarioNome;
+  final double classificacao; // Classificação de 1 a 5 estrelas
+  final String? comentario;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   Map<String, dynamic> toJson() {
     return {

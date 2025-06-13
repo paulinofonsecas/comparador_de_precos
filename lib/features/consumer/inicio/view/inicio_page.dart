@@ -2,7 +2,6 @@ import 'package:comparador_de_precos/data/repositories/loja_repository.dart';
 import 'package:comparador_de_precos/features/consumer/inicio/bloc/bloc.dart';
 import 'package:comparador_de_precos/features/consumer/inicio/widgets/inicio_body.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// {@template inicio_page}

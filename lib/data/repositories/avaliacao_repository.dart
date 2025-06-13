@@ -1,17 +1,17 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
-import '../models/avaliacao.dart';
+import 'package:comparador_de_precos/data/models/avaliacao.dart';
 
 class AvaliacaoRepository {
-  final SupabaseClient _supabaseClient;
 
   AvaliacaoRepository(this._supabaseClient);
+  final SupabaseClient _supabaseClient;
   
   /// Adiciona múltiplas avaliações de uma vez
   /// Útil para inserção em lote
   Future<List<Avaliacao>> adicionarMultiplasAvaliacoes(List<Map<String, dynamic>> avaliacoes) async {
-    final List<Map<String, dynamic>> dataToInsert = avaliacoes.map((avaliacao) {
+    final dataToInsert = avaliacoes.map((avaliacao) {
       final uuid = const Uuid().v4();
       final now = DateTime.now();
       
@@ -29,7 +29,7 @@ class AvaliacaoRepository {
 
     await _supabaseClient.from('avaliacoes').insert(dataToInsert);
 
-    return dataToInsert.map((data) => Avaliacao.fromJson(data)).toList();
+    return dataToInsert.map(Avaliacao.fromJson).toList();
   }
 
   Future<List<Avaliacao>> getAvaliacoesByLojaId(String lojaId) async {
@@ -39,7 +39,7 @@ class AvaliacaoRepository {
         .eq('loja_id', lojaId)
         .order('created_at', ascending: false);
 
-    return response.map((json) => Avaliacao.fromJson(json)).toList();
+    return response.map(Avaliacao.fromJson).toList();
   }
 
   Future<double> getClassificacaoMediaByLojaId(String lojaId) async {

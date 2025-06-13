@@ -1,15 +1,15 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../../data/models/avaliacao.dart';
-import '../../../../data/repositories/avaliacao_repository.dart';
+import 'package:comparador_de_precos/data/models/avaliacao.dart';
+import 'package:comparador_de_precos/data/repositories/avaliacao_repository.dart';
 
 part 'avaliacao_state.dart';
 
 class AvaliacaoCubit extends Cubit<AvaliacaoState> {
-  final AvaliacaoRepository _avaliacaoRepository;
 
   AvaliacaoCubit(this._avaliacaoRepository) : super(AvaliacaoInitial());
+  final AvaliacaoRepository _avaliacaoRepository;
 
   Future<void> fetchAvaliacoes(String lojaId) async {
     emit(AvaliacaoLoading());
@@ -22,7 +22,7 @@ class AvaliacaoCubit extends Cubit<AvaliacaoState> {
         avaliacoes: avaliacoes,
         mediaClassificacao: mediaClassificacao,
         numeroAvaliacoes: numeroAvaliacoes,
-      ));
+      ),);
     } catch (e) {
       emit(AvaliacaoFailure(error: e.toString()));
     }

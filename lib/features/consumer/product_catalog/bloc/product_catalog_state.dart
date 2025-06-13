@@ -5,14 +5,6 @@ import 'package:equatable/equatable.dart';
 enum ProductCatalogStatus { initial, loading, success, failure }
 
 class ProductCatalogState extends Equatable {
-  final ProductCatalogStatus status;
-  final List<Produto> produtos;
-  final List<Categoria> categorias;
-  final String? selectedCategoryId;
-  final bool hasReachedMax;
-  final bool isLoadingMore;
-  final String? errorMessage;
-  final int currentPage;
 
   const ProductCatalogState({
     this.status = ProductCatalogStatus.initial,
@@ -24,6 +16,14 @@ class ProductCatalogState extends Equatable {
     this.errorMessage,
     this.currentPage = 0,
   });
+  final ProductCatalogStatus status;
+  final List<Produto> produtos;
+  final List<Categoria> categorias;
+  final String? selectedCategoryId;
+  final bool hasReachedMax;
+  final bool isLoadingMore;
+  final String? errorMessage;
+  final int currentPage;
 
   ProductCatalogState copyWith({
     ProductCatalogStatus? status,

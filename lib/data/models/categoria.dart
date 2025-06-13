@@ -1,13 +1,23 @@
 import 'dart:convert';
 
 class Categoria {
-  final String id;
-  final String nome;
 
   Categoria({
     required this.id,
     required this.nome,
   });
+
+  factory Categoria.fromMap(Map<String, dynamic> map) {
+    return Categoria(
+      id: map['id'] as String,
+      nome: map['nome'] as String,
+    );
+  }
+
+  factory Categoria.fromJson(String source) =>
+      Categoria.fromMap(json.decode(source) as Map<String, dynamic>);
+  final String id;
+  final String nome;
 
   Categoria copyWith({
     String? id,
@@ -26,17 +36,7 @@ class Categoria {
     };
   }
 
-  factory Categoria.fromMap(Map<String, dynamic> map) {
-    return Categoria(
-      id: map['id'] as String,
-      nome: map['nome'] as String,
-    );
-  }
-
   String toJson() => json.encode(toMap());
-
-  factory Categoria.fromJson(String source) =>
-      Categoria.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() => 'Categoria(id: $id, nome: $nome)';

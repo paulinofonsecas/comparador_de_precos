@@ -5,11 +5,11 @@ import 'package:equatable/equatable.dart';
 part 'favorite_state.dart';
 
 class FavoriteCubit extends Cubit<FavoriteState> {
-  final ProductCatalogRepository _repository;
   
   FavoriteCubit({required ProductCatalogRepository repository})
       : _repository = repository,
         super(const FavoriteInitial());
+  final ProductCatalogRepository _repository;
 
   Future<void> checkFavoriteStatus(String productId) async {
     try {

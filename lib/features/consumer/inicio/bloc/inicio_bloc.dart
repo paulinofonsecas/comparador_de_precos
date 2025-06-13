@@ -27,12 +27,12 @@ class InicioBloc extends Bloc<InicioEvent, InicioState> {
       emit(state.copyWith(
         status: InicioStatus.success,
         lojasParaVoce: lojas,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: InicioStatus.failure,
         errorMessage: () => 'Erro ao carregar lojas: $e',
-      ));
+      ),);
     }
   }
 }

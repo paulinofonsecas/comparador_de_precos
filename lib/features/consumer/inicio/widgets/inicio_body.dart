@@ -57,7 +57,7 @@ class InicioBody extends StatelessWidget {
                 ],
               ),
             ),
-            Gutter(),
+            const Gutter(),
             BlocBuilder<InicioBloc, InicioState>(
               builder: (context, state) {
                 if (state.status == InicioStatus.loading) {
@@ -65,7 +65,7 @@ class InicioBody extends StatelessWidget {
                 } else if (state.status == InicioStatus.failure) {
                   return Center(
                       child:
-                          Text(state.errorMessage ?? 'Erro ao carregar lojas'));
+                          Text(state.errorMessage ?? 'Erro ao carregar lojas'),);
                 } else if (state.status == InicioStatus.success &&
                     state.lojasParaVoce.isNotEmpty) {
                   return Column(
@@ -111,7 +111,7 @@ class _Top10MelhoreLojasWidgetState extends State<Top10MelhoreLojasWidget> {
 
   Future<void> _loadTopLojas() async {
     try {
-      final lojas = await _lojaRepository.getTopRatedLojas(limit: 10);
+      final lojas = await _lojaRepository.getTopRatedLojas();
       setState(() {
         _topLojas = lojas;
         _isLoading = false;
@@ -257,7 +257,7 @@ class _LojasProximasWidgetState extends State<LojasProximasWidget> {
                       .take(5)
                       .map((loja) => MarketScrollListItem(
                             loja: loja,
-                          ))
+                          ),)
                       .toList(),
             ),
           ),

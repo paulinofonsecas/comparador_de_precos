@@ -58,7 +58,7 @@ void setupRepositories() {
     )
     ..registerLazySingleton<LocationService>(LocationService.new)
     ..registerLazySingleton<ILojistaRepository>(
-        () => LojistaRepository(getIt()))
+        () => LojistaRepository(getIt()),)
     ..registerLazySingleton<ListaCompraRepository>(ListaCompraRepository.new);
 }
 

@@ -134,7 +134,6 @@ class ProductListItem extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Imagem do produto com efeito de sombra
               Container(
@@ -228,15 +227,14 @@ class ProductListItem extends StatelessWidget {
                               isScrollControlled: true,
                               shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(16)),
+                                    top: Radius.circular(16),),
                               ),
-                              builder: (context) =>
-                                  _buildAddToListBottomSheet(context),
+                              builder: _buildAddToListBottomSheet,
                             );
                           },
                           style: OutlinedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 4),
+                                horizontal: 8, vertical: 4,),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),
@@ -260,7 +258,7 @@ class ProductListItem extends StatelessWidget {
                             foregroundColor:
                                 theme.colorScheme.onPrimaryContainer,
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 8),
+                                horizontal: 12, vertical: 8,),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),

@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 /// {@endtemplate}
 class ProductDetailsPage extends StatelessWidget {
   /// {@macro product_details_page}
-  const ProductDetailsPage({super.key, required this.productId});
+  const ProductDetailsPage({required this.productId, super.key});
 
   final String productId;
 

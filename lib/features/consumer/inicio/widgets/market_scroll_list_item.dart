@@ -55,7 +55,7 @@ class MarketScrollListItem extends StatelessWidget {
                   ),
                 ),
               ),
-              Gutter(),
+              const Gutter(),
               Flexible(
                 flex: 10,
                 child: Column(
@@ -81,7 +81,7 @@ class MarketScrollListItem extends StatelessWidget {
                     ),
                     const GutterTiny(),
                     _buildRatingStars(loja?.classificacaoMedia ?? 0,
-                        loja?.numeroAvaliacoes ?? 0),
+                        loja?.numeroAvaliacoes ?? 0,),
                     Expanded(
                       child: Center(
                         child: TextButton(
@@ -112,9 +112,9 @@ class MarketScrollListItem extends StatelessWidget {
   }
 
   Widget _buildRatingStars(double rating, int numAvaliacoes) {
-    final int fullStars = rating.floor();
-    final bool hasHalfStar = rating - fullStars >= 0.5;
-    final int emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+    final fullStars = rating.floor();
+    final hasHalfStar = rating - fullStars >= 0.5;
+    final emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
     return Row(
       spacing: 2,

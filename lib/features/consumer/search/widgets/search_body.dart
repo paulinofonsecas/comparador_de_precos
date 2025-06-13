@@ -4,7 +4,7 @@ import 'package:comparador_de_precos/features/consumer/search/cubit/search_histo
     show SearchHistoryCubit;
 import 'package:comparador_de_precos/features/consumer/search/search.dart';
 
-import 'default_search_body.dart';
+import 'package:comparador_de_precos/features/consumer/search/widgets/default_search_body.dart';
 import 'package:flutter/material.dart';
 
 class SearchBody extends StatefulWidget {
@@ -37,7 +37,7 @@ class _SearchBodyState extends State<SearchBody> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8),
           child: SearchBar(
             controller: textController,
             hintText: 'Pesquisar produtos 🧃',

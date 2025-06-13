@@ -126,7 +126,7 @@ class _ListaCompraPageState extends State<ListaCompraPage> {
               ? _buildEmptyState()
               : _buildListaComprasList(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _mostrarFormularioLista(),
+        onPressed: _mostrarFormularioLista,
         child: const Icon(Icons.add),
       ),
     );
@@ -161,7 +161,7 @@ class _ListaCompraPageState extends State<ListaCompraPage> {
           ),
           const SizedBox(height: 24),
           ElevatedButton.icon(
-            onPressed: () => _mostrarFormularioLista(),
+            onPressed: _mostrarFormularioLista,
             icon: const Icon(Icons.add),
             label: const Text('Nova Lista'),
             style: ElevatedButton.styleFrom(
@@ -275,7 +275,7 @@ class _ListaCompraPageState extends State<ListaCompraPage> {
                                   Icon(Icons.delete, color: Colors.red),
                                   SizedBox(width: 8),
                                   Text('Excluir',
-                                      style: TextStyle(color: Colors.red)),
+                                      style: TextStyle(color: Colors.red),),
                                 ],
                               ),
                             ),

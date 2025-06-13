@@ -4,10 +4,7 @@ import 'package:flutter_gutter/flutter_gutter.dart';
 
 class HistoricItens extends StatelessWidget {
   const HistoricItens({
-    super.key,
-    required this.history,
-    required this.onItemTap,
-    required this.onRemoveTap,
+    required this.history, required this.onItemTap, required this.onRemoveTap, super.key,
   });
 
   final List<String> history;

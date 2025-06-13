@@ -6,8 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DefaultSearchBody extends StatefulWidget {
   const DefaultSearchBody({
-    super.key,
-    required this.onItemTap,
+    required this.onItemTap, super.key,
   });
 
   final void Function(String) onItemTap;

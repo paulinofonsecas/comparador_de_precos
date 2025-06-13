@@ -20,7 +20,7 @@ class LojasProximasCubit extends Cubit<LojasProximasState> {
 
     try {
       // Tenta obter a localização do usuário
-      final Position? posicao = await locationService.getCurrentLocation();
+      final posicao = await locationService.getCurrentLocation();
 
       if (posicao != null) {
         // Se tiver localização, busca lojas por proximidade
@@ -34,19 +34,18 @@ class LojasProximasCubit extends Cubit<LojasProximasState> {
           lojas: lojas,
           raioMaxKm: raioMaxKm,
           temLocalizacao: true,
-        ));
+        ),);
       } else {
         // Se não tiver localização, busca todas as lojas sem ordenação
         final lojas = await lojaRepository.getAllLojas();
         // Converte Loja para LojaComDistancia com distância zero
         final lojasComDistancia =
-            lojas.map((loja) => LojaComDistancia.fromLoja(loja, 0.0)).toList();
+            lojas.map((loja) => LojaComDistancia.fromLoja(loja, 0)).toList();
 
         emit(LojasProximasSuccess(
           lojas: lojasComDistancia,
-          raioMaxKm: null,
           temLocalizacao: false,
-        ));
+        ),);
       }
     } catch (e) {
       emit(LojasProximasFailure('Erro ao carregar lojas: $e'));
@@ -60,7 +59,7 @@ class LojasProximasCubit extends Cubit<LojasProximasState> {
       emit(LojasProximasLoading());
       try {
         // Obtém a localização atual novamente
-        final Position? posicao = await locationService.getCurrentLocation();
+        final posicao = await locationService.getCurrentLocation();
 
         if (posicao != null) {
           // Busca lojas com o novo raio
@@ -74,7 +73,7 @@ class LojasProximasCubit extends Cubit<LojasProximasState> {
             lojas: lojas,
             raioMaxKm: raioMaxKm,
             temLocalizacao: true,
-          ));
+          ),);
         } else {
           // Se perdeu a localização, volta para o estado anterior
           emit(currentState);

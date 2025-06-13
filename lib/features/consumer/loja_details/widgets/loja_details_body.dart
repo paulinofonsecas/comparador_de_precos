@@ -1,6 +1,9 @@
 import 'package:comparador_de_precos/data/models/categoria.dart';
 import 'package:comparador_de_precos/data/models/loja.dart';
 import 'package:comparador_de_precos/data/models/produto.dart';
+import 'package:comparador_de_precos/features/consumer/loja_details/cubit/avaliacao_cubit.dart';
+import 'package:comparador_de_precos/features/consumer/loja_details/cubit/loja_products_cubit.dart';
+import 'package:comparador_de_precos/features/consumer/loja_details/cubit/loja_products_state.dart';
 import 'package:comparador_de_precos/widgets/map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,12 +11,8 @@ import 'package:flutter_gutter/flutter_gutter.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../cubit/avaliacao_cubit.dart';
-import '../cubit/loja_products_cubit.dart';
-import '../cubit/loja_products_state.dart';
-
 class LojaDetailsBody extends StatefulWidget {
-  const LojaDetailsBody({super.key, required this.loja});
+  const LojaDetailsBody({required this.loja, super.key});
 
   final Loja loja;
 
@@ -132,8 +131,11 @@ class _LojaDetailsBodyState extends State<LojaDetailsBody>
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Icon(Icons.location_on,
-                              size: 16, color: Colors.grey),
+                          const Icon(
+                            Icons.location_on,
+                            size: 16,
+                            color: Colors.grey,
+                          ),
                           const SizedBox(width: 4),
                           Expanded(
                             child: Text(
@@ -159,8 +161,8 @@ class _LojaDetailsBodyState extends State<LojaDetailsBody>
                     // Rating
                     BlocBuilder<AvaliacaoCubit, AvaliacaoState>(
                       builder: (context, state) {
-                        double rating = 0.0;
-                        int numAvaliacoes = 0;
+                        var rating = 0.0;
+                        var numAvaliacoes = 0;
                         if (state is AvaliacaoSuccess) {
                           rating = state.mediaClassificacao;
                           numAvaliacoes = state.numeroAvaliacoes;
@@ -168,23 +170,24 @@ class _LojaDetailsBodyState extends State<LojaDetailsBody>
                           // Usar valores do modelo Loja se disponíveis
                           final classificacaoMedia =
                               widget.loja.classificacaoMedia;
-                          if (classificacaoMedia != null) {
-                            rating = classificacaoMedia;
-                            numAvaliacoes = widget.loja.numeroAvaliacoes ?? 0;
-                          }
+                          rating = classificacaoMedia;
+                          numAvaliacoes = widget.loja.numeroAvaliacoes;
                         }
 
                         return Row(
                           children: [
-                            const Icon(Icons.star,
-                                size: 16, color: Colors.amber),
+                            const Icon(
+                              Icons.star,
+                              size: 16,
+                              color: Colors.amber,
+                            ),
                             const SizedBox(width: 4),
                             Text(
                               rating > 0 ? rating.toStringAsFixed(1) : 'N/A',
                               style:
                                   const TextStyle(fontWeight: FontWeight.bold),
                             ),
-                            Text(' (${numAvaliacoes} avaliações)'),
+                            Text(' ($numAvaliacoes avaliações)'),
                           ],
                         );
                       },
@@ -253,7 +256,7 @@ class _LojaDetailsBodyState extends State<LojaDetailsBody>
                   ),
                   filled: true,
                   fillColor: Colors.grey[200],
-                  contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                  contentPadding: EdgeInsets.zero,
                 ),
               ),
             ),
@@ -413,9 +416,11 @@ class _LojaDetailsBodyState extends State<LojaDetailsBody>
                     if (product.categoria != null)
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 2),
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
                         decoration: BoxDecoration(
-                          color: Colors.blue.withOpacity(0.1),
+                          color: Colors.blue.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
@@ -514,8 +519,6 @@ class _LojaDetailsBodyState extends State<LojaDetailsBody>
                       widget.loja.longitude!,
                     ),
                     width: double.infinity,
-                    height: 250,
-                    initialZoom: 17,
                   ),
                 ),
                 Padding(
@@ -563,7 +566,9 @@ class _LojaDetailsBodyState extends State<LojaDetailsBody>
             Text(
               icon,
               style: TextStyle(
-                  fontWeight: FontWeight.bold, color: Colors.grey[800]),
+                fontWeight: FontWeight.bold,
+                color: Colors.grey[800],
+              ),
             ),
           const SizedBox(height: 8),
           Text(text),
@@ -595,14 +600,18 @@ class _LojaDetailsBodyState extends State<LojaDetailsBody>
                     Text(
                       state.mediaClassificacao.toStringAsFixed(1),
                       style: const TextStyle(
-                          fontSize: 48, fontWeight: FontWeight.bold),
+                        fontSize: 48,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: _buildStarRating(state.mediaClassificacao),
                     ),
-                    Text('Baseado em ${state.numeroAvaliacoes} avaliações',
-                        style: TextStyle(color: Colors.grey[600])),
+                    Text(
+                      'Baseado em ${state.numeroAvaliacoes} avaliações',
+                      style: TextStyle(color: Colors.grey[600]),
+                    ),
                   ],
                 ),
               ),
@@ -611,7 +620,7 @@ class _LojaDetailsBodyState extends State<LojaDetailsBody>
               if (state.avaliacoes.isEmpty)
                 Center(
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(16),
                     child: Text(
                       'Nenhuma avaliação ainda. Seja o primeiro a avaliar!',
                       style: TextStyle(color: Colors.grey[600]),
@@ -620,12 +629,14 @@ class _LojaDetailsBodyState extends State<LojaDetailsBody>
                   ),
                 )
               else
-                ...state.avaliacoes.map((avaliacao) => _buildReviewCard(
-                      name: avaliacao.usuarioNome ?? 'Anônimo',
-                      date: _formatDate(avaliacao.createdAt),
-                      rating: avaliacao.classificacao.toInt(),
-                      comment: avaliacao.comentario ?? '',
-                    )),
+                ...state.avaliacoes.map(
+                  (avaliacao) => _buildReviewCard(
+                    name: avaliacao.usuarioNome ?? 'Anônimo',
+                    date: _formatDate(avaliacao.createdAt),
+                    rating: avaliacao.classificacao.toInt(),
+                    comment: avaliacao.comentario ?? '',
+                  ),
+                ),
               // Add review button
               const SizedBox(height: 16),
               ElevatedButton.icon(
@@ -635,7 +646,8 @@ class _LojaDetailsBodyState extends State<LojaDetailsBody>
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
             ],
@@ -651,12 +663,12 @@ class _LojaDetailsBodyState extends State<LojaDetailsBody>
   }
 
   List<Widget> _buildStarRating(double rating) {
-    final List<Widget> stars = [];
-    final int fullStars = rating.floor();
-    final bool hasHalfStar = rating - fullStars >= 0.5;
+    final stars = <Widget>[];
+    final fullStars = rating.floor();
+    final hasHalfStar = rating - fullStars >= 0.5;
 
     // Adicionar estrelas cheias
-    for (int i = 0; i < fullStars; i++) {
+    for (var i = 0; i < fullStars; i++) {
       stars.add(const Icon(Icons.star, color: Colors.amber));
     }
 
@@ -666,8 +678,8 @@ class _LojaDetailsBodyState extends State<LojaDetailsBody>
     }
 
     // Adicionar estrelas vazias
-    final int emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-    for (int i = 0; i < emptyStars; i++) {
+    final emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+    for (var i = 0; i < emptyStars; i++) {
       stars.add(const Icon(Icons.star_border, color: Colors.amber));
     }
 
@@ -675,7 +687,7 @@ class _LojaDetailsBodyState extends State<LojaDetailsBody>
   }
 
   void _showAddReviewDialog(BuildContext context) {
-    double classificacao = 5.0;
+    var classificacao = 5.0;
     final comentarioController = TextEditingController();
     final avaliacaoCubit = context.read<AvaliacaoCubit>();
 
@@ -733,8 +745,7 @@ class _LojaDetailsBodyState extends State<LojaDetailsBody>
                       Navigator.pop(ctx);
                       return;
                     }
-                    // Aqui você deve implementar a lógica para obter o ID do usuário logado
-                    // Por enquanto, usaremos valores de exemplo
+
                     avaliacaoCubit.adicionarAvaliacao(
                       lojaId: widget.loja.id,
                       usuarioId: myUser.id,
@@ -827,8 +838,11 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Container(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return ColoredBox(
       color: Theme.of(context).scaffoldBackgroundColor,
       child: _tabBar,
     );

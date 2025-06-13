@@ -228,7 +228,7 @@ class _ProductCatalogBodyState extends State<ProductCatalogBody> {
   }
 
   Widget _buildProductListView(
-      BuildContext context, ProductCatalogState state) {
+      BuildContext context, ProductCatalogState state,) {
     final theme = Theme.of(context);
     // Determinar se deve usar grid ou lista baseado no tamanho da tela
     final screenWidth = MediaQuery.of(context).size.width;

@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:comparador_de_precos/features/logista/solicitar_cadastro/bloc/bloc.dart';
 import 'package:comparador_de_precos/features/logista/solicitar_cadastro/widgets/solicitar_cadastro_body.dart';
+import 'package:flutter/material.dart';
 
 /// {@template solicitar_cadastro_page}
 /// A description for SolicitarCadastroPage

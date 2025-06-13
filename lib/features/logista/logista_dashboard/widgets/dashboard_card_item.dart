@@ -3,9 +3,7 @@ import 'package:flutter_gutter/flutter_gutter.dart';
 
 class DashboardCardItem extends StatelessWidget {
   const DashboardCardItem({
-    super.key,
-    required this.title,
-    required this.icon,
+    required this.title, required this.icon, super.key,
     this.onTap,
   });
 

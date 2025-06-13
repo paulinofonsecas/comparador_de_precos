@@ -1,10 +1,9 @@
 import 'package:comparador_de_precos/app/config/dependencies.dart';
 import 'package:comparador_de_precos/features/logista/associar_produto/view/associar_produto_page.dart';
-import 'package:comparador_de_precos/features/logista/logista_produtos_associados/cubit/atualizar_preco_cubit.dart';
-import 'package:comparador_de_precos/features/logista/logista_produtos_associados/cubit/get_produtos_associados_cubit.dart';
-import 'package:flutter/material.dart';
 import 'package:comparador_de_precos/features/logista/logista_produtos_associados/bloc/bloc.dart';
+import 'package:comparador_de_precos/features/logista/logista_produtos_associados/cubit/get_produtos_associados_cubit.dart';
 import 'package:comparador_de_precos/features/logista/logista_produtos_associados/widgets/logista_produtos_associados_body.dart';
+import 'package:flutter/material.dart';
 
 /// {@template logista_produtos_associados_page}
 /// A description for LogistaProdutosAssociadosPage

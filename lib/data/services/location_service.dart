@@ -4,7 +4,7 @@ import 'package:permission_handler/permission_handler.dart';
 class LocationService {
   /// Verifica se o serviço de localização está habilitado
   Future<bool> isLocationServiceEnabled() async {
-    return await Geolocator.isLocationServiceEnabled();
+    return Geolocator.isLocationServiceEnabled();
   }
 
   /// Verifica se a permissão de localização foi concedida

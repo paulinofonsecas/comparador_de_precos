@@ -4,10 +4,10 @@ import 'package:comparador_de_precos/app/config/dependencies.dart';
 import 'package:comparador_de_precos/app/utils/number_format.dart';
 import 'package:comparador_de_precos/data/models/user_profile.dart';
 import 'package:comparador_de_precos/data/repositories/produto_with_price.dart';
+import 'package:comparador_de_precos/features/logista/logista_produtos_associados/bloc/bloc.dart';
 import 'package:comparador_de_precos/features/logista/logista_produtos_associados/cubit/get_produtos_associados_cubit.dart';
 import 'package:comparador_de_precos/features/logista/logista_produtos_associados/dialogs/atualizar_price_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:comparador_de_precos/features/logista/logista_produtos_associados/bloc/bloc.dart';
 
 /// {@template logista_produtos_associados_body}
 /// Body of the LogistaProdutosAssociadosPage.

@@ -7,7 +7,6 @@ import 'package:comparador_de_precos/data/models/my_user.dart';
 import 'package:comparador_de_precos/data/repositories/authentication_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 part 'signin_event.dart';
 part 'signin_state.dart';
 

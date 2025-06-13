@@ -172,9 +172,7 @@ class _Body extends StatelessWidget {
 
 class EmailTextField extends StatelessWidget {
   const EmailTextField({
-    super.key,
-    required TextEditingController emailController,
-    required FocusNode focusNode,
+    required TextEditingController emailController, required FocusNode focusNode, super.key,
   })  : _emailController = emailController,
         _focusNode = focusNode;
 
@@ -203,8 +201,7 @@ class EmailTextField extends StatelessWidget {
 
 class SenhaTextField extends StatelessWidget {
   const SenhaTextField({
-    super.key,
-    required TextEditingController passwordController,
+    required TextEditingController passwordController, super.key,
   }) : _passwordController = passwordController;
 
   final TextEditingController _passwordController;

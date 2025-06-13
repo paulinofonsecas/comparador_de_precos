@@ -28,7 +28,7 @@ class LojaRepository {
     double? raioMaxKm,
   }) async {
     try {
-      final Map<String, dynamic> params = {
+      final params = <String, dynamic>{
         'user_lat': userLat,
         'user_lon': userLon,
       };
@@ -41,7 +41,7 @@ class LojaRepository {
           .rpc<List<Map<String, dynamic>>>('buscar_lojas_proximas', params: params);
       
       return response
-          .map((json) => LojaComDistancia.fromJson(json))
+          .map(LojaComDistancia.fromJson)
           .toList();
     } catch (e) {
       throw Exception('Erro ao buscar lojas próximas: $e');
@@ -51,14 +51,14 @@ class LojaRepository {
   /// Busca todas as lojas
   Future<List<Loja>> getAllLojas() async {
     try {
-      final List<Map<String, dynamic>> response = await supabaseClient
+      final response = await supabaseClient
           .from('lojas')
           .select()
           .eq('aprovada', true)
           .order('nome');
       
       return response
-          .map((json) => Loja.fromJson(json))
+          .map(Loja.fromJson)
           .toList();
     } catch (e) {
       throw Exception('Erro ao buscar todas as lojas: $e');
@@ -70,13 +70,13 @@ class LojaRepository {
   /// [limit] é o número máximo de lojas a retornar (padrão: 10)
   Future<List<Loja>> getTopRatedLojas({int limit = 10}) async {
     try {
-      final List<Map<String, dynamic>> response = await supabaseClient
+      final response = await supabaseClient
           .from('avaliacoes')
           .select('lojas(*)')
           .order('classificacao', ascending: false)
           .limit(limit);
 
-      final List<Loja> lojas = response
+      final lojas = response
           .map((json) => Loja.fromJson(json['lojas'] as Map<String, dynamic>))
           .where((loja) => loja.aprovada ?? false)
           .toList();

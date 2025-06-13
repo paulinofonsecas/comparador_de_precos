@@ -137,32 +137,31 @@ class LojasProximasBody extends StatelessWidget {
                       border: OutlineInputBorder(),
                     ),
                     value: state.raioMaxKm,
-                    items: [
-                      const DropdownMenuItem<double?>(
-                        value: null,
+                    items: const [
+                      DropdownMenuItem<double?>(
                         child: Text('Todas as lojas'),
                       ),
-                      const DropdownMenuItem<double?>(
+                      DropdownMenuItem<double?>(
                         value: 1,
                         child: Text('1 km'),
                       ),
-                      const DropdownMenuItem<double?>(
+                      DropdownMenuItem<double?>(
                         value: 2,
                         child: Text('2 km'),
                       ),
-                      const DropdownMenuItem<double?>(
+                      DropdownMenuItem<double?>(
                         value: 5,
                         child: Text('5 km'),
                       ),
-                      const DropdownMenuItem<double?>(
+                      DropdownMenuItem<double?>(
                         value: 10,
                         child: Text('10 km'),
                       ),
-                      const DropdownMenuItem<double?>(
+                      DropdownMenuItem<double?>(
                         value: 20,
                         child: Text('20 km'),
                       ),
-                      const DropdownMenuItem<double?>(
+                      DropdownMenuItem<double?>(
                         value: 50,
                         child: Text('50 km'),
                       ),

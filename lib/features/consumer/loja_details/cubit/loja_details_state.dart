@@ -12,17 +12,17 @@ class LojaDetailsInitial extends LojaDetailsState {}
 class LojaDetailsLoading extends LojaDetailsState {}
 
 class LojaDetailsSuccess extends LojaDetailsState {
-  final Loja loja;
   const LojaDetailsSuccess(this.loja);
+  final Loja loja;
 
   @override
   List<Object> get props => [loja];
 }
 
 class LojaDetailsFailure extends LojaDetailsState {
-  final String error;
 
   const LojaDetailsFailure(this.error);
+  final String error;
 
   @override
   List<Object> get props => [error];

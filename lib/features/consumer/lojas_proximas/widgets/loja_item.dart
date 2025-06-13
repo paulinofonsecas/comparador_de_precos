@@ -4,10 +4,7 @@ import 'package:flutter_gutter/flutter_gutter.dart';
 
 class LojaItem extends StatelessWidget {
   const LojaItem({
-    super.key,
-    required this.loja,
-    required this.onTap,
-    required this.mostrarDistancia,
+    required this.loja, required this.onTap, required this.mostrarDistancia, super.key,
   });
 
   final LojaComDistancia loja;
@@ -40,7 +37,7 @@ class LojaItem extends StatelessWidget {
                       )
                     : _buildPlaceholder(),
               ),
-              Gutter(),
+              const Gutter(),
               // Informações da loja
               Expanded(
                 child: Column(

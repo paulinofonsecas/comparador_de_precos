@@ -25,14 +25,6 @@ String userTypeToString(UserType type) {
 }
 
 class UserProfile {
-  final String id; // UUID do perfil (PK da tabela profiles)
-  final String userId; // UUID do auth.users (FK)
-  final String? bi;
-  String? nomeCompleto;
-  UserType tipoUsuario;
-  String? telefone;
-  final DateTime createdAt;
-  DateTime? updatedAt;
 
   UserProfile({
     required this.id,
@@ -69,6 +61,14 @@ class UserProfile {
           : null,
     );
   }
+  final String id; // UUID do perfil (PK da tabela profiles)
+  final String userId; // UUID do auth.users (FK)
+  final String? bi;
+  String? nomeCompleto;
+  UserType tipoUsuario;
+  String? telefone;
+  final DateTime createdAt;
+  DateTime? updatedAt;
 
   // Método para converter a instância para um Map (JSON para enviar ao Supabase)
   Map<String, dynamic> toMap() {

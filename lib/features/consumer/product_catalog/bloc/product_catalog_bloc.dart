@@ -6,8 +6,6 @@ import 'package:comparador_de_precos/features/consumer/product_catalog/bloc/prod
 
 class ProductCatalogBloc
     extends Bloc<ProductCatalogEvent, ProductCatalogState> {
-  final ProductCatalogRepository _repository;
-  static const int _pageSize = 15;
 
   ProductCatalogBloc({required ProductCatalogRepository repository})
       : _repository = repository,
@@ -17,6 +15,8 @@ class ProductCatalogBloc
     on<FilterByCategory>(_onFilterByCategory);
     on<LoadCategories>(_onLoadCategories);
   }
+  final ProductCatalogRepository _repository;
+  static const int _pageSize = 15;
 
   Future<void> _onLoadProducts(
     LoadProducts event,
@@ -29,10 +29,9 @@ class ProductCatalogBloc
 
       emit(state.copyWith(
         status: ProductCatalogStatus.loading,
-        errorMessage: null,
         currentPage: 0,
         produtos: event.refresh ? [] : state.produtos,
-      ));
+      ),);
 
       final produtos = await _repository.getProdutos(
         categoriaId: event.categoryId == '0' ? null : event.categoryId,
@@ -47,12 +46,12 @@ class ProductCatalogBloc
         produtos: produtos,
         hasReachedMax: hasReachedMax,
         currentPage: 0,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: ProductCatalogStatus.failure,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 
@@ -78,7 +77,7 @@ class ProductCatalogBloc
         emit(state.copyWith(
           hasReachedMax: true,
           isLoadingMore: false,
-        ));
+        ),);
       } else {
         final updatedProdutos = List<Produto>.from(state.produtos)
           ..addAll(newProdutos);
@@ -89,13 +88,13 @@ class ProductCatalogBloc
           hasReachedMax: hasReachedMax,
           isLoadingMore: false,
           currentPage: nextPage,
-        ));
+        ),);
       }
     } catch (e) {
       emit(state.copyWith(
         isLoadingMore: false,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 
@@ -110,7 +109,7 @@ class ProductCatalogBloc
       produtos: [],
       currentPage: 0,
       hasReachedMax: false,
-    ));
+    ),);
 
     add(LoadProducts(categoryId: event.categoryId));
   }
@@ -124,8 +123,8 @@ class ProductCatalogBloc
       emit(state.copyWith(categorias: categorias));
     } catch (e) {
       emit(state.copyWith(
-        errorMessage: 'Erro ao carregar categorias: ${e.toString()}',
-      ));
+        errorMessage: 'Erro ao carregar categorias: ${e}',
+      ),);
     }
   }
 }

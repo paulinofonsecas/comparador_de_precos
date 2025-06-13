@@ -8,8 +8,7 @@ import 'package:timeago/timeago.dart' as timeago;
 
 class ProductInfoSection extends StatelessWidget {
   const ProductInfoSection({
-    super.key,
-    required this.oferta,
+    required this.oferta, super.key,
   });
 
   final OfertaModel oferta;
@@ -94,7 +93,7 @@ class ProductInfoSection extends StatelessWidget {
                             ),
                           ],
                         ],
-                      )
+                      ),
                     ],
                   ],
                 ),

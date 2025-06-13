@@ -151,7 +151,7 @@ class ListaCompraRepository {
             quantidade: quantidade,
             observacao: observacao,
             produto: produto,
-          )
+          ),
         ],
       );
 

@@ -6,7 +6,7 @@ import 'package:equatable/equatable.dart';
 part 'get_all_products_state.dart';
 
 class GetAllProductsCubit extends Cubit<GetAllProductsState> {
-  GetAllProductsCubit(this._repository) : super(GetAllProductsInitial());
+  GetAllProductsCubit(this._repository) : super(const GetAllProductsInitial());
 
   final ProductCatalogRepository _repository;
 

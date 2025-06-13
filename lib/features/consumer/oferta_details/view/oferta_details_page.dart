@@ -12,13 +12,13 @@ import 'package:flutter/material.dart';
 /// {@endtemplate}
 class OfertaDetailsBottomSheet extends StatelessWidget {
   /// {@macro oferta_details_bottom_sheet}
-  const OfertaDetailsBottomSheet({super.key, required this.oferta});
+  const OfertaDetailsBottomSheet({required this.oferta, super.key});
 
   final OfertaModel oferta;
 
   /// Shows the OfertaDetailsBottomSheet
   static Future<void> show(BuildContext context,
-      {required OfertaModel oferta}) {
+      {required OfertaModel oferta,}) {
     final size = MediaQuery.sizeOf(context);
 
     return showModalBottomSheet<void>(
@@ -74,7 +74,7 @@ class OfertaDetailsView extends StatelessWidget {
 /// @deprecated Use OfertaDetailsBottomSheet instead
 class OfertaDetailsPage extends StatelessWidget {
   /// @deprecated Use OfertaDetailsBottomSheet.show instead
-  const OfertaDetailsPage({super.key, required this.oferta});
+  const OfertaDetailsPage({required this.oferta, super.key});
 
   final OfertaModel oferta;
 

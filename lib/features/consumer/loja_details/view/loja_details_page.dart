@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LojaDetailsPage extends StatefulWidget {
-  const LojaDetailsPage({super.key, required this.lojaId});
+  const LojaDetailsPage({required this.lojaId, super.key});
 
   final String lojaId;
 

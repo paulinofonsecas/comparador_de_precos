@@ -15,8 +15,7 @@ final class LojasProximasLoading extends LojasProximasState {}
 final class LojasProximasSuccess extends LojasProximasState {
   const LojasProximasSuccess({
     required this.lojas,
-    this.raioMaxKm,
-    required this.temLocalizacao,
+    required this.temLocalizacao, this.raioMaxKm,
   });
 
   final List<LojaComDistancia> lojas;

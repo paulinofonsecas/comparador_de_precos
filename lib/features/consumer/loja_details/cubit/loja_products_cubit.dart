@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:comparador_de_precos/data/models/categoria.dart';
 import 'package:comparador_de_precos/data/repositories/product_catalog_repository.dart';
 
-import 'loja_products_state.dart';
+import 'package:comparador_de_precos/features/consumer/loja_details/cubit/loja_products_state.dart';
 
 class LojaProductsCubit extends Cubit<LojaProductsState> {
   LojaProductsCubit({
@@ -30,12 +30,12 @@ class LojaProductsCubit extends Cubit<LojaProductsState> {
       emit(state.copyWith(
         status: LojaProductsStatus.success,
         produtos: produtos,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: LojaProductsStatus.failure,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 
@@ -46,7 +46,7 @@ class LojaProductsCubit extends Cubit<LojaProductsState> {
   void updateCategoryFilter(String? categoryId) {
     emit(state.copyWith(
       selectedCategoryId: () => categoryId,
-    ));
+    ),);
   }
 
   void updatePriceFilter(String filter) {

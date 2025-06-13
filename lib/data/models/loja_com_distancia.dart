@@ -1,7 +1,6 @@
 import 'package:comparador_de_precos/data/models/loja.dart';
 
 class LojaComDistancia extends Loja {
-  final double distanciaKm;
 
   LojaComDistancia({
     required super.id,
@@ -37,13 +36,6 @@ class LojaComDistancia extends Loja {
     );
   }
 
-  @override
-  Map<String, dynamic> toJson() {
-    final json = super.toJson();
-    json['distancia_km'] = distanciaKm;
-    return json;
-  }
-
   /// Create a LojaComDistancia from a Loja object
   factory LojaComDistancia.fromLoja(Loja loja, double distanciaKm) {
     return LojaComDistancia(
@@ -61,5 +53,13 @@ class LojaComDistancia extends Loja {
       updatedAt: loja.updatedAt,
       distanciaKm: distanciaKm,
     );
+  }
+  final double distanciaKm;
+
+  @override
+  Map<String, dynamic> toJson() {
+    final json = super.toJson();
+    json['distancia_km'] = distanciaKm;
+    return json;
   }
 }

@@ -152,7 +152,7 @@ class _ListaCompraDetalhesPageState extends State<ListaCompraDetalhesPage> {
               : _buildListaDetalhes(),
       floatingActionButton: _lista != null
           ? FloatingActionButton(
-              onPressed: () => _mostrarFormularioItem(),
+              onPressed: _mostrarFormularioItem,
               child: const Icon(Icons.add),
             )
           : null,
@@ -204,7 +204,7 @@ class _ListaCompraDetalhesPageState extends State<ListaCompraDetalhesPage> {
   }
 
   Widget _buildCabecalhoLista(
-      double progresso, int itemsComprados, int totalItems) {
+      double progresso, int itemsComprados, int totalItems,) {
     final theme = Theme.of(context);
 
     return Container(
@@ -326,7 +326,7 @@ class _ListaCompraDetalhesPageState extends State<ListaCompraDetalhesPage> {
           ),
           const SizedBox(height: 24),
           ElevatedButton.icon(
-            onPressed: () => _mostrarFormularioItem(),
+            onPressed: _mostrarFormularioItem,
             icon: const Icon(Icons.add),
             label: const Text('Adicionar Item'),
             style: ElevatedButton.styleFrom(
