@@ -1,6 +1,7 @@
 import 'package:comparador_de_precos/app/params/new_user_form_param.dart';
 import 'package:comparador_de_precos/features/auth/signin/bloc/bloc.dart';
 import 'package:comparador_de_precos/features/auth/signup/bloc/signup_bloc.dart';
+import 'package:comparador_de_precos/features/auth/signup/view/solicitar_cadastro_loja_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
 
@@ -105,6 +106,22 @@ class _SignupBodyState extends State<SignupBody> {
                 style: TextStyle(
                   fontSize: 16,
                   color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const SolicitarCadastroLojaPage(),
+                  ),
+                );
+              },
+              child: Text(
+                'Deseja cadastrar uma loja?',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
                 ),
               ),
             ),

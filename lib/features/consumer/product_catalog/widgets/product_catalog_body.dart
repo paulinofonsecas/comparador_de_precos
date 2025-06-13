@@ -51,6 +51,7 @@ class _ProductCatalogBodyState extends State<ProductCatalogBody> {
       builder: (context, state) {
         // Exibe o filtro de categorias se houver categorias carregadas
         final hasCategories = state.categorias.isNotEmpty;
+        final theme = Theme.of(context);
     
         return Column(
           children: [
@@ -65,6 +66,36 @@ class _ProductCatalogBodyState extends State<ProductCatalogBody> {
                       .add(FilterByCategory(categoryId));
                 },
               ),
+            
+            // Indicador de categoria selecionada ou busca
+            if (state.selectedCategoryId != null && hasCategories)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Row(
+                  children: [
+                    Text(
+                      'Exibindo produtos da categoria: ',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                    Text(
+                      state.categorias
+                          .firstWhere(
+                            (cat) => cat.id == state.selectedCategoryId,
+                            orElse: () => state.categorias.first,
+                          )
+                          .nome,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: theme.colorScheme.primary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
     
             // Lista de produtos
             Expanded(
@@ -77,20 +108,69 @@ class _ProductCatalogBodyState extends State<ProductCatalogBody> {
   }
 
   Widget _buildProductList(BuildContext context, ProductCatalogState state) {
+    final theme = Theme.of(context);
+    
     switch (state.status) {
       case ProductCatalogStatus.initial:
       case ProductCatalogStatus.loading:
         if (state.produtos.isEmpty) {
-          return const Center(child: CircularProgressIndicator());
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 60,
+                  height: 60,
+                  child: CircularProgressIndicator(
+                    color: theme.colorScheme.primary,
+                    strokeWidth: 3,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'Carregando produtos...',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          );
         }
         return _buildProductListView(context, state);
 
       case ProductCatalogStatus.success:
         if (state.produtos.isEmpty) {
-          return const Center(
-            child: Text(
-              'Nenhum produto disponível nesta categoria',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.inventory_2_outlined,
+                  size: 64,
+                  color: theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'Nenhum produto disponível',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  state.selectedCategoryId != null
+                      ? 'Tente selecionar outra categoria'
+                      : 'Tente novamente mais tarde',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: theme.colorScheme.onSurfaceVariant.withOpacity(0.7),
+                  ),
+                ),
+              ],
             ),
           );
         }
@@ -101,18 +181,45 @@ class _ProductCatalogBodyState extends State<ProductCatalogBody> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Icon(
+                Icons.error_outline_rounded,
+                size: 64,
+                color: theme.colorScheme.error.withOpacity(0.8),
+              ),
+              const SizedBox(height: 16),
               Text(
                 'Erro ao carregar produtos',
-                style: TextStyle(fontSize: 16, color: Colors.red[700]),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: theme.colorScheme.error,
+                ),
               ),
               const SizedBox(height: 8),
-              ElevatedButton(
+              Text(
+                'Verifique sua conexão com a internet',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+              const SizedBox(height: 24),
+              ElevatedButton.icon(
                 onPressed: () {
                   context
                       .read<ProductCatalogBloc>()
                       .add(const LoadProducts(refresh: true));
                 },
-                child: const Text('Tentar novamente'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: theme.colorScheme.primary,
+                  foregroundColor: theme.colorScheme.onPrimary,
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                icon: const Icon(Icons.refresh_rounded),
+                label: const Text('Tentar novamente'),
               ),
             ],
           ),
@@ -122,41 +229,91 @@ class _ProductCatalogBodyState extends State<ProductCatalogBody> {
 
   Widget _buildProductListView(
       BuildContext context, ProductCatalogState state) {
+    final theme = Theme.of(context);
+    // Determinar se deve usar grid ou lista baseado no tamanho da tela
+    final screenWidth = MediaQuery.of(context).size.width;
+    final useGrid = screenWidth > 600; // Grid para telas maiores que 600px
+    final crossAxisCount = screenWidth > 900 ? 3 : 2; // 3 colunas para telas muito largas
+    
     return RefreshIndicator(
       onRefresh: () async {
         context
             .read<ProductCatalogBloc>()
             .add(const LoadProducts(refresh: true));
       },
-      child: ListView.builder(
-        controller: _scrollController,
-        itemCount: state.produtos.length + (state.hasReachedMax ? 0 : 1),
-        padding: const EdgeInsets.only(bottom: 16),
-        itemBuilder: (context, index) {
-          // Mostrar indicador de carregamento no final da lista
-          if (index >= state.produtos.length) {
-            return const Center(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                child: CircularProgressIndicator(),
+      color: theme.colorScheme.primary,
+      backgroundColor: theme.colorScheme.surface,
+      child: useGrid
+          ? GridView.builder(
+              controller: _scrollController,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: crossAxisCount,
+                childAspectRatio: 1.1,
+                crossAxisSpacing: 8,
+                mainAxisSpacing: 8,
               ),
-            );
-          }
+              itemCount: state.produtos.length + (state.hasReachedMax ? 0 : 1),
+              padding: const EdgeInsets.all(12),
+              itemBuilder: (context, index) {
+                // Mostrar indicador de carregamento no final da lista
+                if (index >= state.produtos.length) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: CircularProgressIndicator(
+                        color: theme.colorScheme.primary,
+                        strokeWidth: 3,
+                      ),
+                    ),
+                  );
+                }
 
-          final produto = state.produtos[index];
-          return ProductListItem(
-            produto: produto,
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (context) =>
-                      ProductDetailsPage(productId: produto.id),
-                ),
-              );
-            },
-          );
-        },
-      ),
+                final produto = state.produtos[index];
+                return ProductListItem(
+                  produto: produto,
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (context) =>
+                            ProductDetailsPage(productId: produto.id),
+                      ),
+                    );
+                  },
+                );
+              },
+            )
+          : ListView.builder(
+              controller: _scrollController,
+              itemCount: state.produtos.length + (state.hasReachedMax ? 0 : 1),
+              padding: const EdgeInsets.only(bottom: 16, top: 8),
+              itemBuilder: (context, index) {
+                // Mostrar indicador de carregamento no final da lista
+                if (index >= state.produtos.length) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      child: CircularProgressIndicator(
+                        color: theme.colorScheme.primary,
+                        strokeWidth: 3,
+                      ),
+                    ),
+                  );
+                }
+
+                final produto = state.produtos[index];
+                return ProductListItem(
+                  produto: produto,
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (context) =>
+                            ProductDetailsPage(productId: produto.id),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
     );
   }
 }

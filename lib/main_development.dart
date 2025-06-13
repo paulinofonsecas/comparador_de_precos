@@ -5,6 +5,7 @@ import 'package:comparador_de_precos/app/config/dependencies.dart';
 import 'package:comparador_de_precos/bootstrap.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -13,6 +14,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   Intl.defaultLocale = 'pt_AO';
+  await initializeDateFormatting('pt_AO');
   timeago.setLocaleMessages('pt_BR_short', timeago.PtBrShortMessages());
 
   await Supabase.initialize(

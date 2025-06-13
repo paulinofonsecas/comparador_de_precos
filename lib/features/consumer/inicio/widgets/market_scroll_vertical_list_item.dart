@@ -1,10 +1,14 @@
+import 'package:comparador_de_precos/data/models/loja.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
 
 class MarketScrollVerticalListItem extends StatelessWidget {
   const MarketScrollVerticalListItem({
+    required this.loja,
     super.key,
   });
+
+  final Loja loja;
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +27,17 @@ class MarketScrollVerticalListItem extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Image.network(
-                  'https://www.pontotel.com.br/local/wp-content/uploads/2022/05/imagem-corporativa.webp',
+                  loja.logoUrl ??
+                      'https://www.pontotel.com.br/local/wp-content/uploads/2022/05/imagem-corporativa.webp',
                   fit: BoxFit.cover,
                   width: double.infinity,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Image.network(
+                      'https://www.pontotel.com.br/local/wp-content/uploads/2022/05/imagem-corporativa.webp',
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                    );
+                  },
                 ),
               ),
             ),
@@ -36,32 +48,47 @@ class MarketScrollVerticalListItem extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Column(
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Nome da loja',
-                          style: TextStyle(
+                          loja.nome,
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                         Text(
-                          'Cuito, rua silva, 123',
-                          style: TextStyle(
+                          loja.endereco ?? 'Endereço não disponível',
+                          style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
                           ),
                         ),
-                        GutterTiny(),
+                        const GutterTiny(),
                         Row(
-                          spacing: 2,
                           children: [
-                            Icon(Icons.star, color: Colors.amber, size: 12),
-                            Icon(Icons.star, color: Colors.amber, size: 12),
-                            Icon(Icons.star, color: Colors.amber, size: 12),
-                            Icon(Icons.star_outline, color: Colors.amber, size: 12),
-                            Icon(Icons.star_outline, color: Colors.amber, size: 12),
+                            ...List.generate(
+                              loja.classificacaoMedia.floor(),
+                              (index) => const Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                                size: 12,
+                              ),
+                            ),
+                            ...List.generate(
+                              5 - loja.classificacaoMedia.floor(),
+                              (index) => const Icon(
+                                Icons.star_outline,
+                                color: Colors.amber,
+                                size: 12,
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              '(${loja.numeroAvaliacoes})',
+                              style: const TextStyle(fontSize: 10),
+                            ),
                           ],
                         ),
                       ],

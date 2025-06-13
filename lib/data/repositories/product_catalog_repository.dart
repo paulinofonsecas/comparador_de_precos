@@ -4,10 +4,9 @@ import 'package:comparador_de_precos/data/models/produto.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProductCatalogRepository {
-  final SupabaseClient _supabaseClient;
-
   ProductCatalogRepository({SupabaseClient? supabaseClient})
       : _supabaseClient = supabaseClient ?? Supabase.instance.client;
+  final SupabaseClient _supabaseClient;
 
   /// Busca produtos paginados do Supabase
   /// [categoriaId] - ID da categoria para filtrar (opcional)
@@ -184,6 +183,63 @@ class ProductCatalogRepository {
       }).toList();
     } catch (e) {
       throw Exception('Erro ao buscar produtos: $e');
+    }
+  }
+
+  /// Busca produtos por termo de pesquisa
+  Future<List<Produto>> searchProducts(String query) async {
+    try {
+      if (query.isEmpty) {
+        return [];
+      }
+
+      final response = await _supabaseClient
+          .from('produtos')
+          .select('*, categorias:categoria_id(*)')
+          .ilike('nome', '%$query%')
+          .order('nome')
+          .limit(20);
+
+      // Mapeia a resposta para a lista de produtos
+      return response.map((item) {
+        final produto = Produto.fromMap(item);
+
+        // Adiciona a categoria se estiver presente na resposta
+        if (item['categorias'] != null) {
+          final categoriaMap = item['categorias'] as Map<String, dynamic>;
+          final categoria = Categoria.fromMap(categoriaMap);
+          return produto.copyWith(categoria: categoria);
+        }
+
+        return produto;
+      }).toList();
+    } catch (e) {
+      throw Exception('Erro ao buscar produtos: $e');
+    }
+  }
+
+  Future<List<Produto>> getAllProducts() async {
+    try {
+      final response = await _supabaseClient
+          .from('produtos')
+          .select('*, categorias:categoria_id(*)')
+          .order('nome', ascending: true);
+
+      // Mapeia a resposta para a lista de produtos
+      return response.map((item) {
+        final produto = Produto.fromMap(item);
+
+        // Adiciona a categoria se estiver presente na resposta
+        if (item['categorias'] != null) {
+          final categoriaMap = item['categorias'] as Map<String, dynamic>;
+          final categoria = Categoria.fromMap(categoriaMap);
+          return produto.copyWith(categoria: categoria);
+        }
+
+        return produto;
+      }).toList();
+    } catch (e) {
+      throw Exception('Erro ao buscar todos os produtos: $e');
     }
   }
 }

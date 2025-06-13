@@ -18,18 +18,48 @@ class ProductCatalogPage extends StatelessWidget {
         ..add(const LoadProducts()),
       child: Builder(
         builder: (context) {
+          final theme = Theme.of(context);
+          
           return Scaffold(
             appBar: AppBar(
-              title: const Text('Catálogo de Produtos'),
+              title: Text(
+                'Catálogo de Produtos',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: theme.colorScheme.onSurface,
+                ),
+              ),
+              centerTitle: true,
+              elevation: 0,
+              backgroundColor: theme.colorScheme.surface,
               actions: [
                 IconButton(
-                  icon: const Icon(Icons.refresh),
+                  icon: Icon(
+                    Icons.refresh_rounded,
+                    color: theme.colorScheme.primary,
+                  ),
                   onPressed: () {
                     context
                         .read<ProductCatalogBloc>()
                         .add(const LoadProducts(refresh: true));
                   },
                 ),
+                IconButton(
+                  icon: Icon(
+                    Icons.filter_list_rounded,
+                    color: theme.colorScheme.primary,
+                  ),
+                  onPressed: () {
+                    // Implementar filtragem avançada no futuro
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Filtros avançados em breve!'),
+                        duration: Duration(seconds: 1),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(width: 8),
               ],
             ),
             body: const ProductCatalogView(),
@@ -45,6 +75,9 @@ class ProductCatalogView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ProductCatalogBody();
+    return Container(
+      color: Theme.of(context).colorScheme.background,
+      child: const ProductCatalogBody(),
+    );
   }
 }
