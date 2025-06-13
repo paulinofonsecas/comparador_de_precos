@@ -13,6 +13,7 @@ class GetProdutosAssociadosCubit extends Cubit<GetProdutosAssociadosState> {
 
   Future<void> getProdutosAssociados(String lojistaId) async {
     emit(GetProdutosAssociadosLoading());
+
     try {
       final produtos =
           await _lojistaRepository.getProdutosAssociados(lojistaId);

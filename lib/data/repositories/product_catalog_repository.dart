@@ -217,4 +217,29 @@ class ProductCatalogRepository {
       throw Exception('Erro ao buscar produtos: $e');
     }
   }
+
+  Future<List<Produto>> getAllProducts() async {
+    try {
+      final response = await _supabaseClient
+          .from('produtos')
+          .select('*, categorias:categoria_id(*)')
+          .order('nome', ascending: true);
+
+      // Mapeia a resposta para a lista de produtos
+      return response.map((item) {
+        final produto = Produto.fromMap(item);
+
+        // Adiciona a categoria se estiver presente na resposta
+        if (item['categorias'] != null) {
+          final categoriaMap = item['categorias'] as Map<String, dynamic>;
+          final categoria = Categoria.fromMap(categoriaMap);
+          return produto.copyWith(categoria: categoria);
+        }
+
+        return produto;
+      }).toList();
+    } catch (e) {
+      throw Exception('Erro ao buscar todos os produtos: $e');
+    }
+  }
 }

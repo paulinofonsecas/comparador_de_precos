@@ -14,7 +14,7 @@ final class GetProdutosAssociadosLoading extends GetProdutosAssociadosState {}
 final class GetProdutosAssociadosSuccess extends GetProdutosAssociadosState {
   const GetProdutosAssociadosSuccess(this.produtos);
 
-  final List<ProdutoWithPrice> produtos;
+  final List<ProductWithPrice> produtos;
 
   @override
   List<Object> get props => [produtos];

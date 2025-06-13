@@ -5,13 +5,13 @@ import 'package:equatable/equatable.dart';
 part 'associante_product_state.dart';
 
 class AssocianteProductCubit extends Cubit<AssocianteProductState> {
-  AssocianteProductCubit(this._lojistaRepository) : super(AssocianteProductInitial());
+  AssocianteProductCubit(this._lojistaRepository)
+      : super(AssocianteProductInitial());
 
   final ILojistaRepository _lojistaRepository;
 
   Future<void> associar(
     String productId,
-    String lojaId,
     String associanteId,
     double newPrice,
   ) async {
@@ -20,15 +20,13 @@ class AssocianteProductCubit extends Cubit<AssocianteProductState> {
 
       await _lojistaRepository.associarProduto(
         productId: productId,
-        lojaId: lojaId,
-        associanteId: associanteId,
+        lojistaId: associanteId,
         newPrice: newPrice,
       );
-      
+
       emit(AssocianteProductSuccess());
     } catch (e) {
       emit(AssocianteProductFailure(e.toString()));
-    
+    }
   }
-}
 }

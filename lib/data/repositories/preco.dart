@@ -4,6 +4,7 @@ import 'dart:convert';
 class Preco {
   final String uuid;
   final String produtoId;
+  final String lojaId;
   final double preco;
   final bool? emPromocao;
   final double? precoPromocional;
@@ -14,6 +15,7 @@ class Preco {
   Preco({
     required this.uuid,
     required this.produtoId,
+    required this.lojaId,
     required this.preco,
     required this.createdAt,
     required this.updatedAt,
@@ -35,6 +37,7 @@ class Preco {
     return Preco(
       uuid: uuid ?? this.uuid,
       produtoId: produtoId ?? this.produtoId,
+      lojaId: lojaId,
       preco: preco ?? this.preco,
       emPromocao: emPromocao ?? this.emPromocao,
       precoPromocional: precoPromocional ?? this.precoPromocional,
@@ -48,6 +51,7 @@ class Preco {
     return <String, dynamic>{
       'uuid': uuid,
       'produto_id': produtoId,
+      'loja_id': lojaId,
       'preco': preco,
       'em_promocao': emPromocao,
       'preco_promocional': precoPromocional,
@@ -61,6 +65,7 @@ class Preco {
     return Preco(
       uuid: map['id'] as String,
       preco: (map['preco'] as num).toDouble(),
+      lojaId: map['loja_id'] as String,
       emPromocao: map['em_promocao'] as bool? ?? false,
       produtoId: map['produto_id'] as String,
       precoPromocional: ((map['preco_promocional'] as num?) ?? 0.0).toDouble(),
@@ -86,6 +91,7 @@ class Preco {
 
     return other.uuid == uuid &&
         other.produtoId == produtoId &&
+        other.lojaId == lojaId &&
         other.preco == preco &&
         other.emPromocao == emPromocao &&
         other.precoPromocional == precoPromocional &&
@@ -98,6 +104,7 @@ class Preco {
   int get hashCode {
     return uuid.hashCode ^
         produtoId.hashCode ^
+        lojaId.hashCode ^
         preco.hashCode ^
         emPromocao.hashCode ^
         precoPromocional.hashCode ^

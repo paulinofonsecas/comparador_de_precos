@@ -1,4 +1,6 @@
 import 'package:comparador_de_precos/app/config/dependencies.dart';
+import 'package:comparador_de_precos/features/logista/associar_produto/view/associar_produto_page.dart';
+import 'package:comparador_de_precos/features/logista/logista_produtos_associados/cubit/atualizar_preco_cubit.dart';
 import 'package:comparador_de_precos/features/logista/logista_produtos_associados/cubit/get_produtos_associados_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:comparador_de_precos/features/logista/logista_produtos_associados/bloc/bloc.dart';
@@ -14,7 +16,8 @@ class LogistaProdutosAssociadosPage extends StatelessWidget {
   /// The static route for LogistaProdutosAssociadosPage
   static Route<dynamic> route() {
     return MaterialPageRoute<dynamic>(
-        builder: (_) => const LogistaProdutosAssociadosPage());
+      builder: (_) => const LogistaProdutosAssociadosPage(),
+    );
   }
 
   @override
@@ -30,7 +33,16 @@ class LogistaProdutosAssociadosPage extends StatelessWidget {
       ],
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('LogistaProdutosAssociadosPage'),
+          title: const Text('Produtos associados'),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              AssociarProdutoPage.route(),
+            );
+          },
+          child: const Icon(Icons.add),
         ),
         body: const LogistaProdutosAssociadosView(),
       ),

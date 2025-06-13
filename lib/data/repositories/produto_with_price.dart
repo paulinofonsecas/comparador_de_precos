@@ -5,8 +5,8 @@ import 'package:comparador_de_precos/data/models/produto.dart';
 import 'package:comparador_de_precos/data/repositories/preco.dart';
 import 'package:postgrest/src/types.dart';
 
-class ProdutoWithPrice {
-  ProdutoWithPrice({
+class ProductWithPrice {
+  ProductWithPrice({
     required this.produto,
     required this.preco,
   });
@@ -14,11 +14,11 @@ class ProdutoWithPrice {
   final Produto produto;
   final Preco preco;
 
-  ProdutoWithPrice copyWith({
+  ProductWithPrice copyWith({
     Produto? produto,
     Preco? preco,
   }) {
-    return ProdutoWithPrice(
+    return ProductWithPrice(
       produto: produto ?? this.produto,
       preco: preco ?? this.preco,
     );
@@ -31,8 +31,8 @@ class ProdutoWithPrice {
     };
   }
 
-  factory ProdutoWithPrice.fromMap(Map<String, dynamic> map) {
-    return ProdutoWithPrice(
+  factory ProductWithPrice.fromMap(Map<String, dynamic> map) {
+    return ProductWithPrice(
       produto: Produto.fromMap(map['produtos'] as Map<String, dynamic>),
       preco: Preco.fromMap(map),
     );
@@ -40,14 +40,14 @@ class ProdutoWithPrice {
 
   String toJson() => json.encode(toMap());
 
-  factory ProdutoWithPrice.fromJson(String source) =>
-      ProdutoWithPrice.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory ProductWithPrice.fromJson(String source) =>
+      ProductWithPrice.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() => 'ProdutoWithPrice(produto: $produto, preco: $preco)';
 
   @override
-  bool operator ==(covariant ProdutoWithPrice other) {
+  bool operator ==(covariant ProductWithPrice other) {
     if (identical(this, other)) return true;
 
     return other.produto == produto && other.preco == preco;
@@ -56,10 +56,10 @@ class ProdutoWithPrice {
   @override
   int get hashCode => produto.hashCode ^ preco.hashCode;
 
-  static Future<List<ProdutoWithPrice>> fromList(PostgrestList response) {
+  static Future<List<ProductWithPrice>> fromList(PostgrestList response) {
     return Future.value(
       response.map((item) {
-        return ProdutoWithPrice.fromMap(item);
+        return ProductWithPrice.fromMap(item);
       }).toList(),
     );
   }
