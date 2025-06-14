@@ -4,9 +4,9 @@ import 'package:comparador_de_precos/app/config/dependencies.dart';
 import 'package:comparador_de_precos/app/utils/number_format.dart';
 import 'package:comparador_de_precos/data/models/user_profile.dart';
 import 'package:comparador_de_precos/data/repositories/produto_with_price.dart';
+import 'package:comparador_de_precos/features/logista/logista_product_details/view/logista_product_details_page.dart';
 import 'package:comparador_de_precos/features/logista/logista_produtos_associados/bloc/bloc.dart';
 import 'package:comparador_de_precos/features/logista/logista_produtos_associados/cubit/get_produtos_associados_cubit.dart';
-import 'package:comparador_de_precos/features/logista/logista_produtos_associados/dialogs/atualizar_price_dialog.dart';
 import 'package:flutter/material.dart';
 
 /// {@template logista_produtos_associados_body}
@@ -71,19 +71,12 @@ class _Body extends StatelessWidget {
         final produtoWithPreco = produtos[index];
         return ListTile(
           onTap: () async {
-            final result = await AtualizarPriceDialog.show(
-              context,
-              produtoWithPreco,
-            ) as bool?;
-
-            if (result ?? false) {
-              unawaited(
-                // ignore: use_build_context_synchronously
-                context
-                    .read<GetProdutosAssociadosCubit>()
-                    .getProdutosAssociados(profile.id),
-              );
-            }
+            unawaited(Navigator.of(context).push(
+              LogistaProductDetailsPage.route(
+                produtoWithPreco.produto.id,
+                profile.id,
+              ),
+            ));
           },
           title: Text(produtoWithPreco.produto.nome),
           subtitle: Text(

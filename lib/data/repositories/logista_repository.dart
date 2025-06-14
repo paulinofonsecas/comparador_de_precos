@@ -18,6 +18,15 @@ abstract class ILojistaRepository {
     String lojistaId,
     double newPrice,
   );
+
+  Future<ProductWithPrice?> getProdutosAssociado(
+    String produtoId,
+    String logistaId,
+  );
+
+  Future<bool> toggleVisibility(
+      String productId, String lojaId, String profileId,
+      {required bool previusVisibity});
 }
 
 class LojistaRepository implements ILojistaRepository {
@@ -118,6 +127,61 @@ class LojistaRepository implements ILojistaRepository {
     } catch (e) {
       log(e.toString());
       throw Exception('Erro ao atualizar preço: $e');
+    }
+  }
+
+  @override
+  Future<ProductWithPrice?> getProdutosAssociado(
+    String produtoId,
+    String logistaId,
+  ) async {
+    try {
+      final lojaId = await _supabaseClient
+          .from('lojas')
+          .select('id')
+          .eq('profile_id_lojista', logistaId)
+          .single();
+
+      final loja = lojaId['id'] as String;
+
+      final response = await _supabaseClient
+          .from('precos')
+          .select('*, produtos:produto_id(*, categorias:categoria_id(*))')
+          .eq('loja_id', loja)
+          .eq('produto_id', produtoId)
+          .single();
+
+      final pwp = ProductWithPrice.fromMap(response);
+
+      return pwp;
+    } catch (e) {
+      log(e.toString());
+      throw Exception('Erro ao buscar produtos: $e');
+    }
+  }
+
+  @override
+  Future<bool> toggleVisibility(
+    String productId,
+    String lojaId,
+    String profileId, {
+    required bool previusVisibity,
+  }) async {
+    try {
+      await _supabaseClient
+          .from('precos')
+          .update({
+            'disponivel': !previusVisibity,
+            'updated_at': DateTime.now().toIso8601String(),
+            'profile_id_atualizador': profileId,
+          })
+          .eq('loja_id', lojaId)
+          .eq('produto_id', productId);
+
+      return !previusVisibity;
+    } catch (e) {
+      log(e.toString());
+      throw Exception('Erro ao buscar produtos: $e');
     }
   }
 }

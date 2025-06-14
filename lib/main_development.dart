@@ -4,6 +4,7 @@ import 'package:comparador_de_precos/app/app.dart';
 import 'package:comparador_de_precos/app/config/dependencies.dart';
 import 'package:comparador_de_precos/bootstrap.dart';
 import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -28,7 +29,7 @@ Future<void> main() async {
   await setupDependencies();
 
   // if is running on android, device preview is not available
-  if (Platform.isAndroid) {
+  if (!kIsWeb && Platform.isAndroid) {
     await bootstrap(
       () => const App(),
     );
@@ -41,3 +42,4 @@ Future<void> main() async {
     ),
   );
 }
+ 

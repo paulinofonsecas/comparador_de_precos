@@ -64,7 +64,11 @@ void setupRepositories() {
 
 void setupBlocs() {
   getIt
-    ..registerLazySingleton<AuthBloc>(AuthBloc.new)
+    ..registerLazySingleton<AuthBloc>(
+      () => AuthBloc(
+        authenticationRepository: getIt<AuthenticationRepository>(),
+      ),
+    )
     ..registerLazySingleton<SignupBloc>(
       () => SignupBloc(getIt()),
     );

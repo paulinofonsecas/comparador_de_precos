@@ -90,7 +90,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       }
 
       await supabaseClient.auth.signOut();
-    } catch (e) {
+    } on Exception catch (e) {
       throw Exception('Failed to sign out: $e');
     }
   }

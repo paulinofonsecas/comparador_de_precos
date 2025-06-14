@@ -1,10 +1,15 @@
+import 'package:comparador_de_precos/app/config/dependencies.dart';
+import 'package:comparador_de_precos/features/auth/bloc/auth_bloc.dart';
+import 'package:comparador_de_precos/features/auth/signin/cubit/login_cubit.dart';
+import 'package:comparador_de_precos/features/auth/signin/view/signin_page.dart';
 import 'package:comparador_de_precos/features/consumer/application/bloc/bloc.dart';
 import 'package:comparador_de_precos/features/consumer/inicio/inicio.dart';
 import 'package:comparador_de_precos/features/consumer/lista_compra/lista_compra_page.dart';
 import 'package:comparador_de_precos/features/consumer/product_catalog/view/product_catalog_page.dart';
 import 'package:comparador_de_precos/features/consumer/search/view/search_page.dart';
+import 'package:comparador_de_precos/features/consumer_profile/consumer_profile.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
 
 /// {@template application_page}
 /// A description for ApplicationPage
@@ -32,56 +37,67 @@ class _ApplicationPageState extends State<ApplicationPage> {
     ListaCompraPage(
       userId: Supabase.instance.client.auth.currentUser!.id,
     ),
-    const Center(child: Text('Perfil')),
+    const ConsumerProfilePage(),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ApplicationBloc(),
-      child: Scaffold(
-        body: _pages[_currentIndex],
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-          child: Icon(
-            Icons.qr_code_scanner,
-            size: 30,
-            color: Theme.of(context).colorScheme.onPrimaryContainer,
+    return BlocListener<AuthBloc, AuthState>(
+      bloc: getIt<AuthBloc>(),
+      listener: (context, state) {
+        if (state is SignOutSuccess) {
+          Navigator.of(context).pushReplacement(
+            SigninPage.route(),
+          );
+        }
+      },
+      child: BlocProvider(
+        create: (context) => ApplicationBloc(),
+        child: Scaffold(
+          body: _pages[_currentIndex],
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {},
+            backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+            child: Icon(
+              Icons.qr_code_scanner,
+              size: 30,
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
+            ),
           ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          currentIndex: _currentIndex,
-          showUnselectedLabels: true,
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined),
-              label: 'Inicio',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              label: 'Pesquisar',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.store),
-              label: 'Catálogo',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.list),
-              label: 'Listas',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline),
-              label: 'Perfil',
-            ),
-          ],
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerFloat,
+          bottomNavigationBar: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            currentIndex: _currentIndex,
+            showUnselectedLabels: true,
+            onTap: (index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home_outlined),
+                label: 'Inicio',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.search),
+                label: 'Pesquisar',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.store),
+                label: 'Catálogo',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.list),
+                label: 'Listas',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person_outline),
+                label: 'Perfil',
+              ),
+            ],
+          ),
         ),
       ),
     );
