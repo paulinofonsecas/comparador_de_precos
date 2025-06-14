@@ -2,27 +2,28 @@ import 'dart:developer';
 
 import 'package:comparador_de_precos/app/config/dependencies.dart';
 import 'package:comparador_de_precos/data/repositories/produto_with_price.dart';
+import 'package:comparador_de_precos/features/logista/logista_product_details/cubit/atualizar_promotion_preco_cubit.dart';
 import 'package:comparador_de_precos/features/logista/logista_produtos_associados/bloc/bloc.dart';
-import 'package:comparador_de_precos/features/logista/logista_product_details/cubit/atualizar_preco_cubit.dart';
 import 'package:flutter/material.dart';
 
-class AtualizarPriceDialog extends StatefulWidget {
-  const AtualizarPriceDialog({
+class AtualizarPromotionPriceDialog extends StatefulWidget {
+  const AtualizarPromotionPriceDialog({
     required this.productWithPrice,
     super.key,
   });
 
   final ProductWithPrice productWithPrice;
 
-  static Future<void> show(
+  static Future<bool?> show(
     BuildContext context,
     ProductWithPrice produtoWithPrice,
   ) async {
-    return showDialog<void>(
+    return showDialog<bool>(
       context: context,
       builder: (c) => BlocProvider(
-        create: (ctx) => AtualizarPrecoCubit(produtoWithPrice, getIt()),
-        child: AtualizarPriceDialog(
+        create: (ctx) =>
+            AtualizarPromotionPrecoCubit(produtoWithPrice, getIt()),
+        child: AtualizarPromotionPriceDialog(
           productWithPrice: produtoWithPrice,
         ),
       ),
@@ -30,10 +31,12 @@ class AtualizarPriceDialog extends StatefulWidget {
   }
 
   @override
-  State<AtualizarPriceDialog> createState() => _AtualizarPriceDialogState();
+  State<AtualizarPromotionPriceDialog> createState() =>
+      _AtualizarPromotionPriceDialogState();
 }
 
-class _AtualizarPriceDialogState extends State<AtualizarPriceDialog> {
+class _AtualizarPromotionPriceDialogState
+    extends State<AtualizarPromotionPriceDialog> {
   final priceController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
@@ -46,14 +49,15 @@ class _AtualizarPriceDialogState extends State<AtualizarPriceDialog> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          AtualizarPrecoCubit(widget.productWithPrice, getIt()),
+          AtualizarPromotionPrecoCubit(widget.productWithPrice, getIt()),
       child: Builder(
         builder: (context) {
           return AlertDialog(
-            title: const Text('Atualizar Preço'),
-            content: BlocConsumer<AtualizarPrecoCubit, AtualizarPrecoState>(
+            title: const Text('Atualizar Preço promocional'),
+            content: BlocConsumer<AtualizarPromotionPrecoCubit,
+                AtualizarPromotionPrecoState>(
               listener: (context, state) {
-                if (state is AtualizarPrecoSuccess) {
+                if (state is AtualizarPromotionPrecoSuccess) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Preço atualizado com sucesso!'),
@@ -61,17 +65,19 @@ class _AtualizarPriceDialogState extends State<AtualizarPriceDialog> {
                   );
 
                   Navigator.of(context).pop(true);
-                } else if (state is AtualizarPrecoFailure) {
+                } else if (state is AtualizarPromotionPrecoFailure) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content:
                           Text('Erro ao atualizar preço: ${state.message}'),
                     ),
                   );
+
+                  Navigator.of(context).pop(false);
                 }
               },
               builder: (context, state) {
-                if (state is AtualizarPrecoLoading) {
+                if (state is AtualizarPromotionPrecoLoading) {
                   return const SizedBox.shrink(
                     child: Center(child: CircularProgressIndicator()),
                   );
@@ -114,7 +120,9 @@ class _AtualizarPriceDialogState extends State<AtualizarPriceDialog> {
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState?.validate() ?? false) {
-                    context.read<AtualizarPrecoCubit>().atualizarPreco(
+                    context
+                        .read<AtualizarPromotionPrecoCubit>()
+                        .atualizarPromotionPreco(
                           widget.productWithPrice.produto.id,
                           widget.productWithPrice.preco.profileIdAtualizador ??
                               '',

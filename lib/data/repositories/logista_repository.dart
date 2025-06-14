@@ -19,6 +19,12 @@ abstract class ILojistaRepository {
     double newPrice,
   );
 
+  Future<void> updatePromotionPrice(
+    String productId,
+    String lojistaId,
+    double? newPrice,
+  );
+
   Future<ProductWithPrice?> getProdutosAssociado(
     String produtoId,
     String logistaId,
@@ -119,6 +125,36 @@ class LojistaRepository implements ILojistaRepository {
           .from('precos')
           .update({
             'preco': newPrice,
+            'profile_id_atualizador': lojistaId,
+            'updated_at': DateTime.now().toIso8601String(),
+          })
+          .eq('produto_id', productId)
+          .eq('loja_id', lojaId);
+    } catch (e) {
+      log(e.toString());
+      throw Exception('Erro ao atualizar preço: $e');
+    }
+  }
+
+  @override
+  Future<void> updatePromotionPrice(
+    String productId,
+    String lojistaId,
+    double? newPrice,
+  ) async {
+    try {
+      final lojaResponse = await _supabaseClient
+          .from('lojas')
+          .select('id')
+          .eq('profile_id_lojista', lojistaId)
+          .single();
+
+      final lojaId = lojaResponse['id'] as String;
+
+      await _supabaseClient
+          .from('precos')
+          .update({
+            'preco_promocional': newPrice,
             'profile_id_atualizador': lojistaId,
             'updated_at': DateTime.now().toIso8601String(),
           })
