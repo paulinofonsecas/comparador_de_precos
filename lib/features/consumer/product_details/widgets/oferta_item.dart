@@ -65,11 +65,46 @@ class OfertaItem extends StatelessWidget {
                     children: [
                       Text(
                         numberFormat.format(oferta.price),
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                        ),
+                        style: oferta.promotionPrice != null
+                            ? TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                decoration: TextDecoration.lineThrough,
+                                decorationColor:
+                                    Colors.red.withValues(alpha: 0.8),
+                                decorationThickness: 2,
+                              )
+                            : null,
                       ),
+                      if (oferta.promotionPrice != null) ...[
+                        const GutterSmall(),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.green.withValues(alpha: 0.8),
+                          ),
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: numberFormat
+                                      .format(oferta.promotionPrice),
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                       const GutterSmall(),
                       if (oferta.lastPriceUpdate != null) ...[
                         Container(

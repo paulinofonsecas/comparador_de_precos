@@ -13,6 +13,7 @@ class OfertaModel {
     required this.storeLocation,
     required this.price,
     required this.lastPriceUpdate,
+    required this.promotionPrice,
   });
 
   final String id;
@@ -24,6 +25,7 @@ class OfertaModel {
   final String storeLocation;
   final double price;
   final DateTime? lastPriceUpdate;
+  final double? promotionPrice;
 
   OfertaModel copyWith({
     String? id,
@@ -35,6 +37,7 @@ class OfertaModel {
     String? storeLocation,
     double? price,
     DateTime? lastPriceUpdate,
+    double? promotionPrice,
   }) {
     return OfertaModel(
       id: id ?? this.id,
@@ -46,6 +49,7 @@ class OfertaModel {
       storeLocation: storeLocation ?? this.storeLocation,
       price: price ?? this.price,
       lastPriceUpdate: lastPriceUpdate ?? this.lastPriceUpdate,
+      promotionPrice: promotionPrice ?? this.promotionPrice,
     );
   }
 
@@ -60,6 +64,7 @@ class OfertaModel {
       'store_location': storeLocation,
       'price': price,
       'last_price_update': lastPriceUpdate?.millisecondsSinceEpoch,
+      'promotion_price': promotionPrice,
     };
   }
 
@@ -78,6 +83,7 @@ class OfertaModel {
       lastPriceUpdate: map['last_price_update'] != null
           ? DateTime.parse(map['last_price_update'] as String)
           : null,
+      promotionPrice: map['promotional_price'] as double?,
     );
   }
 
@@ -103,7 +109,8 @@ class OfertaModel {
         other.storeName == storeName &&
         other.storeLocation == storeLocation &&
         other.price == price &&
-        other.lastPriceUpdate == lastPriceUpdate;
+        other.lastPriceUpdate == lastPriceUpdate &&
+        other.promotionPrice == promotionPrice;
   }
 
   @override
@@ -116,6 +123,7 @@ class OfertaModel {
         storeName.hashCode ^
         storeLocation.hashCode ^
         price.hashCode ^
-        lastPriceUpdate.hashCode;
+        lastPriceUpdate.hashCode ^
+        promotionPrice.hashCode;
   }
 }

@@ -1,8 +1,6 @@
-import 'package:comparador_de_precos/app/config/dependencies.dart';
-import 'package:comparador_de_precos/features/auth/bloc/auth_bloc.dart';
-import 'package:flutter/material.dart';
 import 'package:comparador_de_precos/features/consumer_profile/cubit/cubit.dart';
 import 'package:comparador_de_precos/features/consumer_profile/widgets/consumer_profile_body.dart';
+import 'package:flutter/material.dart';
 
 /// {@template consumer_profile_page}
 /// A description for ConsumerProfilePage
@@ -23,9 +21,7 @@ class ConsumerProfilePage extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => ConsumerProfileCubit(),
-        ),
-        BlocProvider(
-          create: (context) => getIt<AuthBloc>(),
+          
         ),
       ],
       child: const Scaffold(
@@ -36,7 +32,7 @@ class ConsumerProfilePage extends StatelessWidget {
 }
 
 /// {@template consumer_profile_view}
-/// Displays the Body of ConsumerProfileView
+/// 
 /// {@endtemplate}
 class ConsumerProfileView extends StatelessWidget {
   /// {@macro consumer_profile_view}

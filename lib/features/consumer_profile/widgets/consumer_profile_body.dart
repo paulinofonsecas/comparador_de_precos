@@ -1,3 +1,4 @@
+import 'package:comparador_de_precos/app/config/dependencies.dart';
 import 'package:comparador_de_precos/features/auth/bloc/auth_bloc.dart';
 import 'package:comparador_de_precos/features/consumer_profile/cubit/cubit.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ class ConsumerProfileBody extends StatelessWidget {
     return Center(
       child: ElevatedButton(
         onPressed: () {
-          context.read<AuthBloc>().add(SignOutEvent());
+          getIt<AuthBloc>().add(SignOutEvent());
         },
         child: const Text('Logout'),
       ),

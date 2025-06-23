@@ -99,6 +99,7 @@ class LojistaRepository implements ILojistaRepository {
         'loja_id': lojaId,
         'profile_id_atualizador': lojistaId,
         'preco': newPrice,
+        'data_atualizacao': DateTime.now().toIso8601String(),
       });
     } catch (e) {
       log(e.toString());
@@ -127,6 +128,7 @@ class LojistaRepository implements ILojistaRepository {
             'preco': newPrice,
             'profile_id_atualizador': lojistaId,
             'updated_at': DateTime.now().toIso8601String(),
+            'data_atualizacao': DateTime.now().toIso8601String(),
           })
           .eq('produto_id', productId)
           .eq('loja_id', lojaId);
@@ -157,6 +159,7 @@ class LojistaRepository implements ILojistaRepository {
             'preco_promocional': newPrice,
             'profile_id_atualizador': lojistaId,
             'updated_at': DateTime.now().toIso8601String(),
+            'data_atualizacao': DateTime.now().toIso8601String(),
           })
           .eq('produto_id', productId)
           .eq('loja_id', lojaId);
