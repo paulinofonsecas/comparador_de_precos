@@ -71,7 +71,7 @@ class SigninView extends StatelessWidget {
               // Handle failure state
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text('Ocorreu um erro ao fazer login'),
+                  content: Text('Usuário ou senha incorretos'),
                 ),
               );
             }

@@ -28,70 +28,46 @@ class ProductDetailsBody extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             DefaultImageWidget(
-              // imageUrl: produto.imagemUrl,
-              imageUrl:
-                  'https://www.pontotel.com.br/local/wp-content/uploads/2022/05/imagem-corporativa.webp',
+              imageUrl: produto.imagemUrl,
+              // imageUrl:
+              //     'https://www.pontotel.com.br/local/wp-content/uploads/2022/05/imagem-corporativa.webp',
+              fit: BoxFit.fitHeight,
               borderRadius: BorderRadius.circular(8),
             ),
             const GutterTiny(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        produto.nome,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const StarRating(
-                        rating: 3.5,
-                        length: 5,
-                        color: Colors.amber,
-                        starSize: 18,
-                      ),
-                      if (produto.precoMinimo != null) ...[
-                        const GutterTiny(),
-                        Text(
-                          'Menor preço: '
-                          '${numberFormat.format(produto.precoMinimo)}',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ],
+                  Text(
+                    produto.nome,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  BlocBuilder<FavoriteCubit, FavoriteState>(
-                    builder: (context, state) {
-                      final isFavorite = state is FavoriteLoaded ? state.isFavorite : false;
-                      final isLoading = state is FavoriteLoading;
-
-                      if (state is FavoriteError) {
-                        print(state.message);
-                      }
-
-                      return IconButton(
-                        icon: Icon(
-                          isFavorite ? Icons.favorite : Icons.favorite_border,
-                          color: isFavorite ? Colors.red : Colors.grey,
-                        ),
-                        onPressed: isLoading
-                            ? null
-                            : () => context
-                                .read<FavoriteCubit>()
-                                .toggleFavorite(produto.id),
-                      );
-                    },
-                  ),
+                  // const StarRating(
+                  //   rating: 3.5,
+                  //   length: 5,
+                  //   color: Colors.amber,
+                  //   starSize: 18,
+                  // ),
+                  // if (produto.precoMinimo != null) ...[
+                  //   const GutterTiny(),
+                  //   Text(
+                  //     'Menor preço: '
+                  //     '${numberFormat.format(produto.precoMinimo)}',
+                  //     style: const TextStyle(
+                  //       fontSize: 16,
+                  //       fontWeight: FontWeight.w500,
+                  //     ),
+                  //   ),
+                  //   const GutterTiny(),
+                  //   Text('Na loja: ${produto.}'),
+                  // ],
                 ],
               ),
             ),
