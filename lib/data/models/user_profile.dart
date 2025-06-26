@@ -3,7 +3,8 @@
 // Enum para representar os tipos de usuário de forma mais segura
 enum UserType {
   consumidor('consumidor'),
-  lojista('lojista');
+  lojista('lojista'),
+  admin('admin');
 
   const UserType(this.name);
 
@@ -15,6 +16,11 @@ UserType userTypeFromString(String? typeString) {
   if (typeString == 'lojista') {
     return UserType.lojista;
   }
+
+  if (typeString == 'admin') {
+    return UserType.admin;
+  }
+
   // Adicione mais conversões se tiver mais tipos
   return UserType.consumidor; // Padrão para consumidor
 }
@@ -25,7 +31,6 @@ String userTypeToString(UserType type) {
 }
 
 class UserProfile {
-
   UserProfile({
     required this.id,
     required this.userId,

@@ -16,7 +16,7 @@ class GetLogistaProfileCubit extends Cubit<GetLogistaProfileState> {
     emit(GetLogistaProfileLoading());
 
     try {
-      final profile = await repository.getLogistaProfile(userId);
+      final profile = await repository.getProfile(userId);
 
       if (profile == null) {
         emit(const GetLogistaProfileFailure('Usuário não encontrado'));

@@ -14,7 +14,7 @@ abstract class AuthenticationRepository {
   );
   Future<void> sendPasswordResetEmail(String email);
   Future<void> verifyEmail();
-  Future<UserProfile?> getLogistaProfile(String userId);
+  Future<UserProfile?> getProfile(String userId);
 
   Future<MyUser?> getUser(String token);
 }
@@ -62,7 +62,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
         throw Exception('User not found');
       }
 
-      final profile = await getLogistaProfile(authResponse.user!.id);
+      final profile = await getProfile(authResponse.user!.id);
 
       if (profile == null) {
         throw Exception('User not found');
@@ -148,7 +148,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   }
 
   @override
-  Future<UserProfile?> getLogistaProfile(String userId) async {
+  Future<UserProfile?> getProfile(String userId) async {
     try {
       // Check if the device is connected to the internet
       final profile = await supabaseClient
@@ -189,7 +189,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       final token2 = newSession.session?.refreshToken;
       await saveToken(token2);
 
-      final profile = await getLogistaProfile(user.user!.id);
+      final profile = await getProfile(user.user!.id);
 
       if (profile == null) {
         return null;

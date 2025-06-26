@@ -1,6 +1,7 @@
 import 'package:comparador_de_precos/app/config/dependencies.dart';
 import 'package:comparador_de_precos/data/models/user_profile.dart';
 import 'package:comparador_de_precos/data/repositories/authentication_repository.dart';
+import 'package:comparador_de_precos/features/admin/admin_dashboard/view/admin_dashboard_page.dart';
 import 'package:comparador_de_precos/features/auth/signin/bloc/bloc.dart';
 import 'package:comparador_de_precos/features/auth/signin/widgets/signin_body.dart';
 import 'package:comparador_de_precos/features/auth/signup/bloc/signup_bloc.dart';
@@ -63,6 +64,14 @@ class SigninView extends StatelessWidget {
               if (state.user.userType! == UserType.lojista.name) {
                 Navigator.of(context).pushReplacement(
                   LogistaDashboardPage.route(
+                    user: state.user,
+                  ),
+                );
+              }
+
+              if (state.user.userType! == UserType.admin.name) {
+                Navigator.of(context).pushReplacement(
+                  AdminDashboardPage.route(
                     user: state.user,
                   ),
                 );
