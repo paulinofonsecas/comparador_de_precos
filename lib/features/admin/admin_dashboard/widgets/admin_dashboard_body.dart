@@ -1,5 +1,10 @@
+import 'dart:developer';
+
+import 'package:comparador_de_precos/features/admin/admin_dashboard/widgets/custom_list_tile.dart';
+import 'package:comparador_de_precos/features/admin/admin_dashboard/widgets/info_card_widget.dart';
+import 'package:comparador_de_precos/features/admin/admin_dashboard/widgets/user_info_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:comparador_de_precos/features/admin/admin_dashboard/bloc/bloc.dart';
+import 'package:flutter_gutter/flutter_gutter.dart';
 
 /// {@template admin_dashboard_body}
 /// Body of the AdminDashboardPage.
@@ -12,10 +17,47 @@ class AdminDashboardBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AdminDashboardBloc, AdminDashboardState>(
-      builder: (context, state) {
-        return Center(child: Text(state.customProperty));
-      },
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          const UserInfoWidget(),
+          const GutterLarge(),
+          const InfoCardWidget(),
+          const GutterLarge(),
+          CustomListTile(
+            title: 'Gestão de Lojas',
+            icon: Icons.store,
+            onTap: () {
+              log('Gestão de Lojas tapped');
+            },
+          ),
+          const Gutter(),
+          CustomListTile(
+            title: 'Gestão de Produtos',
+            icon: Icons.shopping_bag,
+            onTap: () {
+              log('Gestão de Produtos tapped');
+            },
+          ),
+          const Gutter(),
+          CustomListTile(
+            title: 'Gestão de categorias',
+            icon: Icons.category,
+            onTap: () {
+              log('Gestão de categorias tapped');
+            },
+          ),
+          const Gutter(),
+          CustomListTile(
+            title: 'Gestão de Avaliações',
+            icon: Icons.rate_review,
+            onTap: () {
+              log('Gestão de Avaliações tapped');
+            },
+          ),
+        ],
+      ),
     );
   }
 }

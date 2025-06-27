@@ -1,6 +1,9 @@
+import 'package:comparador_de_precos/app/config/dependencies.dart';
 import 'package:comparador_de_precos/data/models/my_user.dart';
 import 'package:comparador_de_precos/features/admin/admin_dashboard/bloc/bloc.dart';
 import 'package:comparador_de_precos/features/admin/admin_dashboard/widgets/admin_dashboard_body.dart';
+import 'package:comparador_de_precos/features/auth/signin/cubit/login_cubit.dart';
+import 'package:comparador_de_precos/features/auth/signin/view/signin_page.dart';
 import 'package:flutter/material.dart';
 
 /// {@template admin_dashboard_page}
@@ -24,11 +27,29 @@ class AdminDashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AdminDashboardBloc(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => AdminDashboardBloc(),
+        ),
+        BlocProvider(
+          create: (context) => LoginCubit(getIt()),
+        ),
+      ],
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Admin Dashboard'),
+          title: const Text('Comparador de Preços'),
+          actions: [
+            IconButton(
+              icon: Icon(
+                Icons.logout,
+                color: Theme.of(context).colorScheme.error,
+              ),
+              onPressed: () {
+                context.read<LoginCubit>().signOut();
+              },
+            ),
+          ],
         ),
         body: const AdminDashboardView(),
       ),
@@ -45,6 +66,15 @@ class AdminDashboardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const AdminDashboardBody();
+    return BlocListener<LoginCubit, LoginState>(
+      listener: (context, state) {
+        if (state is LogoutSuccess) {
+          Navigator.of(context).pushReplacement(
+            SigninPage.route(),
+          );
+        }
+      },
+      child: const AdminDashboardBody(),
+    );
   }
 }

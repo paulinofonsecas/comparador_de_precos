@@ -23,7 +23,7 @@ class _UpdateScrappedProductsState extends State<UpdateScrappedProducts> {
   List<SociaProduct> subList = <SociaProduct>[];
   double percentage = 0;
   String produtoEmCurso = '';
-  String categoriaAtual = 'alimentares';
+  String categoriaAtual = 'higiene';
 
   Future<String> addImageToProduct(
     String productId,
@@ -179,8 +179,8 @@ class _UpdateScrappedProductsState extends State<UpdateScrappedProducts> {
                   child: ElevatedButton(
                     onPressed: () {
                       uploadProducts(
-                        'alimentares',
-                        '081c1efc-193c-45e0-9957-f824e554d38b',
+                        'higiene',
+                        '4c60a35a-886c-4dd3-ac33-f5ce357754bf',
                       );
                     },
                     child: const Text('Upload'),
