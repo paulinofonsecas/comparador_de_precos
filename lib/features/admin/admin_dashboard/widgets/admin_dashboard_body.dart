@@ -36,6 +36,15 @@ class AdminDashboardBody extends StatelessWidget {
             },
           ),
           const Gutter(),
+          // Lojas para avaliação
+          CustomListTile(
+            title: 'Lojas para Avaliação',
+            icon: Icons.check_circle_outline,
+            onTap: () {
+              log('Lojas para Avaliação tapped');
+            },
+          ),
+          const Gutter(),
           CustomListTile(
             title: 'Gestão de Produtos',
             icon: Icons.shopping_bag,

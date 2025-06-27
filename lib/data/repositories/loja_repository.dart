@@ -19,7 +19,7 @@ class LojaRepository {
   }
 
   /// Busca todas as lojas ordenadas por proximidade
-  /// 
+  ///
   /// [userLat] e [userLon] são as coordenadas do usuário
   /// [raioMaxKm] é o raio máximo em km (opcional)
   Future<List<LojaComDistancia>> getLojasProximas({
@@ -32,22 +32,21 @@ class LojaRepository {
         'user_lat': userLat,
         'user_lon': userLon,
       };
-      
+
       if (raioMaxKm != null) {
         params['raio_max_km'] = raioMaxKm;
       }
-      
-      final response = await supabaseClient
-          .rpc<List<Map<String, dynamic>>>('buscar_lojas_proximas', params: params);
-      
-      return response
-          .map(LojaComDistancia.fromJson)
-          .toList();
+
+      final response = await supabaseClient.rpc<List<Map<String, dynamic>>>(
+          'buscar_lojas_proximas',
+          params: params);
+
+      return response.map(LojaComDistancia.fromJson).toList();
     } catch (e) {
       throw Exception('Erro ao buscar lojas próximas: $e');
     }
   }
-  
+
   /// Busca todas as lojas
   Future<List<Loja>> getAllLojas() async {
     try {
@@ -56,17 +55,15 @@ class LojaRepository {
           .select()
           .eq('aprovada', true)
           .order('nome');
-      
-      return response
-          .map(Loja.fromJson)
-          .toList();
+
+      return response.map(Loja.fromJson).toList();
     } catch (e) {
       throw Exception('Erro ao buscar todas as lojas: $e');
     }
   }
-  
+
   /// Busca as lojas com melhor classificação
-  /// 
+  ///
   /// [limit] é o número máximo de lojas a retornar (padrão: 10)
   Future<List<Loja>> getTopRatedLojas({int limit = 10}) async {
     try {
@@ -80,10 +77,48 @@ class LojaRepository {
           .map((json) => Loja.fromJson(json['lojas'] as Map<String, dynamic>))
           .where((loja) => loja.aprovada ?? false)
           .toList();
-      
+
       return lojas;
     } catch (e) {
       throw Exception('Erro ao buscar lojas melhores avaliadas: $e');
+    }
+  }
+
+  /// Busca lojas por nome
+  /// /// [nome] é o nome ou parte do nome da loja
+  Future<List<Loja>> searchLojas(String nome) async {
+    try {
+      final response = await supabaseClient
+          .from('lojas')
+          .select()
+          .ilike('nome', '%$nome%')
+          .order('nome');
+
+      return response.map(Loja.fromJson).toList();
+    } catch (e) {
+      throw Exception('Erro ao buscar lojas: $e');
+    }
+  }
+
+  /// get lojas with pagination
+  /// [page] é o número da página (começando de 1)
+  /// [limit] é o número de lojas por página (padrão: 10
+  /// [orderBy] é o campo para ordenar as lojas (padrão: 'nome')
+  Future<List<Loja>> getLojas({
+    int page = 1,
+    int limit = 10,
+    String orderBy = 'nome',
+  }) async {
+    try {
+      final response = await supabaseClient
+          .from('lojas')
+          .select()
+          .range((page - 1) * limit, page * limit - 1)
+          .order(orderBy);
+
+      return response.map(Loja.fromJson).toList();
+    } catch (e) {
+      throw Exception('Erro ao buscar lojas: $e');
     }
   }
 }
