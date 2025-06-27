@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:comparador_de_precos/features/admin/admin_dashboard/widgets/custom_list_tile.dart';
 import 'package:comparador_de_precos/features/admin/admin_dashboard/widgets/info_card_widget.dart';
 import 'package:comparador_de_precos/features/admin/admin_dashboard/widgets/user_info_widget.dart';
+import 'package:comparador_de_precos/features/admin/admin_gestao_lojas/admin_gestao_lojas.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
 
@@ -29,7 +30,9 @@ class AdminDashboardBody extends StatelessWidget {
             title: 'Gestão de Lojas',
             icon: Icons.store,
             onTap: () {
-              log('Gestão de Lojas tapped');
+              Navigator.of(context).push(
+                AdminGestaoLojasPage.route(),
+              );
             },
           ),
           const Gutter(),
