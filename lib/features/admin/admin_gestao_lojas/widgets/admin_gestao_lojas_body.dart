@@ -5,6 +5,7 @@ import 'package:comparador_de_precos/features/admin/admin_gestao_lojas/cubit/adm
 import 'package:comparador_de_precos/features/admin/admin_gestao_lojas/cubit/search_lojas_cubit.dart';
 import 'package:comparador_de_precos/features/admin/admin_gestao_lojas/widgets/custom_search_widget.dart';
 import 'package:comparador_de_precos/features/admin/admin_gestao_lojas/widgets/loja_list_tile_widget.dart';
+import 'package:comparador_de_precos/features/admin/admin_loja_details/admin_loja_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
@@ -141,6 +142,14 @@ class _AdminGestaoLojasBodyState extends State<AdminGestaoLojasBody> {
                   itemBuilder: (context, index) {
                     return LojaListTileWidget(
                       loja: lojasFiltradas[index],
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          AdminLojaDetailsPage.route(
+                            lojaId: lojasFiltradas[index].id,
+                          ),
+                        );
+                      },
                     );
                   },
                 ),
