@@ -149,4 +149,24 @@ class LojaRepository {
       throw Exception('Erro ao buscar informações das lojas: $e');
     }
   }
+
+  Future<void> desaprovarLoja(String lojaId) async {
+    try {
+      await supabaseClient
+          .from('lojas')
+          .update({'aprovada': false}).eq('id', lojaId);
+    } catch (e) {
+      throw Exception('Erro ao desaprovar loja: $e');
+    }
+  }
+
+  Future<void> aprovarLoja(String lojaId) async {
+    try {
+      await supabaseClient
+          .from('lojas')
+          .update({'aprovada': true}).eq('id', lojaId);
+    } catch (e) {
+      throw Exception('Erro ao aprovar loja: $e');
+    }
+  }
 }

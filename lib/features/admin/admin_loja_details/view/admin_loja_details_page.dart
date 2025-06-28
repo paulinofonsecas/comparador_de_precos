@@ -1,5 +1,7 @@
 import 'package:comparador_de_precos/app/config/dependencies.dart';
 import 'package:comparador_de_precos/features/admin/admin_loja_details/bloc/bloc.dart';
+import 'package:comparador_de_precos/features/admin/admin_loja_details/cubit/aprovar_loja_cubit.dart';
+import 'package:comparador_de_precos/features/admin/admin_loja_details/cubit/desaprovar_loja_cubit.dart';
 import 'package:comparador_de_precos/features/admin/admin_loja_details/widgets/admin_loja_details_body.dart';
 import 'package:flutter/material.dart';
 
@@ -24,15 +26,28 @@ class AdminLojaDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AdminLojaDetailsBloc(getIt())
-        ..add(LoadAdminLojaDetailsEvent(lojaId: lojaId)),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => AdminLojaDetailsBloc(getIt())
+            ..add(LoadAdminLojaDetailsEvent(lojaId: lojaId)),
+        ),
+        BlocProvider(
+          create: (context) => AprovarLojaCubit(getIt()),
+        ),
+        BlocProvider(
+          create: (context) => DesaprovarLojaCubit(getIt()),
+        ),
+      ],
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Detalhes da Loja'),
           centerTitle: true,
         ),
-        body: const AdminLojaDetailsView(),
+        body: AdminLojaDetailsView(
+          key: Key('admin_loja_details_view_//'),
+          lojaId: lojaId,
+        ),
       ),
     );
   }
@@ -43,10 +58,57 @@ class AdminLojaDetailsPage extends StatelessWidget {
 /// {@endtemplate}
 class AdminLojaDetailsView extends StatelessWidget {
   /// {@macro admin_loja_details_view}
-  const AdminLojaDetailsView({super.key});
+  const AdminLojaDetailsView({
+    super.key,
+    required this.lojaId,
+  });
+
+  final String lojaId;
 
   @override
   Widget build(BuildContext context) {
-    return const AdminLojaDetailsBody();
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<AprovarLojaCubit, AprovarLojaState>(
+          listener: (context, state) {
+            if (state is AprovarLojaSuccess) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Loja aprovada com sucesso!')),
+              );
+
+              context.read<AdminLojaDetailsBloc>().add(
+                    LoadAdminLojaDetailsEvent(
+                      lojaId: lojaId,
+                    ),
+                  );
+            } else if (state is AprovarLojaFailure) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: const Text('Erro ao aprovar loja')),
+              );
+            }
+          },
+        ),
+        BlocListener<DesaprovarLojaCubit, DesaprovarLojaState>(
+          listener: (context, state) {
+            if (state is DesaprovarLojaSuccess) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Loja desaprovada com sucesso!')),
+              );
+
+              context.read<AdminLojaDetailsBloc>().add(
+                    LoadAdminLojaDetailsEvent(
+                      lojaId: lojaId,
+                    ),
+                  );
+            } else if (state is DesaprovarLojaFailure) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Erro ao desaprovar loja')),
+              );
+            }
+          },
+        ),
+      ],
+      child: const AdminLojaDetailsBody(),
+    );
   }
 }

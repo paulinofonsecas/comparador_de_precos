@@ -1,10 +1,13 @@
 import 'package:comparador_de_precos/data/models/loja.dart';
+import 'package:comparador_de_precos/features/admin/admin_loja_details/cubit/aprovar_loja_cubit.dart';
+import 'package:comparador_de_precos/features/admin/admin_loja_details/cubit/desaprovar_loja_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LojaDetailsBody extends StatelessWidget {
   const LojaDetailsBody({
-    super.key,
     required this.loja,
+    super.key,
   });
 
   final Loja loja;
@@ -13,6 +16,7 @@ class LojaDetailsBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final imageHeight = mediaQuery.size.height * 0.25;
+
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -92,12 +96,35 @@ class LojaDetailsBody extends StatelessWidget {
               runSpacing: 8,
               children: [
                 ElevatedButton.icon(
-                  icon: const Icon(Icons.verified_user),
+                  icon: Icon(
+                    Icons.verified_user,
+                    color: loja.aprovada ?? false
+                        ? Theme.of(context).colorScheme.onErrorContainer
+                        : Theme.of(context).colorScheme.onPrimaryContainer,
+                  ),
                   label: Text(
                     loja.aprovada ?? false ? 'Desaprovar Loja' : 'Aprovar Loja',
+                    style: TextStyle(
+                      color: loja.aprovada ?? false
+                          ? Theme.of(context).colorScheme.onErrorContainer
+                          : Theme.of(context).colorScheme.onPrimaryContainer,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: loja.aprovada ?? false
+                        ? Theme.of(context).colorScheme.errorContainer
+                        : Theme.of(context).colorScheme.primaryContainer,
+                    foregroundColor:
+                        loja.aprovada ?? false ? Colors.white : Colors.white,
                   ),
                   onPressed: () {
-                    // TODO: Implementar ação de alterar estado
+                    if (loja.aprovada ?? false) {
+                      context
+                          .read<DesaprovarLojaCubit>()
+                          .desaprovarLoja(loja.id);
+                    } else {
+                      context.read<AprovarLojaCubit>().aprovarLoja(loja.id);
+                    }
                   },
                 ),
                 ElevatedButton.icon(
