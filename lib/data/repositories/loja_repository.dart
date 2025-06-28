@@ -121,4 +121,32 @@ class LojaRepository {
       throw Exception('Erro ao buscar lojas: $e');
     }
   }
+
+  /// get informações gerais das lojas
+  Future<Map<String, int>> getLojasInfo() async {
+    try {
+      final totalLojasResponse = await supabaseClient
+          .from('lojas')
+          .select()
+          .eq('aprovada', true)
+          .count();
+
+      final lojasParaAvaliarResponse = await supabaseClient
+          .from('lojas')
+          .select()
+          .eq('aprovada', false)
+          .count();
+
+      // Retorna um mapa com as informações
+      // totalLojas: total de lojas aprovadas
+      // lojasParaAvaliar: total de lojas pendentes de avaliação
+      // Se não houver lojas pendentes, retorna 0
+      return {
+        'totalLojas': totalLojasResponse.count,
+        'lojasParaAvaliar': lojasParaAvaliarResponse.count,
+      };
+    } catch (e) {
+      throw Exception('Erro ao buscar informações das lojas: $e');
+    }
+  }
 }

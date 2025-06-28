@@ -1,6 +1,7 @@
 import 'package:comparador_de_precos/app/config/dependencies.dart';
 import 'package:comparador_de_precos/data/models/my_user.dart';
 import 'package:comparador_de_precos/features/admin/admin_dashboard/bloc/bloc.dart';
+import 'package:comparador_de_precos/features/admin/admin_dashboard/cubit/get_lojas_info_cubit.dart';
 import 'package:comparador_de_precos/features/admin/admin_dashboard/widgets/admin_dashboard_body.dart';
 import 'package:comparador_de_precos/features/auth/signin/cubit/login_cubit.dart';
 import 'package:comparador_de_precos/features/auth/signin/view/signin_page.dart';
@@ -35,10 +36,13 @@ class AdminDashboardPage extends StatelessWidget {
         BlocProvider(
           create: (context) => LoginCubit(getIt()),
         ),
+        BlocProvider(
+          create: (context) => GetLojasInfoCubit(getIt()),
+        ),
       ],
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Comparador de Preços'),
+          title: const Text('Painel Administrativo'),
           actions: [
             IconButton(
               icon: Icon(
