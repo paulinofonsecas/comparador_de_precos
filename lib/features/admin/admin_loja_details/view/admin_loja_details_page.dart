@@ -2,7 +2,9 @@ import 'package:comparador_de_precos/app/config/dependencies.dart';
 import 'package:comparador_de_precos/features/admin/admin_loja_details/bloc/bloc.dart';
 import 'package:comparador_de_precos/features/admin/admin_loja_details/cubit/aprovar_loja_cubit.dart';
 import 'package:comparador_de_precos/features/admin/admin_loja_details/cubit/desaprovar_loja_cubit.dart';
+import 'package:comparador_de_precos/features/admin/admin_loja_details/cubit/get_lojistas_cubit.dart';
 import 'package:comparador_de_precos/features/admin/admin_loja_details/widgets/admin_loja_details_body.dart';
+import 'package:comparador_de_precos/features/logista/logista_dashboard/cubit/get_logista_profile_cubit.dart';
 import 'package:flutter/material.dart';
 
 /// {@template admin_loja_details_page}
@@ -38,6 +40,12 @@ class AdminLojaDetailsPage extends StatelessWidget {
         BlocProvider(
           create: (context) => DesaprovarLojaCubit(getIt()),
         ),
+        BlocProvider(
+          create: (context) => GetLojistasCubit(getIt()),
+        ),
+        BlocProvider(
+          create: (context) => GetLogistaProfileCubit(getIt()),
+        ),
       ],
       child: Scaffold(
         appBar: AppBar(
@@ -69,6 +77,21 @@ class AdminLojaDetailsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocListener(
       listeners: [
+        BlocListener<AdminLojaDetailsBloc, AdminLojaDetailsState>(
+          listener: (context, state) {
+            if (state is AdminLojaDetailsLoading) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Carregando detalhes da loja...')),
+              );
+            } else if (state is AdminLojaDetailsLoaded) {
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            } else if (state is AdminLojaDetailsError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(state.message)),
+              );
+            }
+          },
+        ),
         BlocListener<AprovarLojaCubit, AprovarLojaState>(
           listener: (context, state) {
             if (state is AprovarLojaSuccess) {

@@ -1,9 +1,8 @@
-import 'loja_details_body.dart';
 import 'dart:developer';
 
-import 'package:comparador_de_precos/data/models/loja.dart';
-import 'package:flutter/material.dart';
 import 'package:comparador_de_precos/features/admin/admin_loja_details/bloc/bloc.dart';
+import 'package:comparador_de_precos/features/admin/admin_loja_details/widgets/loja_details_body.dart';
+import 'package:flutter/material.dart';
 
 /// {@template admin_loja_details_body}
 /// Body of the AdminLojaDetailsPage.
@@ -28,7 +27,7 @@ class AdminLojaDetailsBody extends StatelessWidget {
           );
         } else if (state is AdminLojaDetailsLoaded) {
           final loja = state.loja;
-          
+
           return LojaDetailsBody(loja: loja);
         }
         return const SizedBox.shrink();
@@ -36,5 +35,3 @@ class AdminLojaDetailsBody extends StatelessWidget {
     );
   }
 }
-
-

@@ -169,4 +169,21 @@ class LojaRepository {
       throw Exception('Erro ao aprovar loja: $e');
     }
   }
+
+  Future<Loja?> alterarLojista(String id, String novoLojistaId) async {
+    try {
+      await supabaseClient
+          .from('lojas')
+          .update({'profile_id_lojista': novoLojistaId}).eq('id', id);
+
+      final loja = await getLojaById(id);
+      if (loja == null) {
+        throw Exception('Loja não encontrada após alteração');
+      }
+
+      return loja;
+    } catch (e) {
+      throw Exception('Erro ao alterar lojista: $e');
+    }
+  }
 }

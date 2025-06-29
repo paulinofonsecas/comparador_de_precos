@@ -54,11 +54,19 @@ class LojaListTileWidget extends StatelessWidget {
               ),
             ),
             const GutterSmall(),
-            Icon(
-              Icons.arrow_forward_ios,
-              size: 16,
-              color:
-                  Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Icon(
+                Icons.verified,
+                size: 24,
+                color: loja.aprovada ?? false
+                    ? Theme.of(context)
+                        .colorScheme
+                        .primary
+                    : Theme.of(context)
+                        .colorScheme
+                        .error,
+              ),
             ),
           ],
         ),

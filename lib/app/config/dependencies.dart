@@ -56,9 +56,15 @@ void setupRepositories() {
         getIt<SupabaseClient>(),
       ),
     )
+    ..registerLazySingleton<LojistaRepository>(
+      () => LojistaRepository(
+        getIt<SupabaseClient>(),
+      ),
+    )
     ..registerLazySingleton<LocationService>(LocationService.new)
     ..registerLazySingleton<ILojistaRepository>(
-        () => LojistaRepository(getIt()),)
+      () => LojistaRepository(getIt()),
+    )
     ..registerLazySingleton<ListaCompraRepository>(ListaCompraRepository.new);
 }
 

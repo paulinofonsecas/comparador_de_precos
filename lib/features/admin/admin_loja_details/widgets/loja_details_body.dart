@@ -1,8 +1,7 @@
 import 'package:comparador_de_precos/data/models/loja.dart';
-import 'package:comparador_de_precos/features/admin/admin_loja_details/cubit/aprovar_loja_cubit.dart';
-import 'package:comparador_de_precos/features/admin/admin_loja_details/cubit/desaprovar_loja_cubit.dart';
+import 'package:comparador_de_precos/features/admin/admin_loja_details/widgets/administracao_section.dart';
+import 'package:comparador_de_precos/features/admin/admin_loja_details/widgets/responsavel_section.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LojaDetailsBody extends StatelessWidget {
   const LojaDetailsBody({
@@ -86,74 +85,10 @@ class LojaDetailsBody extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             const Divider(),
-            Text(
-              'Administração',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                ElevatedButton.icon(
-                  icon: Icon(
-                    Icons.verified_user,
-                    color: loja.aprovada ?? false
-                        ? Theme.of(context).colorScheme.onErrorContainer
-                        : Theme.of(context).colorScheme.onPrimaryContainer,
-                  ),
-                  label: Text(
-                    loja.aprovada ?? false ? 'Desaprovar Loja' : 'Aprovar Loja',
-                    style: TextStyle(
-                      color: loja.aprovada ?? false
-                          ? Theme.of(context).colorScheme.onErrorContainer
-                          : Theme.of(context).colorScheme.onPrimaryContainer,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: loja.aprovada ?? false
-                        ? Theme.of(context).colorScheme.errorContainer
-                        : Theme.of(context).colorScheme.primaryContainer,
-                    foregroundColor:
-                        loja.aprovada ?? false ? Colors.white : Colors.white,
-                  ),
-                  onPressed: () {
-                    if (loja.aprovada ?? false) {
-                      context
-                          .read<DesaprovarLojaCubit>()
-                          .desaprovarLoja(loja.id);
-                    } else {
-                      context.read<AprovarLojaCubit>().aprovarLoja(loja.id);
-                    }
-                  },
-                ),
-                ElevatedButton.icon(
-                  icon: const Icon(Icons.person),
-                  label: const Text('Alterar Usuário'),
-                  onPressed: () {
-                    // TODO: Implementar ação de alterar usuário
-                  },
-                ),
-                ElevatedButton.icon(
-                  icon: const Icon(Icons.edit),
-                  label: const Text('Editar Loja'),
-                  onPressed: () {
-                    // TODO: Implementar ação de editar loja
-                  },
-                ),
-                ElevatedButton.icon(
-                  icon: const Icon(Icons.delete),
-                  label: const Text('Excluir Loja'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.error,
-                    foregroundColor: Theme.of(context).colorScheme.onError,
-                  ),
-                  onPressed: () {
-                    // TODO: Implementar ação de excluir loja
-                  },
-                ),
-              ],
-            ),
+            ResponsavelSection(loja: loja),
+            const SizedBox(height: 16),
+            const Divider(),
+            AdministracaoSection(loja: loja),
             const SizedBox(height: 24),
             Text(
               'Criada em: ${loja.createdAt.toLocal().toString().split(' ')[0]}',

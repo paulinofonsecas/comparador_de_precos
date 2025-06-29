@@ -17,3 +17,20 @@ class LoadAdminLojaDetailsEvent extends AdminLojaDetailsEvent {
   @override
   List<Object> get props => [lojaId];
 }
+
+class AdminLojaDetailsAlterarLojistaEvent extends AdminLojaDetailsEvent {
+  /// {@macro admin_loja_details_alterar_lojista_event}
+  const AdminLojaDetailsAlterarLojistaEvent({
+    required this.lojaId,
+    required this.novoLojistaId,
+  });
+
+  /// The ID of the store to update
+  final String lojaId;
+
+  /// The new lojista to set for the store
+  final String novoLojistaId;
+
+  @override
+  List<Object> get props => [lojaId, novoLojistaId];
+}

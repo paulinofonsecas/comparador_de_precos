@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:comparador_de_precos/data/models/user_profile.dart';
 import 'package:comparador_de_precos/data/repositories/produto_with_price.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -221,6 +222,41 @@ class LojistaRepository implements ILojistaRepository {
     } catch (e) {
       log(e.toString());
       throw Exception('Erro ao buscar produtos: $e');
+    }
+  }
+
+  Future<List<UserProfile>> getLojistas(String search) async {
+    try {
+      final response = await _supabaseClient
+          .from('profiles')
+          .select()
+          .eq('tipo_usuario', 'lojista')
+          .ilike('nome_completo', '%$search%')
+          .limit(20);
+
+      if (response.isEmpty) {
+        return [];
+      }
+
+      return response.map(UserProfile.fromMap).toList();
+    } catch (e) {
+      log(e.toString());
+      throw Exception('Erro ao buscar lojistas: $e');
+    }
+  }
+
+  Future<UserProfile?> getProfile(String profileId) async {
+    try {
+      final response = await _supabaseClient
+          .from('profiles')
+          .select()
+          .eq('id', profileId)
+          .single();
+
+      return UserProfile.fromMap(response);
+    } catch (e) {
+      log(e.toString());
+      throw Exception('Erro ao buscar perfil do lojista: $e');
     }
   }
 }
