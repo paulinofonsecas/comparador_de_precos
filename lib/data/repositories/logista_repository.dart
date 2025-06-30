@@ -250,7 +250,7 @@ class LojistaRepository implements ILojistaRepository {
       final response = await _supabaseClient
           .from('profiles')
           .select()
-          .eq('id', profileId)
+          .eq('user_id', profileId)
           .single();
 
       return UserProfile.fromMap(response);

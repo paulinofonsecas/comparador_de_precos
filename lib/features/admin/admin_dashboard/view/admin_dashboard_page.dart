@@ -40,22 +40,26 @@ class AdminDashboardPage extends StatelessWidget {
           create: (context) => GetLojasInfoCubit(getIt()),
         ),
       ],
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Painel Administrativo'),
-          actions: [
-            IconButton(
-              icon: Icon(
-                Icons.logout,
-                color: Theme.of(context).colorScheme.error,
-              ),
-              onPressed: () {
-                context.read<LoginCubit>().signOut();
-              },
+      child: Builder(
+        builder: (context) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Painel Administrativo'),
+              actions: [
+                IconButton(
+                  icon: Icon(
+                    Icons.logout,
+                    color: Theme.of(context).colorScheme.error,
+                  ),
+                  onPressed: () {
+                    context.read<LoginCubit>().signOut();
+                  },
+                ),
+              ],
             ),
-          ],
-        ),
-        body: const AdminDashboardView(),
+            body: const AdminDashboardView(),
+          );
+        },
       ),
     );
   }

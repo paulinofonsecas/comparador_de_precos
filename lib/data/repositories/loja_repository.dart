@@ -132,9 +132,8 @@ class LojaRepository {
           .count();
 
       final lojasParaAvaliarResponse = await supabaseClient
-          .from('lojas')
+          .from('solicitacoes_lojas')
           .select()
-          .eq('aprovada', false)
           .count();
 
       // Retorna um mapa com as informações
