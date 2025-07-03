@@ -11,6 +11,7 @@ class SolicitacaoLoja {
   final String? descricao;
   final String nomeCompletoUsuario;
   final String emailUsuario;
+  final List<String> filePaths;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -22,6 +23,7 @@ class SolicitacaoLoja {
     this.latitude,
     this.longitude,
     this.descricao,
+    this.filePaths = const [],
     required this.nomeCompletoUsuario,
     required this.emailUsuario,
     required this.createdAt,
@@ -37,6 +39,7 @@ class SolicitacaoLoja {
     double? longitude,
     String? descricao,
     String? nomeCompletoUsuario,
+    List<String>? filePaths,
     String? emailUsuario,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -49,6 +52,7 @@ class SolicitacaoLoja {
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,
       descricao: descricao ?? this.descricao,
+      filePaths: filePaths ?? this.filePaths,
       nomeCompletoUsuario: nomeCompletoUsuario ?? this.nomeCompletoUsuario,
       emailUsuario: emailUsuario ?? this.emailUsuario,
       createdAt: createdAt ?? this.createdAt,
@@ -83,6 +87,9 @@ class SolicitacaoLoja {
       latitude: map['latitude'] != null ? map['latitude'] as double : null,
       longitude: map['longitude'] != null ? map['longitude'] as double : null,
       descricao: map['descricao'] != null ? map['descricao'] as String : null,
+      filePaths: map['file_paths'] != null
+          ? List<String>.from(map['file_paths'] as List)
+          : const [],
       nomeCompletoUsuario: map['nome_completo_usuario'] as String,
       emailUsuario: map['email_usuario'] as String,
       createdAt: DateTime.parse(map['created_at'] as String),

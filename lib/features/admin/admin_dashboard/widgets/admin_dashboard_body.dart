@@ -4,6 +4,7 @@ import 'package:comparador_de_precos/features/admin/admin_dashboard/widgets/cust
 import 'package:comparador_de_precos/features/admin/admin_dashboard/widgets/info_card_widget.dart';
 import 'package:comparador_de_precos/features/admin/admin_dashboard/widgets/user_info_widget.dart';
 import 'package:comparador_de_precos/features/admin/admin_gestao_lojas/admin_gestao_lojas.dart';
+import 'package:comparador_de_precos/features/admin/admin_solicitacoes_lojas/view/admin_solicitacoes_lojas_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
 
@@ -38,10 +39,12 @@ class AdminDashboardBody extends StatelessWidget {
           const Gutter(),
           // Lojas para avaliação
           CustomListTile(
-            title: 'Lojas para Avaliação',
-            icon: Icons.check_circle_outline,
+            title: 'Solicitações de lojas',
+            icon: Icons.add,
             onTap: () {
-              log('Lojas para Avaliação tapped');
+              Navigator.of(context).push(
+                AdminSolicitacoesLojasPage.route(),
+              );
             },
           ),
           const Gutter(),

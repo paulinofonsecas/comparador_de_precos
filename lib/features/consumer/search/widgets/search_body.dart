@@ -5,6 +5,7 @@ import 'package:comparador_de_precos/features/consumer/search/cubit/search_histo
 import 'package:comparador_de_precos/features/consumer/search/search.dart';
 
 import 'package:comparador_de_precos/features/consumer/search/widgets/default_search_body.dart';
+import 'package:comparador_de_precos/widgets/default_image_widget.dart';
 import 'package:flutter/material.dart';
 
 class SearchBody extends StatefulWidget {
@@ -127,11 +128,10 @@ class _ResultSearchListState extends State<ResultSearchList> {
                         subtitle: const Text('1.250 Kz, em 10 lojas'),
                         leading: ClipRRect(
                           borderRadius: BorderRadius.circular(12),
-                          child: Image.network(
-                            'https://www.pontotel.com.br/local/wp-content/uploads/2022/05/imagem-corporativa.webp',
-                            width: 64,
-                            height: 64,
-                            fit: BoxFit.cover,
+                          child: DefaultImageWidget(
+                            imageUrl: item.imagemUrl,
+                            width: 50,
+                            height: 50,
                           ),
                         ),
                         trailing: const Icon(Icons.arrow_forward_ios, size: 16),

@@ -42,7 +42,7 @@ class InfoCardWidget extends StatelessWidget {
                   MetricItemWidget(
                     key: Key('total_products_metric'),
                     title: 'Lojas por avaliar',
-                    icon: Icons.search,
+                    icon: Icons.add,
                     value: '5,678',
                   ),
                 ],
