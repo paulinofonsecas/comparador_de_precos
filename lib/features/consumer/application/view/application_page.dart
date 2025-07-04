@@ -9,6 +9,9 @@ import 'package:comparador_de_precos/features/consumer/product_catalog/view/prod
 import 'package:comparador_de_precos/features/consumer/search/view/search_page.dart';
 import 'package:comparador_de_precos/features/consumer_profile/consumer_profile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'dart:developer';
 import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
 
 /// {@template application_page}
@@ -29,6 +32,7 @@ class ApplicationPage extends StatefulWidget {
 
 class _ApplicationPageState extends State<ApplicationPage> {
   var _currentIndex = 0;
+  String _scanBarcode = 'Unknown';
 
   final List<Widget> _pages = [
     const InicioPage(),
@@ -56,7 +60,27 @@ class _ApplicationPageState extends State<ApplicationPage> {
         child: Scaffold(
           body: _pages[_currentIndex],
           floatingActionButton: FloatingActionButton(
-            onPressed: () {},
+            onPressed: () async {
+              String barcodeScanRes;
+              // Platform messages may fail, so we use a try/catch PlatformException.
+              try {
+                barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+                    '#ff6666', 'Cancel', true, ScanMode.QR);
+                print(barcodeScanRes);
+              } on PlatformException {
+                barcodeScanRes = 'Failed to get platform version.';
+              }
+
+              // If the widget was removed from the tree while the asynchronous platform
+              // message was in flight, we want to discard the reply rather than calling
+              // setState to update our non-existent appearance.
+              if (!mounted) return;
+
+              setState(() {
+                _scanBarcode = barcodeScanRes;
+                log('Scanned barcode: $_scanBarcode');
+              });
+            },
             backgroundColor: Theme.of(context).colorScheme.primaryContainer,
             child: Icon(
               Icons.qr_code_scanner,

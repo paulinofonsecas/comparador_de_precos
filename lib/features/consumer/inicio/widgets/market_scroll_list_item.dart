@@ -44,7 +44,7 @@ class MarketScrollListItem extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   child: Image.network(
                     loja?.logoUrl ??
-                        'https://www.pontotel.com.br/local/wp-content/uploads/2022/05/imagem-corporativa.webp',
+                        'https://as1.ftcdn.net/v2/jpg/01/27/40/68/1000_F_127406856_K7ABxpHlydS6gFurI9kZsVaR3HsFp4yz.jpg',
                     fit: BoxFit.cover,
                     width: double.infinity,
                     height: double.infinity,

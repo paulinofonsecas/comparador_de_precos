@@ -71,11 +71,7 @@ class _DefaultSearchBottomSheetState<T>
   @override
   void initState() {
     super.initState();
-    if (widget.asyncLoader != null) {
-      _loadAsync('');
-    } else {
-      filteredItems = widget.items;
-    }
+    filteredItems = widget.items;
   }
 
   Future<void> _loadAsync(String value) async {

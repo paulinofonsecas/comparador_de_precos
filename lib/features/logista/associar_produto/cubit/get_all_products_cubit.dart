@@ -13,12 +13,40 @@ class GetAllProductsCubit extends Cubit<GetAllProductsState> {
   Future<void> fetchAllProducts() async {
     try {
       emit(const GetAllProductsLoading());
-      
+
       final products = await _repository.getAllProducts();
 
       emit(GetAllProductsSuccess(products));
     } catch (e) {
       emit(GetAllProductsFailure('Failed to fetch products: $e'));
+    }
+  }
+
+  Future<List<Produto>> searchProducts({String? search}) async {
+    try {
+      emit(const GetAllProductsLoading());
+
+      final products = await _repository.searchProducts(search ?? '');
+
+      emit(GetAllProductsSuccess(products));
+      return products;
+    } catch (e) {
+      emit(GetAllProductsFailure('Failed to fetch products: $e'));
+      return [];
+    }
+  }
+
+  Future<List<Produto>> first20Products() async {
+    try {
+      emit(const GetAllProductsLoading());
+
+      final products = await _repository.first20Products();
+
+      emit(GetAllProductsSuccess(products));
+      return products;
+    } catch (e) {
+      emit(GetAllProductsFailure('Failed to fetch products: $e'));
+      return [];
     }
   }
 }

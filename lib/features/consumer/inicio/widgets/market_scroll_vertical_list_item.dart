@@ -1,4 +1,5 @@
 import 'package:comparador_de_precos/data/models/loja.dart';
+import 'package:comparador_de_precos/widgets/default_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
 
@@ -26,18 +27,10 @@ class MarketScrollVerticalListItem extends StatelessWidget {
               flex: 10,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child: Image.network(
-                  loja.logoUrl ??
-                      'https://www.pontotel.com.br/local/wp-content/uploads/2022/05/imagem-corporativa.webp',
-                  fit: BoxFit.cover,
+                child: const DefaultImageWidget(
+                  imageUrl:
+                      'https://as1.ftcdn.net/v2/jpg/01/27/40/68/1000_F_127406856_K7ABxpHlydS6gFurI9kZsVaR3HsFp4yz.jpg',
                   width: double.infinity,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Image.network(
-                      'https://www.pontotel.com.br/local/wp-content/uploads/2022/05/imagem-corporativa.webp',
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                    );
-                  },
                 ),
               ),
             ),

@@ -13,7 +13,8 @@ class ProductCatalogRepository {
   /// [page] - Número da página (começa em 0)
   /// [pageSize] - Tamanho da página
   Future<List<Produto>> getProdutos({
-    required int page, String? categoriaId,
+    required int page,
+    String? categoriaId,
     int pageSize = 10,
   }) async {
     try {
@@ -179,6 +180,34 @@ class ProductCatalogRepository {
       return response.map((item) {
         final produto = item['produtos'] as Map<String, dynamic>;
         return Produto.fromMap(produto);
+      }).toList();
+    } catch (e) {
+      throw Exception('Erro ao buscar produtos: $e');
+    }
+  }
+
+  /// Buscar os primeiros 20
+  /// produtos por categoria
+  Future<List<Produto>> first20Products() async {
+    try {
+      final response = await _supabaseClient
+          .from('produtos')
+          .select('*, categorias:categoria_id(*)')
+          .order('nome', ascending: true)
+          .limit(20);
+
+      // Mapeia a resposta para a lista de produtos
+      return response.map((item) {
+        final produto = Produto.fromMap(item);
+
+        // Adiciona a categoria se estiver presente na resposta
+        if (item['categorias'] != null) {
+          final categoriaMap = item['categorias'] as Map<String, dynamic>;
+          final categoria = Categoria.fromMap(categoriaMap);
+          return produto.copyWith(categoria: categoria);
+        }
+
+        return produto;
       }).toList();
     } catch (e) {
       throw Exception('Erro ao buscar produtos: $e');

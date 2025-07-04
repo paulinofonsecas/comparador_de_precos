@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:comparador_de_precos/app/config/dependencies.dart';
+import 'package:comparador_de_precos/data/models/produto.dart';
 import 'package:comparador_de_precos/data/models/user_profile.dart';
 import 'package:comparador_de_precos/features/logista/associar_produto/cubit/associante_product_cubit.dart';
 import 'package:comparador_de_precos/features/logista/associar_produto/cubit/get_all_products_cubit.dart';
 import 'package:comparador_de_precos/features/logista/logista_produtos_associados/bloc/bloc.dart';
+import 'package:comparador_de_precos/widgets/default_search_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
 
@@ -60,6 +64,7 @@ class _AssociarProdutoBodyState extends State<AssociarProdutoBody> {
                 });
               },
             ),
+            const Gutter(),
             ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate() && productId != null) {
@@ -78,40 +83,64 @@ class _AssociarProdutoBodyState extends State<AssociarProdutoBody> {
   }
 }
 
-class SelectProduct extends StatelessWidget {
+class SelectProduct extends StatefulWidget {
   const SelectProduct({required this.onProductSelected, super.key, this.value});
 
   final ValueChanged<String?> onProductSelected;
   final String? value;
 
   @override
+  State<SelectProduct> createState() => _SelectProductState();
+}
+
+class _SelectProductState extends State<SelectProduct> {
+  Produto? _selectedProduct;
+
+  @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField<String>(
-      decoration: const InputDecoration(
-        labelText: 'Selecione um produto',
-      ),
-      value: value,
-      items: context
-          .watch<GetAllProductsCubit>()
-          .state
-          .produtos
-          .map(
-            (product) => DropdownMenuItem<String>(
-              value: product.id,
-              child: Text(product.nome),
-              onTap: () {
-                onProductSelected(product.id);
+    return Column(
+      children: [
+        if (_selectedProduct != null) ...[
+          Text(
+            _selectedProduct!.nome,
+            style: const TextStyle(fontSize: 16),
+          ),
+          const Gutter(),
+        ],
+        ElevatedButton(
+          onPressed: () async {
+            final produtosCubit = context.read<GetAllProductsCubit>();
+            final first20Products = await produtosCubit.first20Products();
+
+            final resultado = await DefaultSearchBottomSheet.show<Produto>(
+              // ignore: use_build_context_synchronously
+              context: context,
+              asyncLoader: (search) async {
+                final produtos = await produtosCubit.searchProducts(
+                  search: search,
+                );
+
+                return produtos;
               },
-            ),
-          )
-          .toList(),
-      onChanged: onProductSelected,
-      validator: (value) {
-        if (value == null) {
-          return 'Por favor, selecione um produto';
-        }
-        return null;
-      },
+              items: first20Products,
+              itemToString: (item) => item.nome,
+              itemSubtitle: (item) => 'Subtítulo de ${item.nome}',
+              title: 'Selecione um Lojista',
+            );
+
+            if (resultado == null) {
+              log('Nenhum lojista selecionado');
+              return;
+            }
+
+            setState(() {
+              _selectedProduct = resultado;
+              widget.onProductSelected(_selectedProduct?.id);
+            });
+          },
+          child: const Text('Selecionar Produto'),
+        ),
+      ],
     );
   }
 }
