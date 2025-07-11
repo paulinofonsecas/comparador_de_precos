@@ -22,7 +22,9 @@ class LojaListTileWidget extends StatelessWidget {
         child: Row(
           children: [
             DefaultImageWidget(
-              imageUrl: loja.logoUrl,
+              // imageUrl: loja.logoUrl,
+              imageUrl:
+                      'https://as1.ftcdn.net/v2/jpg/01/27/40/68/1000_F_127406856_K7ABxpHlydS6gFurI9kZsVaR3HsFp4yz.jpg',
               width: 80,
               height: 80,
               borderRadius: BorderRadius.circular(8),

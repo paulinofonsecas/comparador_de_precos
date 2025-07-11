@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:clarity_flutter/clarity_flutter.dart';
 import 'package:comparador_de_precos/app/app.dart';
 import 'package:comparador_de_precos/app/config/dependencies.dart';
 import 'package:comparador_de_precos/bootstrap.dart';
@@ -20,8 +21,8 @@ Future<void> main() async {
 
   await Supabase.initialize(
     url: 'https://yrouhkfyreqgsugljnbt.supabase.co',
-    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJl'
-        'ZiI6Inlyb3Voa2Z5cmVxZ3N1Z2xqbmJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcxNz'
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlyb3Voa2Z5cmVxZ3N1Z2xqbmJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcxNz'
         'UxOTcsImV4cCI6MjA2Mjc1MTE5N30.PzqUT8blpH0Dk13oMKjZop9W08-WmQUI8GX'
         'ZWnKJvRw',
   );
@@ -31,15 +32,32 @@ Future<void> main() async {
   // if is running on android, device preview is not available
   if (!kIsWeb && Platform.isAndroid) {
     await bootstrap(
-      () => const App(),
+      () => const WrapperApp(),
     );
     return;
   }
 
   await bootstrap(
     () => DevicePreview(
-      builder: (context) => const App(),
+      builder: (context) => const WrapperApp(),
     ),
   );
 }
- 
+
+class WrapperApp extends StatelessWidget {
+  const WrapperApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // Clarity Configure
+    final config = ClarityConfig(
+      projectId: 's9uvmzz5ay',
+      logLevel: LogLevel.None,
+    );
+
+    return ClarityWidget(
+      app: const App(),
+      clarityConfig: config,
+    );
+  }
+}

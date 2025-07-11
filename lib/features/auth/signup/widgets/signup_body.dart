@@ -4,6 +4,7 @@ import 'package:comparador_de_precos/features/auth/signup/bloc/signup_bloc.dart'
 import 'package:comparador_de_precos/features/auth/signup/view/solicitar_cadastro_loja_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
+import 'package:nif_validator/nif_validator.dart';
 
 /// {@template signup_body}
 /// Body of the SignupPage.
@@ -37,16 +38,18 @@ class _SignupBodyState extends State<SignupBody> {
         key: _form,
         child: Column(
           children: [
+            BITextField(
+              controller: _biController,
+              nameController: _nameController,
+            ),
+            const Gutter(),
             NameTextField(
               controller: _nameController,
+              enabled: false,
             ),
             const Gutter(),
             EmailTextField(
               controller: _emailController,
-            ),
-            const Gutter(),
-            BITextField(
-              controller: _biController,
             ),
             const Gutter(),
             PhoneTextField(
@@ -164,9 +167,11 @@ class EmailTextField extends StatelessWidget {
 }
 
 class NameTextField extends StatelessWidget {
-  const NameTextField({required this.controller, super.key});
+  const NameTextField(
+      {required this.controller, this.enabled = true, super.key});
 
   final TextEditingController controller;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -178,8 +183,10 @@ class NameTextField extends StatelessWidget {
         }
         return null;
       },
+      readOnly: !enabled,
       decoration: const InputDecoration(
         labelText: 'Nome',
+        hintText: 'O nome será preenchido automaticamente a partir do BI',
         prefixIcon: Icon(Icons.person),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -192,31 +199,87 @@ class NameTextField extends StatelessWidget {
   }
 }
 
-class BITextField extends StatelessWidget {
-  const BITextField({required this.controller, super.key});
+class BITextField extends StatefulWidget {
+  const BITextField(
+      {required this.controller, super.key, required this.nameController});
 
   final TextEditingController controller;
+  final TextEditingController nameController;
+
+  @override
+  State<BITextField> createState() => _BITextFieldState();
+}
+
+class _BITextFieldState extends State<BITextField> {
+  var isLoading = false;
+  var isError = false;
+  var errorMessage = '';
+  var nif = '';
+
+  @override
+  void initState() {
+    widget.controller.addListener(() async {
+      if (widget.controller.text.length == 14 && nif.isEmpty) {
+        setState(() {
+          isLoading = true;
+          isError = false;
+          errorMessage = '';
+        });
+        final bi = widget.controller.text;
+        final nifValidator = NIFValidator();
+        final result = await nifValidator.validate(bi);
+
+        if (result is NIFValidatorResponse) {
+          setState(() {
+            isLoading = false;
+            isError = false;
+            errorMessage = '';
+            nif = result.nif;
+            widget.controller.text = bi;
+            widget.nameController.text = result.name;
+          });
+        } else {
+          setState(() {
+            isLoading = false;
+            isError = true;
+            errorMessage = (result as NIFValidatorError).message;
+          });
+        }
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Por favor, insira um BI';
-        }
-        return null;
-      },
-      decoration: const InputDecoration(
-        labelText: 'BI',
-        prefixIcon: Icon(Icons.person),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(8)),
-          borderSide: BorderSide(
-            color: Colors.grey,
+    return Column(
+      children: [
+        TextFormField(
+          controller: widget.controller,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Por favor, insira um BI';
+            }
+            return null;
+          },
+          decoration: const InputDecoration(
+            labelText: 'BI',
+            prefixIcon: Icon(Icons.person),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+              borderSide: BorderSide(
+                color: Colors.grey,
+              ),
+            ),
           ),
         ),
-      ),
+        if (isLoading) const LinearProgressIndicator(),
+        if (isError)
+          Text(
+            errorMessage,
+            style: TextStyle(color: Theme.of(context).colorScheme.error),
+          ),
+      ],
     );
   }
 }

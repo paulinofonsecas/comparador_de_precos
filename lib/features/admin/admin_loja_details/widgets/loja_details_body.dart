@@ -29,7 +29,8 @@ class LojaDetailsBody extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
                 child: loja.logoUrl != null && loja.logoUrl!.isNotEmpty
                     ? Image.network(
-                        loja.logoUrl!,
+                        // loja.logoUrl!,
+                        'https://as1.ftcdn.net/v2/jpg/01/27/40/68/1000_F_127406856_K7ABxpHlydS6gFurI9kZsVaR3HsFp4yz.jpg',
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) => Container(
                           color: Colors.grey[200],

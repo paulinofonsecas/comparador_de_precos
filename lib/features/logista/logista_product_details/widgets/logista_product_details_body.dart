@@ -65,9 +65,9 @@ class _Body extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 DefaultImageWidget(
-                  // imageUrl: produto.imagemUrl,
-                  imageUrl:
-                      'https://www.pontotel.com.br/local/wp-content/uploads/2022/05/imagem-corporativa.webp',
+                  imageUrl: product.produto.imagemUrl,
+                  // imageUrl:
+                  //     'https://www.pontotel.com.br/local/wp-content/uploads/2022/05/imagem-corporativa.webp',
                   borderRadius: BorderRadius.circular(8),
                 ),
                 const GutterTiny(),
