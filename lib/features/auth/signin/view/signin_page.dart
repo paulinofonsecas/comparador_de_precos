@@ -77,10 +77,19 @@ class SigninView extends StatelessWidget {
                 );
               }
             } else if (state is SigninError) {
+              late final String errorMessage;
+
+              if (state.error.contains("Failed host lookup")) {
+                errorMessage = 'Falha na comunicação com o servidor. '
+                    'Verifique a sua conexão e tente novamente';
+              } else {
+                errorMessage = 'Usuário ou senha incorretos';
+              }
+
               // Handle failure state
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Usuário ou senha incorretos'),
+                SnackBar(
+                  content: Text(errorMessage),
                 ),
               );
             }

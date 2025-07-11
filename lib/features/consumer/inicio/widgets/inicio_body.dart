@@ -64,8 +64,8 @@ class InicioBody extends StatelessWidget {
                   return const Center(child: CircularProgressIndicator());
                 } else if (state.status == InicioStatus.failure) {
                   return Center(
-                      child:
-                          Text(state.errorMessage ?? 'Erro ao carregar lojas'),);
+                    child: Text(state.errorMessage ?? 'Erro ao carregar lojas'),
+                  );
                 } else if (state.status == InicioStatus.success &&
                     state.lojasParaVoce.isNotEmpty) {
                   return Column(
@@ -155,7 +155,7 @@ class _Top10MelhoreLojasWidgetState extends State<Top10MelhoreLojasWidget> {
         if (_isLoading)
           const Center(child: CircularProgressIndicator())
         else if (_error != null)
-          Center(child: Text(_error!))
+          const Center(child: Text("Ocorreu um erro. Tente novamente."))
         else
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
@@ -255,9 +255,11 @@ class _LojasProximasWidgetState extends State<LojasProximasWidget> {
                   ? const [Text('Nenhuma loja encontrada')]
                   : _lojasProximas
                       .take(5)
-                      .map((loja) => MarketScrollListItem(
-                            loja: loja,
-                          ),)
+                      .map(
+                        (loja) => MarketScrollListItem(
+                          loja: loja,
+                        ),
+                      )
                       .toList(),
             ),
           ),
