@@ -32,3 +32,14 @@ class ApplicationInitial extends ApplicationState {
   /// {@macro application_initial}
   const ApplicationInitial() : super();
 }
+
+class ApplicationChangePage extends ApplicationState {
+  const ApplicationChangePage({
+    required this.index,
+  }) : super();
+
+  final int index;
+
+  @override
+  List<Object> get props => [index];
+}

@@ -119,6 +119,82 @@ class ProductCatalogRepository {
     }
   }
 
+  /// get 14 produtos com precos mais baixos
+  Future<List<Oferta>> getTop14Products() async {
+    try {
+      final response = await _supabaseClient
+          .from('precos')
+          .select('*, produtos:produto_id(*), lojas:loja_id(*)')
+          // entre 100 e 1000
+          .gt('preco', 100)
+          .lt('preco', 1000)
+          .order('preco', ascending: true)
+          .limit(14);
+
+      final ofertas = response.map((e) {
+        return Oferta(
+          id: e['id'] as String,
+          productName: e['produtos']['nome'] as String,
+          productImage: e['produtos']['imagem_url'] as String,
+          productId: e['produtos']['id'] as String,
+          storeId: e['lojas']['id'] as String,
+          storeName: e['lojas']['nome'] as String,
+          storeLocation: e['lojas']['endereco'] as String,
+          price: e['preco'] as double,
+          lastPriceUpdate: e['updated_at'] != null
+              ? DateTime.parse(e['updated_at'] as String)
+              : null,
+          promotionPrice: e['preco_promocional'] != null
+              ? e['preco_promocional'] as double
+              : null,
+        );
+      }).toList()
+        ..sort((a, b) => a.price.compareTo(b.price))
+        ..reversed;
+
+      return ofertas;
+    } catch (e) {
+      print('Erro ao buscar ofertas: $e');
+      rethrow;
+    }
+  }
+
+  Future<List<Oferta>> getRecentPriceUpdatedProducts() async {
+    try {
+      final response = await _supabaseClient
+          .from('precos')
+          .select('*, produtos:produto_id(*), lojas:loja_id(*)')
+          .order('updated_at', ascending: true)
+          .limit(14);
+
+      final ofertas = response.map((e) {
+        return Oferta(
+          id: e['id'] as String,
+          productName: e['produtos']['nome'] as String,
+          productImage: e['produtos']['imagem_url'] as String,
+          productId: e['produtos']['id'] as String,
+          storeId: e['lojas']['id'] as String,
+          storeName: e['lojas']['nome'] as String,
+          storeLocation: e['lojas']['endereco'] as String,
+          price: e['preco'] as double,
+          lastPriceUpdate: e['updated_at'] != null
+              ? DateTime.parse(e['updated_at'] as String)
+              : null,
+          promotionPrice: e['preco_promocional'] != null
+              ? e['preco_promocional'] as double
+              : null,
+        );
+      }).toList()
+        ..sort((a, b) => a.price.compareTo(b.price))
+        ..reversed;
+
+      return ofertas;
+    } catch (e) {
+      print('Erro ao buscar ofertas: $e');
+      rethrow;
+    }
+  }
+
   /// Verifica se um produto está nos favoritos
   Future<bool> isFavorite(String productId) async {
     try {

@@ -1,13 +1,21 @@
+import 'package:comparador_de_precos/app/config/dependencies.dart';
+import 'package:comparador_de_precos/app/utils/number_format.dart';
 import 'package:comparador_de_precos/data/models/loja.dart';
+import 'package:comparador_de_precos/data/models/oferta_model.dart';
 import 'package:comparador_de_precos/data/repositories/loja_repository.dart';
+import 'package:comparador_de_precos/data/repositories/product_catalog_repository.dart';
+import 'package:comparador_de_precos/features/admin/admin_gestao_lojas/widgets/custom_search_widget.dart';
+import 'package:comparador_de_precos/features/consumer/application/bloc/application_bloc.dart';
 import 'package:comparador_de_precos/features/consumer/inicio/bloc/inicio_bloc.dart';
 import 'package:comparador_de_precos/features/consumer/inicio/widgets/market_scroll_list_item.dart';
 import 'package:comparador_de_precos/features/consumer/inicio/widgets/market_scroll_vertical_list_item.dart';
 import 'package:comparador_de_precos/features/consumer/lojas_proximas/view/lojas_proximas_page.dart';
+import 'package:comparador_de_precos/widgets/default_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 /// {@template inicio_body}
 /// Body of the InicioPage.
@@ -29,9 +37,11 @@ class InicioBody extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Top10MelhoreLojasWidget(),
+            const _CustomSearchWidget(),
+            const Gutter(),
+            const ProdutosComMenoresPrecosSection(),
             const GutterLarge(),
-            const LojasProximasWidget(),
+            const AtualizacoesDePrecosMaisRecenteSection(),
             const GutterLarge(),
             SizedBox(
               width: MediaQuery.of(context).size.width,
@@ -39,7 +49,7 @@ class InicioBody extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      'Para você',
+                      'Explorar',
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.titleSmall?.copyWith(
                             fontWeight: FontWeight.w600,
@@ -86,34 +96,65 @@ class InicioBody extends StatelessWidget {
   }
 }
 
-class Top10MelhoreLojasWidget extends StatefulWidget {
-  const Top10MelhoreLojasWidget({
+class _CustomSearchWidget extends StatelessWidget {
+  const _CustomSearchWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: InkWell(
+        onTap: () {
+          context
+              .read<ApplicationBloc>()
+              .add(const ChangePageApplicationEvent(1));
+        },
+        child: IgnorePointer(
+          child: TextField(
+            readOnly: true,
+            decoration: InputDecoration(
+              hintText: 'Pesquisar produto',
+              prefixIcon: const Icon(Icons.search),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ProdutosComMenoresPrecosSection extends StatefulWidget {
+  const ProdutosComMenoresPrecosSection({
     super.key,
   });
 
   @override
-  State<Top10MelhoreLojasWidget> createState() =>
-      _Top10MelhoreLojasWidgetState();
+  State<ProdutosComMenoresPrecosSection> createState() =>
+      _ProdutosComMenoresPrecosSectionState();
 }
 
-class _Top10MelhoreLojasWidgetState extends State<Top10MelhoreLojasWidget> {
-  late final LojaRepository _lojaRepository;
-  List<Loja> _topLojas = [];
+class _ProdutosComMenoresPrecosSectionState
+    extends State<ProdutosComMenoresPrecosSection> {
+  late final ProductCatalogRepository _produtoRepository;
+  List<Oferta> _precosBaixos = [];
   bool _isLoading = true;
   String? _error;
 
   @override
   void initState() {
     super.initState();
-    _lojaRepository = LojaRepository(supabaseClient: Supabase.instance.client);
+    _produtoRepository = getIt();
     _loadTopLojas();
   }
 
   Future<void> _loadTopLojas() async {
     try {
-      final lojas = await _lojaRepository.getTopRatedLojas();
+      final produtos = await _produtoRepository.getTop14Products();
       setState(() {
-        _topLojas = lojas;
+        _precosBaixos = produtos;
         _isLoading = false;
       });
     } catch (e) {
@@ -131,7 +172,7 @@ class _Top10MelhoreLojasWidgetState extends State<Top10MelhoreLojasWidget> {
         Row(
           children: [
             Text(
-              'Top 10 melhores Lojas',
+              'Preços baixos',
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w600,
                     fontSize: 16,
@@ -161,15 +202,15 @@ class _Top10MelhoreLojasWidgetState extends State<Top10MelhoreLojasWidget> {
             scrollDirection: Axis.horizontal,
             child: Row(
               spacing: 4,
-              children: _topLojas.isEmpty
-                  ? const [Text('Nenhuma loja encontrada')]
-                  : _topLojas
-                      .map(
-                        (loja) => MarketScrollListItem(
-                          loja: loja,
-                        ),
-                      )
-                      .toList(),
+              children: _precosBaixos
+                  .map(
+                    (e) => ProductCard(
+                      title: e.productName,
+                      price: e.price,
+                      imageUrl: e.productImage,
+                    ),
+                  )
+                  .toList(),
             ),
           ),
       ],
@@ -177,33 +218,121 @@ class _Top10MelhoreLojasWidgetState extends State<Top10MelhoreLojasWidget> {
   }
 }
 
-class LojasProximasWidget extends StatefulWidget {
-  const LojasProximasWidget({super.key});
+class ProductCard extends StatelessWidget {
+  final String imageUrl;
+  final String title;
+  final double price;
+  final String? trailing;
+
+  const ProductCard({
+    super.key,
+    required this.imageUrl,
+    required this.title,
+    required this.price,
+    this.trailing,
+  });
 
   @override
-  State<LojasProximasWidget> createState() => _LojasProximasWidgetState();
+  Widget build(BuildContext context) {
+    return Container(
+      width: 160,
+      height: 215,
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 6,
+            offset: Offset(0, 3),
+          )
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: DefaultImageWidget(
+                imageUrl: imageUrl,
+                height: 100,
+                width: double.infinity,
+                fit: BoxFit.fitHeight,
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          // Título
+          Text(
+            title,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 14,
+            ),
+          ),
+          const SizedBox(height: 4),
+          // Preço + Rating
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                numberFormat.format(price),
+                style: const TextStyle(
+                  color: Colors.black87,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              if (trailing != null)
+                Text(
+                  trailing!,
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onPrimaryContainer,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 }
 
-class _LojasProximasWidgetState extends State<LojasProximasWidget> {
-  late final LojaRepository _lojaRepository;
-  List<Loja> _lojasProximas = [];
+class AtualizacoesDePrecosMaisRecenteSection extends StatefulWidget {
+  const AtualizacoesDePrecosMaisRecenteSection({super.key});
+
+  @override
+  State<AtualizacoesDePrecosMaisRecenteSection> createState() =>
+      _AtualizacoesDePrecosMaisRecenteSectionState();
+}
+
+class _AtualizacoesDePrecosMaisRecenteSectionState
+    extends State<AtualizacoesDePrecosMaisRecenteSection> {
+  late final ProductCatalogRepository _produtoRepository;
+  List<Oferta> _precosRecentes = [];
   bool _isLoading = true;
   String? _error;
 
   @override
   void initState() {
     super.initState();
-    _lojaRepository = LojaRepository(supabaseClient: Supabase.instance.client);
-    _loadLojasProximas();
+    _produtoRepository = getIt();
+    _loadPrecosRecentes();
   }
 
-  Future<void> _loadLojasProximas() async {
+  Future<void> _loadPrecosRecentes() async {
     try {
-      // Como não temos a localização do usuário aqui, vamos usar getAllLojas
-      // Em uma implementação real, usaríamos getLojasProximas com a localização do usuário
-      final lojas = await _lojaRepository.getAllLojas();
+      final lojas = await _produtoRepository.getRecentPriceUpdatedProducts();
       setState(() {
-        _lojasProximas = lojas;
+        _precosRecentes = lojas;
         _isLoading = false;
       });
     } catch (e) {
@@ -221,7 +350,7 @@ class _LojasProximasWidgetState extends State<LojasProximasWidget> {
         Row(
           children: [
             Text(
-              'Lojas Próximas',
+              'Atualizações de preços',
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w600,
                     fontSize: 16,
@@ -251,16 +380,19 @@ class _LojasProximasWidgetState extends State<LojasProximasWidget> {
             scrollDirection: Axis.horizontal,
             child: Row(
               spacing: 4,
-              children: _lojasProximas.isEmpty
-                  ? const [Text('Nenhuma loja encontrada')]
-                  : _lojasProximas
-                      .take(5)
-                      .map(
-                        (loja) => MarketScrollListItem(
-                          loja: loja,
-                        ),
-                      )
-                      .toList(),
+              children: _precosRecentes
+                  .map(
+                    (e) => ProductCard(
+                      title: e.productName,
+                      price: e.price,
+                      imageUrl: e.productImage,
+                      trailing: 'Há ${timeago.format(
+                        e.lastPriceUpdate!,
+                        locale: 'pt_BR_short',
+                      )}',
+                    ),
+                  )
+                  .toList(),
             ),
           ),
       ],

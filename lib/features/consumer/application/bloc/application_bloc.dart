@@ -7,13 +7,13 @@ part 'application_state.dart';
 
 class ApplicationBloc extends Bloc<ApplicationEvent, ApplicationState> {
   ApplicationBloc() : super(const ApplicationInitial()) {
-    on<CustomApplicationEvent>(_onCustomApplicationEvent);
+    on<ChangePageApplicationEvent>(_onChangePageApplicationEvent);
   }
 
-  FutureOr<void> _onCustomApplicationEvent(
-    CustomApplicationEvent event,
+  FutureOr<void> _onChangePageApplicationEvent(
+    ChangePageApplicationEvent event,
     Emitter<ApplicationState> emit,
   ) {
-    // TODO: Add Logic
+    emit(ApplicationChangePage(index: event.page));
   }
 }

@@ -57,71 +57,85 @@ class _ApplicationPageState extends State<ApplicationPage> {
       },
       child: BlocProvider(
         create: (context) => ApplicationBloc(),
-        child: Scaffold(
-          body: _pages[_currentIndex],
-          floatingActionButton: FloatingActionButton(
-            onPressed: () async {
-              String barcodeScanRes;
-              // Platform messages may fail, so we use a try/catch PlatformException.
-              try {
-                barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-                    '#ff6666', 'Cancel', true, ScanMode.QR);
-                print(barcodeScanRes);
-              } on PlatformException {
-                barcodeScanRes = 'Failed to get platform version.';
-              }
+        child: Builder(
+          builder: (context) {
+            return BlocListener<ApplicationBloc, ApplicationState>(
+              listener: (context, state) {
+                if (state is ApplicationChangePage) {
+                  setState(() {
+                    _currentIndex = state.index;
+                  });
+                }
+              },
+              child: Scaffold(
+                body: _pages[_currentIndex],
+                floatingActionButton: FloatingActionButton(
+                  onPressed: () async {
+                    String barcodeScanRes;
+                    // Platform messages may fail, so we use a try/catch PlatformException.
+                    try {
+                      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+                          '#ff6666', 'Cancel', true, ScanMode.QR);
+                      print(barcodeScanRes);
+                    } on PlatformException {
+                      barcodeScanRes = 'Failed to get platform version.';
+                    }
 
-              // If the widget was removed from the tree while the asynchronous platform
-              // message was in flight, we want to discard the reply rather than calling
-              // setState to update our non-existent appearance.
-              if (!mounted) return;
+                    // If the widget was removed from the tree while the asynchronous platform
+                    // message was in flight, we want to discard the reply rather than calling
+                    // setState to update our non-existent appearance.
+                    if (!mounted) return;
 
-              setState(() {
-                _scanBarcode = barcodeScanRes;
-                log('Scanned barcode: $_scanBarcode');
-              });
-            },
-            backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-            child: Icon(
-              Icons.qr_code_scanner,
-              size: 30,
-              color: Theme.of(context).colorScheme.onPrimaryContainer,
-            ),
-          ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
-          bottomNavigationBar: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            currentIndex: _currentIndex,
-            showUnselectedLabels: true,
-            onTap: (index) {
-              setState(() {
-                _currentIndex = index;
-              });
-            },
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home_outlined),
-                label: 'Inicio',
+                    setState(() {
+                      _scanBarcode = barcodeScanRes;
+                      log('Scanned barcode: $_scanBarcode');
+                    });
+                  },
+                  backgroundColor:
+                      Theme.of(context).colorScheme.primaryContainer,
+                  child: Icon(
+                    Icons.qr_code_scanner,
+                    size: 30,
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  ),
+                ),
+                floatingActionButtonLocation:
+                    FloatingActionButtonLocation.centerFloat,
+                bottomNavigationBar: BottomNavigationBar(
+                  type: BottomNavigationBarType.fixed,
+                  currentIndex: _currentIndex,
+                  showUnselectedLabels: true,
+                  onTap: (index) {
+                    setState(() {
+                      _currentIndex = index;
+                    });
+                  },
+                  items: const [
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.home_outlined),
+                      label: 'Inicio',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.search),
+                      label: 'Pesquisar',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.store),
+                      label: 'Catálogo',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.list),
+                      label: 'Listas',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.person_outline),
+                      label: 'Perfil',
+                    ),
+                  ],
+                ),
               ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.search),
-                label: 'Pesquisar',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.store),
-                label: 'Catálogo',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.list),
-                label: 'Listas',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person_outline),
-                label: 'Perfil',
-              ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
