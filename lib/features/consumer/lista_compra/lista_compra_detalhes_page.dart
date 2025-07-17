@@ -401,10 +401,7 @@ class _ListaCompraDetalhesPageState extends State<ListaCompraDetalhesPage> {
               borderRadius: BorderRadius.circular(12),
             ),
             child: ListTile(
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 8,
-              ),
+              contentPadding: const EdgeInsets.all(2),
               leading: Checkbox(
                 value: item.comprado,
                 onChanged: (value) {
@@ -419,6 +416,8 @@ class _ListaCompraDetalhesPageState extends State<ListaCompraDetalhesPage> {
               title: Text(
                 item.produto?.nome ?? 'Produto não encontrado',
                 style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
                   decoration: item.comprado
                       ? TextDecoration.lineThrough
                       : TextDecoration.none,
@@ -429,7 +428,7 @@ class _ListaCompraDetalhesPageState extends State<ListaCompraDetalhesPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 4),
-                  Text('Quantidade: ${item.quantidade}'),
+                  Text('Qtd: ${item.quantidade}'),
                   if (item.observacao != null &&
                       item.observacao!.isNotEmpty) ...[
                     const SizedBox(height: 4),
@@ -446,12 +445,12 @@ class _ListaCompraDetalhesPageState extends State<ListaCompraDetalhesPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.edit, size: 20),
+                    icon: const Icon(Icons.edit, size: 18),
                     onPressed: () => _mostrarFormularioItem(item: item),
                     tooltip: 'Editar',
                   ),
                   IconButton(
-                    icon: const Icon(Icons.delete, size: 20),
+                    icon: const Icon(Icons.delete, size: 18),
                     onPressed: () {
                       showDialog(
                         context: context,
