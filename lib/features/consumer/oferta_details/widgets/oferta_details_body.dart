@@ -51,7 +51,7 @@ class OfertaDetailsBody extends StatelessWidget {
 class LojaInfoSection extends StatelessWidget {
   const LojaInfoSection({required this.oferta, super.key});
 
-  final OfertaModel oferta;
+  final Oferta oferta;
 
   @override
   Widget build(BuildContext context) {

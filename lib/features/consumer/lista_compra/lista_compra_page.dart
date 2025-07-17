@@ -220,7 +220,7 @@ class _ListaCompraPageState extends State<ListaCompraPage> {
                           child: Text(
                             lista.nome,
                             style: const TextStyle(
-                              fontSize: 12,
+                              fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
                             maxLines: 1,

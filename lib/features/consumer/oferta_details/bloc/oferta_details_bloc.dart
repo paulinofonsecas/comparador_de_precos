@@ -12,7 +12,7 @@ class OfertaDetailsBloc extends Bloc<OfertaDetailsEvent, OfertaDetailsState> {
     on<CustomOfertaDetailsEvent>(_onCustomOfertaDetailsEvent);
   }
 
-  final OfertaModel oferta;
+  final Oferta oferta;
 
   FutureOr<void> _onCustomOfertaDetailsEvent(
     CustomOfertaDetailsEvent event,

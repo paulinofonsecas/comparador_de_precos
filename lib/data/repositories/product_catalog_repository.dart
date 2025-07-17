@@ -101,7 +101,7 @@ class ProductCatalogRepository {
     }
   }
 
-  Future<List<OfertaModel>> getSimilarProducts(String productName) async {
+  Future<List<Oferta>> getSimilarProducts(String productName) async {
     try {
       // ignore: inference_failure_on_function_invocation
       final response = await _supabaseClient.rpc(
@@ -110,7 +110,7 @@ class ProductCatalogRepository {
       ) as List<dynamic>;
 
       final ofertas = response
-          .map((item) => OfertaModel.fromMap(item as Map<String, dynamic>))
+          .map((item) => Oferta.fromMap(item as Map<String, dynamic>))
           .toList();
 
       return ofertas;

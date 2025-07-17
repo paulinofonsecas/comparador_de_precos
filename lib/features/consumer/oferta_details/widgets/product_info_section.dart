@@ -13,7 +13,7 @@ class ProductInfoSection extends StatelessWidget {
     super.key,
   });
 
-  final OfertaModel oferta;
+  final Oferta oferta;
 
   @override
   Widget build(BuildContext context) {

@@ -14,11 +14,11 @@ class OfertaDetailsBottomSheet extends StatelessWidget {
   /// {@macro oferta_details_bottom_sheet}
   const OfertaDetailsBottomSheet({required this.oferta, super.key});
 
-  final OfertaModel oferta;
+  final Oferta oferta;
 
   /// Shows the OfertaDetailsBottomSheet
   static Future<void> show(BuildContext context,
-      {required OfertaModel oferta,}) {
+      {required Oferta oferta,}) {
     final size = MediaQuery.sizeOf(context);
 
     return showModalBottomSheet<void>(
@@ -76,10 +76,10 @@ class OfertaDetailsPage extends StatelessWidget {
   /// @deprecated Use OfertaDetailsBottomSheet.show instead
   const OfertaDetailsPage({required this.oferta, super.key});
 
-  final OfertaModel oferta;
+  final Oferta oferta;
 
   /// @deprecated Use OfertaDetailsBottomSheet.show instead
-  static Route<dynamic> route({required OfertaModel oferta}) {
+  static Route<dynamic> route({required Oferta oferta}) {
     return MaterialPageRoute<dynamic>(
       builder: (_) => OfertaDetailsPage(oferta: oferta),
     );

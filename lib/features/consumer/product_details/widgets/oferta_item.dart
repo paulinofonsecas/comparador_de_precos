@@ -12,7 +12,7 @@ class OfertaItem extends StatelessWidget {
     super.key,
   });
 
-  final OfertaModel oferta;
+  final Oferta oferta;
   final VoidCallback onTap;
 
   @override

@@ -1,8 +1,10 @@
 import 'package:comparador_de_precos/data/models/lista_compra.dart';
 import 'package:comparador_de_precos/data/repositories/lista_compra_repository.dart';
 import 'package:comparador_de_precos/data/repositories/product_catalog_repository.dart';
+import 'package:comparador_de_precos/features/consumer/lista_compra/widgets/find_offers_bottom_sheet.dart';
 import 'package:comparador_de_precos/features/consumer/lista_compra/widgets/item_lista_compra_form.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gutter/flutter_gutter.dart';
 import 'package:intl/intl.dart';
 
 class ListaCompraDetalhesPage extends StatefulWidget {
@@ -131,18 +133,33 @@ class _ListaCompraDetalhesPageState extends State<ListaCompraDetalhesPage> {
     }
   }
 
+  Future<void> _mostrarOpcoesOferta() async {
+    if (_lista == null) return;
+    await showModalBottomSheet<void>(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) => FindOffersBottomSheet(listaCompra: _lista!),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_lista?.nome ?? 'Detalhes da Lista'),
-        centerTitle: true,
         actions: [
+          TextButton.icon(
+            icon: const Icon(Icons.search),
+            onPressed: _mostrarOpcoesOferta,
+            label: const Text('Encontrar preços'),
+          ),
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: _carregarLista,
             tooltip: 'Atualizar',
           ),
+          const Gutter(),
         ],
       ),
       body: _isLoading
@@ -204,7 +221,10 @@ class _ListaCompraDetalhesPageState extends State<ListaCompraDetalhesPage> {
   }
 
   Widget _buildCabecalhoLista(
-      double progresso, int itemsComprados, int totalItems,) {
+    double progresso,
+    int itemsComprados,
+    int totalItems,
+  ) {
     final theme = Theme.of(context);
 
     return Container(

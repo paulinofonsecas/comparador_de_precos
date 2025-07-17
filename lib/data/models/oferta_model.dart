@@ -2,8 +2,8 @@
 import 'dart:convert';
 import 'dart:developer';
 
-class OfertaModel {
-  OfertaModel({
+class Oferta {
+  Oferta({
     required this.id,
     required this.productName,
     required this.productImage,
@@ -27,7 +27,7 @@ class OfertaModel {
   final DateTime? lastPriceUpdate;
   final double? promotionPrice;
 
-  OfertaModel copyWith({
+  Oferta copyWith({
     String? id,
     String? productName,
     String? productImage,
@@ -39,7 +39,7 @@ class OfertaModel {
     DateTime? lastPriceUpdate,
     double? promotionPrice,
   }) {
-    return OfertaModel(
+    return Oferta(
       id: id ?? this.id,
       productName: productName ?? this.productName,
       productImage: productImage ?? this.productImage,
@@ -68,10 +68,10 @@ class OfertaModel {
     };
   }
 
-  factory OfertaModel.fromMap(Map<String, dynamic> map) {
+  factory Oferta.fromMap(Map<String, dynamic> map) {
     log(map.toString());
 
-    return OfertaModel(
+    return Oferta(
       id: map['id'] as String,
       productName: map['product_title'] as String,
       productImage: map['product_image'] as String? ?? '',
@@ -89,8 +89,8 @@ class OfertaModel {
 
   String toJson() => json.encode(toMap());
 
-  factory OfertaModel.fromJson(String source) =>
-      OfertaModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Oferta.fromJson(String source) =>
+      Oferta.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
@@ -98,7 +98,7 @@ class OfertaModel {
   }
 
   @override
-  bool operator ==(covariant OfertaModel other) {
+  bool operator ==(covariant Oferta other) {
     if (identical(this, other)) return true;
 
     return other.id == id &&

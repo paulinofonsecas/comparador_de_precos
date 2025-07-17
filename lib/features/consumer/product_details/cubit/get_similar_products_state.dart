@@ -14,7 +14,7 @@ final class GetSimilarProductsLoading extends GetSimilarProductsState {}
 final class GetSimilarProductsSuccess extends GetSimilarProductsState {
   const GetSimilarProductsSuccess(this.similarProducts);
 
-  final List<OfertaModel> similarProducts;
+  final List<Oferta> similarProducts;
 
   @override
   List<Object> get props => [similarProducts];
