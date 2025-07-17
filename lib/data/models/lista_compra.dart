@@ -59,7 +59,7 @@ class ItemListaCompra {
       'id': id,
       'produto_id': produtoId,
       'quantidade': quantidade,
-      'produto': produto?.toMap(),
+      // 'produto': produto?.toMap(),
       'observacao': observacao,
       'comprado': comprado,
     };
@@ -112,9 +112,9 @@ class ListaCompra {
       nome: map['nome'] as String,
       userId: map['user_id'] as String,
       dataCriacao: DateTime.parse(map['created_at'] as String),
-      itens: map['itens'] != null
+      itens: map['itens_lista_de_compras'] != null
           ? List<ItemListaCompra>.from(
-              (map['itens'] as List).map<ItemListaCompra>(
+              (map['itens_lista_de_compras'] as List).map<ItemListaCompra>(
                 (x) => ItemListaCompra.fromMap(x as Map<String, dynamic>),
               ),
             )

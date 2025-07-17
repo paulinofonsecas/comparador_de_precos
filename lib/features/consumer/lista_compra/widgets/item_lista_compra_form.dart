@@ -138,7 +138,6 @@ class _ItemListaCompraFormState extends State<ItemListaCompraForm> {
           produtoId: _produtoSelecionado!.id,
           quantidade: quantidade,
           observacao: observacao,
-          produto: _produtoSelecionado,
         );
       } else {
         // Atualizar item existente

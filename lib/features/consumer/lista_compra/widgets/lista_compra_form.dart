@@ -54,19 +54,25 @@ class _ListaCompraFormState extends State<ListaCompraForm> {
 
       if (widget.listaCompra == null) {
         // Criar nova lista
+        final nome = _nomeController.text.trim();
+        final descricao = _descricaoController.text.trim().isNotEmpty
+            ? _descricaoController.text.trim()
+            : null;
+
         lista = await widget.listaCompraRepository.criarListaCompra(
-          nome: _nomeController.text.trim(),
-          descricao: _descricaoController.text.trim().isNotEmpty
-              ? _descricaoController.text.trim()
-              : null,
+          nome: nome,
+          descricao: descricao,
         );
       } else {
         // Atualizar lista existente
+        final nome = _nomeController.text.trim();
+        final descricao = _descricaoController.text.trim().isNotEmpty
+            ? _descricaoController.text.trim()
+            : null;
+
         lista = widget.listaCompra!.copyWith(
-          nome: _nomeController.text.trim(),
-          descricao: _descricaoController.text.trim().isNotEmpty
-              ? _descricaoController.text.trim()
-              : null,
+          nome: nome,
+          descricao: descricao,
         );
         lista = await widget.listaCompraRepository.atualizarListaCompra(lista);
       }
