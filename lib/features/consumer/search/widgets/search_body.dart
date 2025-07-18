@@ -43,6 +43,7 @@ class _SearchBodyState extends State<SearchBody> {
             controller: textController,
             hintText: 'Pesquisar produtos 🧃',
             onChanged: (value) {},
+            autoFocus: true,
             elevation: const WidgetStatePropertyAll(3),
             backgroundColor: WidgetStatePropertyAll(
               Theme.of(context).colorScheme.surface,
@@ -95,16 +96,16 @@ class _ResultSearchListState extends State<ResultSearchList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SearchBloc, SearchState>(
-      listener: (context, state) {
-        if (state is SearchProductsSuccess) {
-          produtsResult
-            ..clear()
-            ..addAll(state.produtsResult);
-          setState(() {});
-        }
-      },
-      child: Expanded(
+    return Expanded(
+      child: BlocListener<SearchBloc, SearchState>(
+        listener: (context, state) {
+          if (state is SearchProductsSuccess) {
+            produtsResult
+              ..clear()
+              ..addAll(state.produtsResult);
+            setState(() {});
+          }
+        },
         child: BlocBuilder<SearchBloc, SearchState>(
           builder: (context, state) {
             if (state is SearchProductsError) {
@@ -125,13 +126,13 @@ class _ResultSearchListState extends State<ResultSearchList> {
 
                       return ListTile(
                         title: Text(item.nome),
-                        subtitle: const Text('1.250 Kz, em 10 lojas'),
                         leading: ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: DefaultImageWidget(
                             imageUrl: item.imagemUrl,
                             width: 50,
                             height: 50,
+                            fit: BoxFit.fitHeight,
                           ),
                         ),
                         trailing: const Icon(Icons.arrow_forward_ios, size: 16),

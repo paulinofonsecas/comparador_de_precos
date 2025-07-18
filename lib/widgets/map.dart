@@ -42,7 +42,7 @@ class MapControllerWidgetState extends State<MapControllerWidget> {
               children: [
                 TileLayer(
                   urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                  userAgentPackageName: 'com.example.app',
+                  userAgentPackageName: 'com.comparador.precos',
                 ),
                 MarkerLayer(
                   markers: [

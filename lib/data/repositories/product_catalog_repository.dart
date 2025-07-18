@@ -164,7 +164,7 @@ class ProductCatalogRepository {
       final response = await _supabaseClient
           .from('precos')
           .select('*, produtos:produto_id(*), lojas:loja_id(*)')
-          .order('updated_at', ascending: true)
+          .order('data_atualizacao', ascending: false)
           .limit(14);
 
       final ofertas = response.map((e) {
@@ -177,16 +177,14 @@ class ProductCatalogRepository {
           storeName: e['lojas']['nome'] as String,
           storeLocation: e['lojas']['endereco'] as String,
           price: e['preco'] as double,
-          lastPriceUpdate: e['updated_at'] != null
-              ? DateTime.parse(e['updated_at'] as String)
+          lastPriceUpdate: e['data_atualizacao'] != null
+              ? DateTime.parse(e['data_atualizacao'] as String)
               : null,
           promotionPrice: e['preco_promocional'] != null
               ? e['preco_promocional'] as double
               : null,
         );
-      }).toList()
-        ..sort((a, b) => a.price.compareTo(b.price))
-        ..reversed;
+      }).toList();
 
       return ofertas;
     } catch (e) {
@@ -269,7 +267,6 @@ class ProductCatalogRepository {
       final response = await _supabaseClient
           .from('produtos')
           .select('*, categorias:categoria_id(*)')
-          .order('nome', ascending: true)
           .limit(20);
 
       // Mapeia a resposta para a lista de produtos

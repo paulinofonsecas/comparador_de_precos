@@ -116,9 +116,9 @@ class LojaInfoSection extends StatelessWidget {
                   const GutterSmall(),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: const MapControllerWidget(
-                      localizacao:
-                          LatLng(-12.391970665011454, 16.93843950388629),
+                    child: MapControllerWidget(
+                      localizacao: LatLng(loja.latitude ?? -12.391970665011454,
+                          loja.longitude ?? 16.93843950388629),
                       width: double.infinity,
                       initialZoom: 14,
                     ),

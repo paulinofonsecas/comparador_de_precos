@@ -150,6 +150,8 @@ class EmailTextField extends StatelessWidget {
         if (value == null || value.isEmpty) {
           return 'Por favor, insira um email';
         }
+
+
         return null;
       },
       decoration: const InputDecoration(

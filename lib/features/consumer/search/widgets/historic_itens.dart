@@ -4,7 +4,10 @@ import 'package:flutter_gutter/flutter_gutter.dart';
 
 class HistoricItens extends StatelessWidget {
   const HistoricItens({
-    required this.history, required this.onItemTap, required this.onRemoveTap, super.key,
+    required this.history,
+    required this.onItemTap,
+    required this.onRemoveTap,
+    super.key,
   });
 
   final List<String> history;
@@ -19,7 +22,7 @@ class HistoricItens extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Historico de buscas',
+            'Histórico de buscas',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.w600,
                   fontSize: 18,
@@ -27,7 +30,7 @@ class HistoricItens extends StatelessWidget {
           ),
           const GutterSmall(),
           if (history.isEmpty)
-            const Text('Nenhum historico encontrado')
+            const Text('Nenhum histórico encontrado')
           else
             Column(
               children: history

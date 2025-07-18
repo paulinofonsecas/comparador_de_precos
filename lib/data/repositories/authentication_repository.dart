@@ -8,13 +8,20 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract class AuthenticationRepository {
   Future<MyUser> signInWithEmailAndPassword(String email, String password);
+
   Future<void> signOut();
+
   Future<MyUser> signUpWithEmailAndPassword(
     NewUserFormParam newUserFormParam,
   );
+
   Future<void> sendPasswordResetEmail(String email);
+
   Future<void> verifyEmail();
+
   Future<UserProfile?> getProfile(String userId);
+
+  Future<List<UserProfile>> getAllUsers();
 
   Future<MyUser?> getUser(String token);
 }
@@ -210,5 +217,17 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   Future<void> saveToken(String? token) async {
     final prefs = getIt<SharedPreferences>();
     await prefs.setString('token', token!);
+  }
+
+  @override
+  Future<List<UserProfile>> getAllUsers() async {
+    try {
+      final profiles = await supabaseClient.from('profiles').select();
+
+      final users = profiles.map(UserProfile.fromMap).toList();
+      return users;
+    } catch (e) {
+      throw Exception('Erro ao obter os usuários: $e');
+    }
   }
 }

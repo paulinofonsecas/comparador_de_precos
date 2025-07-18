@@ -3,7 +3,6 @@ import 'package:comparador_de_precos/features/logista/logista_dashboard/bloc/blo
 import 'package:comparador_de_precos/features/logista/logista_dashboard/cubit/get_logista_profile_cubit.dart';
 import 'package:comparador_de_precos/features/logista/logista_dashboard/widgets/dashboard_card_item.dart';
 import 'package:comparador_de_precos/features/logista/logista_produtos_associados/view/logista_produtos_associados_page.dart';
-import 'package:comparador_de_precos/widgets/upload_products.dart';
 import 'package:flutter/material.dart';
 
 /// {@template logista_dashboard_body}
@@ -75,12 +74,12 @@ class _Body extends StatelessWidget {
             title: 'Relatórios',
             icon: Icons.bar_chart,
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const UpdateScrappedProducts(),
-                ),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => const UpdateScrappedProducts(),
+              //   ),
+              // );
             },
           ),
           DashboardCardItem(

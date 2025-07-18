@@ -5,6 +5,7 @@ import 'package:comparador_de_precos/features/admin/admin_dashboard/widgets/info
 import 'package:comparador_de_precos/features/admin/admin_dashboard/widgets/user_info_widget.dart';
 import 'package:comparador_de_precos/features/admin/admin_gestao_lojas/admin_gestao_lojas.dart';
 import 'package:comparador_de_precos/features/admin/admin_solicitacoes_lojas/view/admin_solicitacoes_lojas_page.dart';
+import 'package:comparador_de_precos/report/stats_and_reports/view/stats_and_reports_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
 
@@ -61,6 +62,16 @@ class AdminDashboardBody extends StatelessWidget {
             icon: Icons.category,
             onTap: () {
               log('Gestão de categorias tapped');
+            },
+          ),
+          const Gutter(),
+          CustomListTile(
+            title: 'Relatório',
+            icon: Icons.print,
+            onTap: () {
+              Navigator.of(context).push(
+                StatsAndReportsPage.route(),
+              );
             },
           ),
           const Gutter(),
