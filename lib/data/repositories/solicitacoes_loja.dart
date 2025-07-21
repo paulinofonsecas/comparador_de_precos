@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:comparador_de_precos/data/models/solicitacao_loja.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SolicitacoesLojaRepository {
@@ -9,17 +10,21 @@ class SolicitacoesLojaRepository {
 
   final SupabaseClient supabaseClient;
 
-  Future<List<Map<String, dynamic>>> getSolicitacoes() async {
+  Future<List<SolicitacaoLoja>> getSolicitacoes() async {
     try {
-      final response = await supabaseClient
-          .from('solicitacoes_lojas')
-          .select('*, file_paths:documentos_solicitacao_loja(*)');
+      final response =
+          await supabaseClient.from('solicitacoes_lojas').select('*');
 
       log(response.toString());
 
-      return [];
+      final solicitacoes =
+          response.map(SolicitacaoLoja.fromMap);
+
+      return solicitacoes.toList();
     } catch (e) {
-      throw Exception('Failed to load solicitacoes: $e');
+      log(e.toString());
+
+      rethrow;
     }
   }
 }

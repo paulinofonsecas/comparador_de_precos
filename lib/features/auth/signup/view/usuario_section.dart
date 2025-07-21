@@ -1,4 +1,8 @@
+import 'package:comparador_de_precos/app/config/dependencies.dart';
+import 'package:comparador_de_precos/data/models/my_user.dart';
+import 'package:comparador_de_precos/data/models/user_profile.dart';
 import 'package:flutter/material.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 
 class UsuarioSection extends StatelessWidget {
   const UsuarioSection({
@@ -13,6 +17,8 @@ class UsuarioSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final profile = getIt<UserProfile>();
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(12),
@@ -26,25 +32,13 @@ class UsuarioSection extends StatelessWidget {
             const SizedBox(height: 8),
             const Text(
               'Os dados do usuário que está solicitando o cadastro'
-              ' da loja serão usados para contato e verificação.',
-              style: TextStyle(fontSize: 14, color: Colors.grey),
+              ' da loja serão usados para contrato e verificação inclusive os dados de sessão.',
+              style: TextStyle(fontSize: 14, color: Colors.black),
             ),
             const SizedBox(height: 16),
-            TextFormField(
-              controller: _usuarioNomeController,
-              decoration: const InputDecoration(labelText: 'Nome Completo *'),
-              validator: (v) => v == null || v.trim().isEmpty
-                  ? 'Informe seu nome completo'
-                  : null,
-            ),
-            const SizedBox(height: 16),
-            TextFormField(
-              controller: _usuarioEmailController,
-              decoration: const InputDecoration(labelText: 'E-mail *'),
-              keyboardType: TextInputType.emailAddress,
-              validator: (v) =>
-                  v == null || v.trim().isEmpty ? 'Informe seu e-mail' : null,
-            ),
+            Text('Nome: ${profile.nomeCompleto}'),
+            const SizedBox(height: 8),
+            Text('Email: ${profile.bi}'),
           ],
         ),
       ),

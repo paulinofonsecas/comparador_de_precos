@@ -3,8 +3,11 @@ import 'package:comparador_de_precos/features/auth/signin/bloc/bloc.dart';
 import 'package:comparador_de_precos/features/auth/signup/bloc/signup_bloc.dart';
 import 'package:comparador_de_precos/features/auth/signup/view/solicitar_cadastro_loja_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 import 'package:nif_validator/nif_validator.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 /// {@template signup_body}
 /// Body of the SignupPage.
@@ -66,7 +69,7 @@ class _SignupBodyState extends State<SignupBody> {
                   final name = _nameController.text;
                   final email = _emailController.text;
                   final bi = _biController.text;
-                  final telefone = _telefoneController.text;
+                  final telefone = _telefoneController.text.replaceAll(' ', '');
                   final senha = _senhaController.text;
 
                   final newUserFormParam = NewUserFormParam(
@@ -112,23 +115,6 @@ class _SignupBodyState extends State<SignupBody> {
                 ),
               ),
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  // ignore: inference_failure_on_instance_creation
-                  MaterialPageRoute(
-                    builder: (_) => const SolicitarCadastroLojaPage(),
-                  ),
-                );
-              },
-              child: Text(
-                'Deseja cadastrar uma loja?',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Theme.of(context).colorScheme.onPrimaryContainer,
-                ),
-              ),
-            ),
           ],
         ),
       ),
@@ -151,9 +137,15 @@ class EmailTextField extends StatelessWidget {
           return 'Por favor, insira um email';
         }
 
+        if (!EmailValidator(
+          errorText: 'Por favor, insira um email válido',
+        ).isValid(value)) {
+          return 'Por favor, insira um email válido';
+        }
 
         return null;
       },
+      inputFormatters: [],
       decoration: const InputDecoration(
         labelText: 'Email',
         prefixIcon: Icon(Icons.email),
@@ -179,12 +171,6 @@ class NameTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Por favor, insira um nome';
-        }
-        return null;
-      },
       readOnly: !enabled,
       decoration: const InputDecoration(
         labelText: 'Nome',
@@ -254,6 +240,15 @@ class _BITextFieldState extends State<BITextField> {
 
   @override
   Widget build(BuildContext context) {
+    var maskFormatter = new MaskTextInputFormatter(
+      mask: '#########AA###',
+      filter: {
+        "#": RegExp(r'[0-9]'),
+        "A": RegExp(r'[a-zA-Z]'),
+      },
+      type: MaskAutoCompletionType.lazy,
+    );
+
     return Column(
       children: [
         TextFormField(
@@ -262,8 +257,18 @@ class _BITextFieldState extends State<BITextField> {
             if (value == null || value.isEmpty) {
               return 'Por favor, insira um BI';
             }
+
+            final regex = RegExp(r'^\d{9}([A-Z]{2})\d{3}$');
+            if (!regex.hasMatch(value)) {
+              return 'Por favor, insira um BI válido';
+            }
+
             return null;
           },
+          inputFormatters: [
+            LengthLimitingTextInputFormatter(14),
+            maskFormatter,
+          ],
           decoration: const InputDecoration(
             labelText: 'BI',
             prefixIcon: Icon(Icons.person),
@@ -293,6 +298,8 @@ class PhoneTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var maskFormatter = MaskTextInputFormatter(mask: "### ### ###");
+
     return TextFormField(
       controller: controller,
       validator: (value) {
@@ -301,6 +308,10 @@ class PhoneTextField extends StatelessWidget {
         }
         return null;
       },
+      inputFormatters: [
+        // LengthLimitingTextInputFormatter(9),
+        maskFormatter,
+      ],
       decoration: const InputDecoration(
         labelText: 'Telefone',
         prefixIcon: Icon(Icons.phone),

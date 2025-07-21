@@ -42,12 +42,14 @@ dependencies:
   nif_validator: ^2.0.0
 
   #pdf
-
   path_provider: ^2.1.5
   syncfusion_flutter_core: ^30.1.40
   syncfusion_flutter_datagrid: ^30.1.40
   syncfusion_flutter_datagrid_export: ^30.1.40
   share_plus: ^11.0.0
+  form_field_validator: ^1.1.0
+  mask_text_input_formatter: ^2.9.0
+  faker: ^2.2.0
 
 dev_dependencies:
   bloc_test: ^9.1.7

@@ -14,7 +14,7 @@ final class GetSolicitacoesLojaLoading extends GetSolicitacoesLojaState {}
 final class GetSolicitacoesLojaLoaded extends GetSolicitacoesLojaState {
   const GetSolicitacoesLojaLoaded(this.solicitacoes);
 
-  final List<Map<String, dynamic>> solicitacoes;
+  final List<SolicitacaoLoja> solicitacoes;
 
   @override
   List<Object> get props => [solicitacoes];

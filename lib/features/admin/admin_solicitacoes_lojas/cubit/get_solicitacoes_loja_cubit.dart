@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:comparador_de_precos/data/models/solicitacao_loja.dart';
 import 'package:comparador_de_precos/data/repositories/solicitacoes_loja.dart';
 import 'package:equatable/equatable.dart';
 

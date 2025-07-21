@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:comparador_de_precos/app/config/dependencies.dart';
 import 'package:comparador_de_precos/data/models/solicitacao_loja.dart';
+import 'package:comparador_de_precos/data/models/user_profile.dart';
 import 'package:comparador_de_precos/features/auth/signup/bloc/file_picker_bloc.dart';
 import 'package:comparador_de_precos/features/auth/signup/view/informacoes_da_loja.dart';
 import 'package:comparador_de_precos/features/auth/signup/view/upload_documents_section.dart';
@@ -29,6 +31,7 @@ class _SolicitarCadastroLojaPageState extends State<SolicitarCadastroLojaPage> {
   final _descricaoController = TextEditingController();
   final _latitudeController = TextEditingController();
   final _longitudeController = TextEditingController();
+
   // user information is not used in this page, but can be added if needed
   final _usuarioNomeController = TextEditingController();
   final _usuarioEmailController = TextEditingController();
@@ -38,6 +41,7 @@ class _SolicitarCadastroLojaPageState extends State<SolicitarCadastroLojaPage> {
   Future<void> _enviarSolicitacao(List<File> files) async {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _isLoading = true);
+    final userProfile = getIt<UserProfile>();
 
     final solicitacaoLoja = SolicitacaoLoja(
       id: const Uuid().v4(),
@@ -55,8 +59,7 @@ class _SolicitarCadastroLojaPageState extends State<SolicitarCadastroLojaPage> {
       longitude: _longitudeController.text.trim().isEmpty
           ? null
           : double.tryParse(_longitudeController.text.trim()),
-      nomeCompletoUsuario: _usuarioNomeController.text.trim(),
-      emailUsuario: _usuarioEmailController.text.trim(),
+      userProfileId: userProfile.id,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
     );
@@ -101,9 +104,14 @@ class _SolicitarCadastroLojaPageState extends State<SolicitarCadastroLojaPage> {
           context: context,
           builder: (_) => AlertDialog(
             title: const Text('Solicitação enviada'),
-            content: Text(
-                "Sua solicitação de cadastro da loja '${solicitacaoLoja.nome}'"
-                ' foi enviada e será analisada em breve.'),
+            content: Column(
+              children: [
+                Text(
+                    "Sua solicitação de cadastro da loja '${solicitacaoLoja.nome}'"
+                    ' foi enviada e será analisada em breve.'),
+                const Icon(Icons.verified, color: Colors.green),
+              ],
+            ),
             actions: [
               TextButton(
                 onPressed: () =>

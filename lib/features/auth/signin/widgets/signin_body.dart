@@ -2,6 +2,7 @@ import 'package:comparador_de_precos/features/auth/signin/bloc/bloc.dart';
 import 'package:comparador_de_precos/features/auth/signup/view/signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 import 'package:hugeicons/hugeicons.dart';
 
 /// {@template signin_body}
@@ -172,7 +173,9 @@ class _Body extends StatelessWidget {
 
 class EmailTextField extends StatelessWidget {
   const EmailTextField({
-    required TextEditingController emailController, required FocusNode focusNode, super.key,
+    required TextEditingController emailController,
+    required FocusNode focusNode,
+    super.key,
   })  : _emailController = emailController,
         _focusNode = focusNode;
 
@@ -194,6 +197,19 @@ class EmailTextField extends StatelessWidget {
           ),
         ),
       ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Por favor, insira um email';
+        }
+
+        if (!EmailValidator(
+          errorText: 'Por favor, insira um email válido',
+        ).isValid(value)) {
+          return 'Por favor, insira um email válido';
+        }
+
+        return null;
+      },
       keyboardType: TextInputType.emailAddress,
     );
   }
@@ -201,7 +217,8 @@ class EmailTextField extends StatelessWidget {
 
 class SenhaTextField extends StatelessWidget {
   const SenhaTextField({
-    required TextEditingController passwordController, super.key,
+    required TextEditingController passwordController,
+    super.key,
   }) : _passwordController = passwordController;
 
   final TextEditingController _passwordController;
