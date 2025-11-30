@@ -21,11 +21,11 @@ class UserInfoWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Paulino Fonseca',
+              'Fulano Silva',
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
             ),
             Text(
-              'paulinofonsecass@gmail.com',
+              'fulano.silva@gmail.com',
               style: TextStyle(fontSize: 16, color: Colors.grey),
             ),
           ],

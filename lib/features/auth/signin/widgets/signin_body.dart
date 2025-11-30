@@ -20,9 +20,8 @@ class SigninBody extends StatefulWidget {
 
 class _SigninBodyState extends State<SigninBody> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController =
-      TextEditingController(text: 'paulinofonsecass@gmail.com');
-  final _passwordController = TextEditingController(text: 'SuperAdmin1.23');
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
   final _focusNode = FocusNode();
 
   @override

@@ -22,9 +22,7 @@ Future<void> main() async {
   await Supabase.initialize(
     url: 'https://yrouhkfyreqgsugljnbt.supabase.co',
     anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlyb3Voa2Z5cmVxZ3N1Z2xqbmJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcxNz'
-        'UxOTcsImV4cCI6MjA2Mjc1MTE5N30.PzqUT8blpH0Dk13oMKjZop9W08-WmQUI8GX'
-        'ZWnKJvRw',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlyb3Voa2Z5cmVxZ3N1Z2xqbmJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcxNzUxOTcsImV4cCI6MjA2Mjc1MTE5N30.PzqUT8blpH0Dk13oMKjZop9W08-WmQUI8GXZWnKJvRw',
   );
 
   await setupDependencies();
