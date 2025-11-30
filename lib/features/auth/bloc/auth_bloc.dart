@@ -12,7 +12,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<SignOutEvent>(_onSignOut);
   }
 
-  final AuthenticationRepository authenticationRepository;
+  final IAuthenticationRepository authenticationRepository;
 
   Future<void> _onSignOut(SignOutEvent event, Emitter<AuthState> emit) async {
     try {

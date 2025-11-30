@@ -24,10 +24,10 @@ Future<void> setupDependencies() async {
     )
     ..registerLazySingleton<SharedPreferences>(() => sp)
     ..registerLazySingleton<Connectivity>(Connectivity.new)
-    ..registerLazySingleton<AuthenticationRepository>(
-      () => AuthenticationRepositoryImpl(
+    ..registerLazySingleton<IAuthenticationRepository>(
+      () => SupabaseAuthenticationRepository(
         connectivity: getIt<Connectivity>(),
-        supabaseClient: getIt<SupabaseClient>(),
+        supabaseClient: getIt(),
       ),
     );
 
@@ -62,14 +62,9 @@ void setupRepositories() {
         getIt<SupabaseClient>(),
       ),
     )
-    ..registerLazySingleton<LojistaRepository>(
-      () => LojistaRepository(
-        getIt<SupabaseClient>(),
-      ),
-    )
     ..registerLazySingleton<LocationService>(LocationService.new)
     ..registerLazySingleton<ILojistaRepository>(
-      () => LojistaRepository(getIt()),
+      () => SupabaseLojistaRepository(getIt()),
     )
     ..registerLazySingleton<ListaCompraRepository>(ListaCompraRepository.new);
 }
@@ -78,7 +73,7 @@ void setupBlocs() {
   getIt
     ..registerLazySingleton<AuthBloc>(
       () => AuthBloc(
-        authenticationRepository: getIt<AuthenticationRepository>(),
+        authenticationRepository: getIt<IAuthenticationRepository>(),
       ),
     )
     ..registerLazySingleton<SignupBloc>(

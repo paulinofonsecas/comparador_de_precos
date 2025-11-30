@@ -27,7 +27,7 @@ class SigninPage extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => SigninBloc(
-            getIt<AuthenticationRepository>(),
+            getIt<IAuthenticationRepository>(),
           )..add(const CheckUserLocalLoginEvent()),
         ),
         BlocProvider.value(

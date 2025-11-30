@@ -8,7 +8,7 @@ part 'get_lojistas_state.dart';
 class GetLojistasCubit extends Cubit<GetLojistasState> {
   GetLojistasCubit(this._lojistaRepository) : super(GetLojistasInitial());
 
-  final LojistaRepository _lojistaRepository;
+  final SupabaseLojistaRepository _lojistaRepository;
 
   Future<List<UserProfile>> getLojistas(String search) async {
     try {

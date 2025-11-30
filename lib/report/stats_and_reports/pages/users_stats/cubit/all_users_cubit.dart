@@ -8,7 +8,7 @@ part 'all_users_state.dart';
 class AllUsersCubit extends Cubit<AllUsersState> {
   AllUsersCubit(this._authRepository) : super(AllUsersInitial());
 
-  final AuthenticationRepository _authRepository;
+  final IAuthenticationRepository _authRepository;
 
   Future<void> getAllUsers() async {
     emit(AllUsersLoading());

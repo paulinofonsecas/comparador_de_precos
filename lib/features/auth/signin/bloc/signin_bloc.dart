@@ -16,7 +16,7 @@ class SigninBloc extends Bloc<SigninEvent, SigninState> {
     on<CheckUserLocalLoginEvent>(_onCheckUserLocalLoginEvent);
   }
 
-  final AuthenticationRepository _authenticationRepository;
+  final IAuthenticationRepository _authenticationRepository;
 
   FutureOr<void> _onCheckUserLocalLoginEvent(
     CheckUserLocalLoginEvent event,

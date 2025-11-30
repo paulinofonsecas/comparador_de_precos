@@ -12,7 +12,7 @@ part 'login_state.dart';
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit(this.auth) : super(LoginInitial());
 
-  final AuthenticationRepository auth;
+  final IAuthenticationRepository auth;
 
   FutureOr<void> signOut() async {
     emit(LogoutLoading());
