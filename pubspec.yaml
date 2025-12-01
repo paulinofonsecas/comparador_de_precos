@@ -11,8 +11,6 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.6
-  flutter_localizations:
-    sdk: flutter
   intl: ^0.20.2
   connectivity_plus: ^6.1.4
   device_preview: ^1.2.0
