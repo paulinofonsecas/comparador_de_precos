@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:clarity_flutter/clarity_flutter.dart';
 import 'package:comparador_de_precos/app/app.dart';
 import 'package:comparador_de_precos/app/config/dependencies.dart';
 import 'package:comparador_de_precos/bootstrap.dart';
@@ -22,9 +21,7 @@ Future<void> main() async {
   await Supabase.initialize(
     url: 'https://yrouhkfyreqgsugljnbt.supabase.co',
     anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlyb3Voa2Z5cmVxZ3N1Z2xqbmJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcxNz'
-        'UxOTcsImV4cCI6MjA2Mjc1MTE5N30.PzqUT8blpH0Dk13oMKjZop9W08-WmQUI8GX'
-        'ZWnKJvRw',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlyb3Voa2Z5cmVxZ3N1Z2xqbmJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcxNzUxOTcsImV4cCI6MjA2Mjc1MTE5N30.PzqUT8blpH0Dk13oMKjZop9W08-WmQUI8GXZWnKJvRw',
   );
 
   await setupDependencies();
@@ -49,15 +46,6 @@ class WrapperApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Clarity Configure
-    final config = ClarityConfig(
-      projectId: 's9uvmzz5ay',
-      logLevel: LogLevel.None,
-    );
-
-    return ClarityWidget(
-      app: const App(),
-      clarityConfig: config,
-    );
+    return const App();
   }
 }

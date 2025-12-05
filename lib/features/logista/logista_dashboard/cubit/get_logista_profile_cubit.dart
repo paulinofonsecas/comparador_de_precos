@@ -10,7 +10,7 @@ part 'get_logista_profile_state.dart';
 class GetLogistaProfileCubit extends Cubit<GetLogistaProfileState> {
   GetLogistaProfileCubit(this.repository) : super(GetLogistaProfileInitial());
 
-  final LojistaRepository repository;
+  final ILojistaRepository repository;
 
   Future<void> getLogistaProfile(String userId) async {
     emit(GetLogistaProfileLoading());

@@ -34,10 +34,11 @@ abstract class ILojistaRepository {
   Future<bool> toggleVisibility(
       String productId, String lojaId, String profileId,
       {required bool previusVisibity});
+  Future<UserProfile?> getProfile(String profileId);
 }
 
-class LojistaRepository implements ILojistaRepository {
-  LojistaRepository(this._supabaseClient);
+class SupabaseLojistaRepository implements ILojistaRepository {
+  SupabaseLojistaRepository(this._supabaseClient);
 
   final SupabaseClient _supabaseClient;
 
@@ -245,6 +246,7 @@ class LojistaRepository implements ILojistaRepository {
     }
   }
 
+  @override
   Future<UserProfile?> getProfile(String profileId) async {
     try {
       final response = await _supabaseClient

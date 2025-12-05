@@ -17,7 +17,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
     on<CadastrarNovoUsuarioEvent>(_onCadastrarNovoUsuarioEvent);
   }
 
-  final AuthenticationRepository _authenticationRepository;
+  final IAuthenticationRepository _authenticationRepository;
 
   FutureOr<void> _onCadastrarNovoUsuarioEvent(
     CadastrarNovoUsuarioEvent event,

@@ -31,9 +31,7 @@ class OfertaDetailsBody extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             DefaultImageWidget(
-              // imageUrl: produto.imagemUrl,
-              imageUrl:
-                  'https://as1.ftcdn.net/v2/jpg/01/27/40/68/1000_F_127406856_K7ABxpHlydS6gFurI9kZsVaR3HsFp4yz.jpg',
+              imageUrl: oferta.productImage,
               borderRadius: BorderRadius.circular(8),
             ),
             const GutterSmall(),

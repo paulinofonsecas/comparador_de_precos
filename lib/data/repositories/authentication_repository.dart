@@ -6,7 +6,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-abstract class AuthenticationRepository {
+abstract class IAuthenticationRepository {
   Future<MyUser> signInWithEmailAndPassword(String email, String password);
 
   Future<void> signOut();
@@ -26,8 +26,8 @@ abstract class AuthenticationRepository {
   Future<MyUser?> getUser(String token);
 }
 
-class AuthenticationRepositoryImpl implements AuthenticationRepository {
-  AuthenticationRepositoryImpl({
+class SupabaseAuthenticationRepository implements IAuthenticationRepository {
+  SupabaseAuthenticationRepository({
     required this.supabaseClient,
     required this.connectivity,
   });
