@@ -1,5 +1,6 @@
+// ignore_for_file: lines_longer_than_80_chars
+
 import 'package:comparador_de_precos/data/models/lista_compra.dart';
-import 'package:comparador_de_precos/data/models/produto.dart';
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
@@ -28,7 +29,8 @@ class ListaCompraRepository {
       final response = await supabase
           .from(tableName)
           .select(
-              '*, itens_lista_de_compras(*, produto:produto_id(*))') // Fetch items directly with the list
+            '*, itens_lista_de_compras(*, produto:produto_id(*))',
+          ) // Fetch items directly with the list
           .eq('user_id', userId);
 
       // The 'response' now contains lists, and each list object has its items.
@@ -44,7 +46,8 @@ class ListaCompraRepository {
       }).toList();
 
       debugPrint(
-          'getListasCompra executed in ${stopwatch.elapsedMilliseconds}ms');
+        'getListasCompra executed in ${stopwatch.elapsedMilliseconds}ms',
+      );
       return listas;
     } catch (e) {
       debugPrint('Erro ao buscar listas de compra: $e');
@@ -63,7 +66,8 @@ class ListaCompraRepository {
       final response = await supabase
           .from(tableName)
           .select(
-              '*, itens_lista_de_compras(*, produto:produto_id(*))') // Embed items and their products
+            '*, itens_lista_de_compras(*, produto:produto_id(*))',
+          ) // Embed items and their products
           .eq('user_id', userId)
           .eq('id', listaId)
           .maybeSingle(); // Use maybeSingle to get one record or null, simplifying error handling.
@@ -77,7 +81,8 @@ class ListaCompraRepository {
       final listaCompra = ListaCompra.fromMap(response);
 
       debugPrint(
-          'getListaCompra executed in ${stopwatch.elapsedMilliseconds}ms for id $listaId');
+        'getListaCompra executed in ${stopwatch.elapsedMilliseconds}ms for id $listaId',
+      );
       return listaCompra;
     } catch (e) {
       debugPrint('Erro ao buscar lista de compra: $e');
@@ -116,7 +121,8 @@ class ListaCompraRepository {
           .single(); // Expect a single row back
 
       debugPrint(
-          'criarListaCompra executed in ${stopwatch.elapsedMilliseconds}ms');
+        'criarListaCompra executed in ${stopwatch.elapsedMilliseconds}ms',
+      );
       // Assuming ListaCompra.fromMap can handle the response correctly.
       return ListaCompra.fromMap(response);
     } catch (e) {
@@ -147,7 +153,8 @@ class ListaCompraRepository {
       // or at least the input object if the update is assumed successful without changes from the DB.
       // For simplicity, returning the input `lista`. If you need server-updated fields (e.g. updated_at), fetch it.
       debugPrint(
-          'atualizarListaCompra executed in ${stopwatch.elapsedMilliseconds}ms for id ${lista.id}');
+        'atualizarListaCompra executed in ${stopwatch.elapsedMilliseconds}ms for id ${lista.id}',
+      );
       return lista;
     } catch (e) {
       debugPrint('Erro ao atualizar lista de compra: $e');
@@ -182,7 +189,8 @@ class ListaCompraRepository {
           .eq('id', listaId);
 
       debugPrint(
-          'excluirListaCompra executed in ${stopwatch.elapsedMilliseconds}ms for id $listaId');
+        'excluirListaCompra executed in ${stopwatch.elapsedMilliseconds}ms for id $listaId',
+      );
       return true;
     } catch (e) {
       debugPrint('Erro ao excluir lista de compra: $e');
@@ -222,7 +230,8 @@ class ListaCompraRepository {
           .from('itens_lista_de_compras')
           .insert(newItemMap)
           .select(
-              '*, produto:produto_id(*)') // Select the item with its product
+            '*, produto:produto_id(*)',
+          ) // Select the item with its product
           .single(); // Expect a single row
 
       final newItem = ItemListaCompra.fromMap(response);
@@ -233,7 +242,8 @@ class ListaCompraRepository {
       // but it's an extra DB call.
 
       debugPrint(
-          'adicionarItemListaCompra executed in ${stopwatch.elapsedMilliseconds}ms for list id $listaId');
+        'adicionarItemListaCompra executed in ${stopwatch.elapsedMilliseconds}ms for list id $listaId',
+      );
       return newItem;
     } catch (e) {
       debugPrint('Erro ao adicionar item à lista de compra: $e');
@@ -270,7 +280,8 @@ class ListaCompraRepository {
       // It's better to update the specific item directly in the 'itens_lista_de_compras' table.
 
       debugPrint(
-          'atualizarItemListaCompra executed in ${stopwatch.elapsedMilliseconds}ms for item id ${item.id}');
+        'atualizarItemListaCompra executed in ${stopwatch.elapsedMilliseconds}ms for item id ${item.id}',
+      );
       return ItemListaCompra.fromMap(response);
     } catch (e) {
       debugPrint('Erro ao atualizar item da lista de compra: $e');
@@ -307,7 +318,8 @@ class ListaCompraRepository {
       // than fetching the whole list, modifying it, and saving the whole list.
 
       debugPrint(
-          'marcarItemComoComprado executed in ${stopwatch.elapsedMilliseconds}ms for item id $itemId');
+        'marcarItemComoComprado executed in ${stopwatch.elapsedMilliseconds}ms for item id $itemId',
+      );
       return ItemListaCompra.fromMap(response);
     } catch (e) {
       debugPrint('Erro ao marcar item como comprado: $e');
@@ -332,15 +344,18 @@ class ListaCompraRepository {
       await supabase
           .from('itens_lista_de_compras')
           .delete()
-          .eq('lista_de_compras_id',
-              listaId) // Ensure we delete from the correct list
+          .eq(
+            'lista_de_compras_id',
+            listaId,
+          ) // Ensure we delete from the correct list
           .eq('id', itemId);
 
       // The UI/ViewModel should handle removing the item from its local state.
       // Returning the modified list is often an unnecessary overhead.
 
       debugPrint(
-          'removerItemListaCompra executed in ${stopwatch.elapsedMilliseconds}ms for item id $itemId from list $listaId');
+        'removerItemListaCompra executed in ${stopwatch.elapsedMilliseconds}ms for item id $itemId from list $listaId',
+      );
     } catch (e) {
       debugPrint('Erro ao remover item da lista de compra: $e');
       rethrow;
@@ -360,7 +375,8 @@ class ListaCompraRepository {
 
       final items = response.map(ItemListaCompra.fromMap).toList();
       debugPrint(
-          'getItemsListaCompra executed in ${stopwatch.elapsedMilliseconds}ms for list id $listaId');
+        'getItemsListaCompra executed in ${stopwatch.elapsedMilliseconds}ms for list id $listaId',
+      );
       return items;
     } catch (e) {
       debugPrint('Erro ao buscar itens da lista de compra: $e');

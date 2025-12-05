@@ -239,7 +239,7 @@ class _SenhaTextFieldState extends State<SenhaTextField> {
         suffixIcon: IconButton(
           icon: Icon(
             _isObscure ? Icons.visibility : Icons.visibility_off,
-            color: Theme.of(context).primaryColorDark,
+            color: Theme.of(context).colorScheme.primary,
           ),
           onPressed: () {
             setState(() {

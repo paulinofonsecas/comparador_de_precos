@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:clarity_flutter/clarity_flutter.dart';
 import 'package:comparador_de_precos/app/app.dart';
 import 'package:comparador_de_precos/app/config/dependencies.dart';
 import 'package:comparador_de_precos/bootstrap.dart';
@@ -47,15 +46,6 @@ class WrapperApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Clarity Configure
-    final config = ClarityConfig(
-      projectId: 's9uvmzz5ay',
-      logLevel: LogLevel.Verbose,
-    );
-
-    return ClarityWidget(
-      app: const App(),
-      clarityConfig: config,
-    );
+    return const App();
   }
 }

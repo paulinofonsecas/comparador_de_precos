@@ -6,7 +6,7 @@ class DefaultImageWidget extends StatelessWidget {
     required this.imageUrl,
     super.key,
     this.height = 256,
-    this.fit = BoxFit.cover,
+    this.fit = BoxFit.fitHeight,
     this.borderRadius,
     this.width,
   });
