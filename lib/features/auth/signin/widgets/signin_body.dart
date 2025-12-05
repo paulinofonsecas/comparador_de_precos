@@ -214,7 +214,7 @@ class EmailTextField extends StatelessWidget {
   }
 }
 
-class SenhaTextField extends StatelessWidget {
+class SenhaTextField extends StatefulWidget {
   const SenhaTextField({
     required TextEditingController passwordController,
     super.key,
@@ -223,20 +223,47 @@ class SenhaTextField extends StatelessWidget {
   final TextEditingController _passwordController;
 
   @override
+  State<SenhaTextField> createState() => _SenhaTextFieldState();
+}
+
+class _SenhaTextFieldState extends State<SenhaTextField> {
+  bool _isObscure = true;
+
+  @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: _passwordController,
-      decoration: const InputDecoration(
+      controller: widget._passwordController,
+      decoration: InputDecoration(
         hintText: 'Digite sua senha',
-        prefixIcon: Icon(Icons.lock),
-        border: OutlineInputBorder(
+        prefixIcon: const Icon(Icons.lock),
+        suffixIcon: IconButton(
+          icon: Icon(
+            _isObscure ? Icons.visibility : Icons.visibility_off,
+            color: Theme.of(context).primaryColorDark,
+          ),
+          onPressed: () {
+            setState(() {
+              _isObscure = !_isObscure;
+            });
+          },
+        ),
+        border: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(8)),
           borderSide: BorderSide(
             color: Colors.grey,
           ),
         ),
       ),
-      obscureText: true,
+      obscureText: _isObscure,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Por favor, insira sua senha';
+        }
+        if (value.length < 6) {
+          return 'A senha deve ter pelo menos 6 caracteres';
+        }
+        return null;
+      },
     );
   }
 }
