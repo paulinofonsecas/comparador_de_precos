@@ -27,7 +27,7 @@ echo.
 
 REM Build APK
 echo [3/5] Compilando APK (Release)...
-call flutter build apk --release
+call flutter build apk --release --target=lib/main_production.dart
 if %errorlevel% neq 0 (
     echo ERRO: Falha ao compilar APK
     exit /b %errorlevel%
@@ -36,7 +36,7 @@ echo.
 
 REM Build App Bundle
 echo [4/5] Compilando App Bundle (Release)...
-call flutter build appbundle --release
+call flutter build appbundle --release --target=lib/main_production.dart
 if %errorlevel% neq 0 (
     echo ERRO: Falha ao compilar App Bundle
     exit /b %errorlevel%
